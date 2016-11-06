@@ -106,9 +106,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\AddNewClientControl.xaml.cs">
-      <DependentUpon>AddNewClientControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\AddNewTestCategoryControl.xaml.cs">
       <DependentUpon>AddNewTestCategoryControl.xaml</DependentUpon>
     </Compile>
@@ -123,9 +120,6 @@
     </Compile>
     <Compile Include="Controls\ClientUserControl.xaml.cs">
       <DependentUpon>ClientUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\UpdateClientControl.xaml.cs">
-      <DependentUpon>UpdateClientControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TestsUserControl.xaml.cs">
       <DependentUpon>TestsUserControl.xaml</DependentUpon>
@@ -145,10 +139,6 @@
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="ViewModels\InputDialog.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Page Include="Controls\AddNewClientControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\AddNewTestCategoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,10 +158,6 @@
     <Page Include="Controls\ClientUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\UpdateClientControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TestsUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>

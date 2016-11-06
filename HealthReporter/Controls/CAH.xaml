@@ -5,65 +5,70 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
              mc:Ignorable="d" Height="485" Width="680">
-    <Border>
-        <Grid>
-            <Border BorderBrush="Gray" BorderThickness="1" Background="White" Margin="223,18,209,405" CornerRadius="12">
-                <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
-                    <TextBlock.Text >
-                        <MultiBinding StringFormat="{} {0} {1}, {2}, {3} &#x0a; {4}">
-                            <Binding Path="firstName" />
-                            <Binding Path="lastName" />
-                            <Binding Path="age" />
-                            <Binding Path="gender" />
-                            <Binding Path="groupName" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </Border>
-            <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="43,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="100"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <Button x:Name="button2" Content="+" HorizontalAlignment="Left" Margin="529,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_NewAppraisal" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="100"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="525,61,0,0" TextWrapping="Wrap" Text="Appraisal" VerticalAlignment="Top"/>
-            <Button x:Name="button2_Copy" Content="+" HorizontalAlignment="Left" Margin="597,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Report" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="100"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="602,62,0,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
-            <Button x:Name="button2_Copy1" Content="+" HorizontalAlignment="Left" Margin="114,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_AddTest" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="100"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="112,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
-            <TextBlock x:Name="textBlock_Copy2" HorizontalAlignment="Left" Margin="46,61,0,0" TextWrapping="Wrap" Text="Clients" VerticalAlignment="Top"/>
-            <DataGrid IsReadOnly="True" x:Name="dataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,132,0,0" VerticalAlignment="Top" Height="204" Width="444" Background="LightBlue" >
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="TestName" Binding="{Binding TestName}"  Width="200"/>
-                    <DataGridTextColumn Header="units" Binding="{Binding units}" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Right" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </Border>
+    <Grid>
+        <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="7" Direction="300" ShadowDepth="4" />
+            </Border.Effect>
+        </Border>
+        <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
+            <Grid>
+                <Border BorderBrush="Gray" BorderThickness="1" Background="White" Margin="223,18,209,405" CornerRadius="12">
+                    <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{} {0} {1}, {2}, {3} &#x0a;">
+                                <Binding Path="firstName" />
+                                <Binding Path="lastName" />
+                                <Binding Path="age" />
+                                <Binding Path="gender" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
+                <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="43,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Back" BorderBrush="#FFA2B2BD" Background="White">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button x:Name="button2" Content="+" HorizontalAlignment="Left" Margin="529,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_NewAppraisal" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="525,61,0,0" TextWrapping="Wrap" Text="Appraisal" VerticalAlignment="Top"/>
+                <Button x:Name="button2_Copy" Content="+" HorizontalAlignment="Left" Margin="597,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Report" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="602,62,0,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
+                <Button x:Name="button2_Copy1" Content="+" HorizontalAlignment="Left" Margin="114,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_AddTest" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="100"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="112,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
+                <DataGrid IsReadOnly="True" x:Name="dataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,132,0,0" VerticalAlignment="Top" Height="204" Width="444">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="TestName" Binding="{Binding TestName}"  Width="200"/>
+                        <DataGridTextColumn Header="units" Binding="{Binding units}" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

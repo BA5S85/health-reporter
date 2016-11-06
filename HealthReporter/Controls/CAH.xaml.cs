@@ -58,7 +58,7 @@ namespace HealthReporter.Controls
 
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
-           
+
             foreach (HistoryTableItem item in history)
             {
                 if (item.date != null && !dates.Contains(item.date.ToString()))
@@ -67,22 +67,23 @@ namespace HealthReporter.Controls
                 }
             }
 
-            dates.Sort((x, y) => DateTime.Parse( y).CompareTo(DateTime.Parse(x)));
+            dates.Sort((x, y) => DateTime.Parse(y).CompareTo(DateTime.Parse(x)));
 
             //Creating list with structure: (TestName, units, (date, score, appraiser))
 
             //Initializing datagrid objects
             List<FullHistoryDatagrid> result = new List<FullHistoryDatagrid>();
-           
-               foreach(HistoryTableItem item in history)
+
+            foreach (HistoryTableItem item in history)
+            {
+                if (!result.Exists(x => x.TestName == item.TestName))
                 {
-                   if (!result.Exists(x=>x.TestName == item.TestName)) {
                     FullHistoryDatagrid newOne = new FullHistoryDatagrid();
-                    newOne.TestName =item.TestName ;
+                    newOne.TestName = item.TestName;
                     newOne.units = item.Units;
                     newOne.list = new List<Date_Score_Appraiser>();
-                    
-                    foreach(string date in dates)
+
+                    foreach (string date in dates)
                     {
                         if (item.date != date)
                         {
@@ -97,12 +98,13 @@ namespace HealthReporter.Controls
                             Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
                             newOne2.date = item.date;
                             newOne2.appraiser = item.AppraisersName;
-                            newOne2.score =item.Score;
+                            newOne2.score = item.Score;
                             newOne.list.Add(newOne2);
-                        }                       
+                        }
                     }
                     result.Add(newOne);
-                }else
+                }
+                else
                 {
                     foreach (string date in dates)
                     {
@@ -122,7 +124,7 @@ namespace HealthReporter.Controls
                         }
                     }
                 }
-                }
+            }
 
 
 
@@ -131,7 +133,7 @@ namespace HealthReporter.Controls
             int i = 0;
             foreach (string elem in dates)
             {
-                
+
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
                 textColumn.Binding = new Binding("list[" + i + "]");
@@ -145,7 +147,7 @@ namespace HealthReporter.Controls
 
                 dataGrid.Columns.Add(textColumn);
                 i++;
-           
+
             }
 
             dataGrid.ItemsSource = result;
