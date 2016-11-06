@@ -680,7 +680,7 @@ namespace HealthReporter.Controls
 
         private bool validation2()
         {
-            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).units == "" || MenAgesTab.Items.Count == 0))
+            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).units == "" || ((Test)testName.DataContext).units == null || MenAgesTab.Items.Count == 0))
             {
                 catsDataGrid.IsEnabled = false;
                 testsDataGrid.IsEnabled = false;
