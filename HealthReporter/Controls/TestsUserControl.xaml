@@ -102,7 +102,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Categorys</TextBlock>
-                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name"  SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False"  SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
+                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name" IsEnabled="{Binding validation2()}" SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False"  SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
@@ -252,11 +252,11 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="0.7*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock x:Name="Text1" Foreground="#575C5C" Margin="10" TextWrapping="Wrap" Text="Name" RenderTransformOrigin="0.469,-1.188" HorizontalAlignment="Right" Width="32" Grid.Column="0" Grid.Row="0" Height="16"/>
-                        <TextBlock x:Name="Text2" Foreground="#575C5C" Margin="0,10,10,0" TextWrapping="Wrap" Text="Units" RenderTransformOrigin="-0.48,0.627" HorizontalAlignment="Right" Width="30" Grid.Row="2" Height="16" VerticalAlignment="Bottom"/>
-                        <TextBlock x:Name="Text3" Foreground="#575C5C" Margin="67,13,0,0" TextWrapping="Wrap" Text="Decimals" RenderTransformOrigin="0.146,1.25" Grid.Row="2" Grid.Column="1" Height="16" HorizontalAlignment="Left" Width="48" VerticalAlignment="Bottom"/>
-                        <TextBox x:Name="testName" Height="23" TextWrapping="Wrap" Style="{StaticResource TextBoxStyle}" Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" HorizontalAlignment="Left" Width="160" Margin="10" Grid.Column="1" Grid.Row="0"/>
-                        <TextBox x:Name="units" Height="23" Margin="10,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBoxStyle}" Text="{Binding units, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" RenderTransformOrigin="0.179,0.522" HorizontalAlignment="Left" Width="40" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom"/>
+                        <TextBlock x:Name="Text1" Margin="10" TextWrapping="Wrap" Text="Name" RenderTransformOrigin="0.469,-1.188" HorizontalAlignment="Right" Width="32" Grid.Column="0" Grid.Row="0" Height="16" Style="{DynamicResource TextBlockValidationStyle}"/>
+                        <TextBlock x:Name="Text2" Margin="0,10,10,0" TextWrapping="Wrap" Text="Units" RenderTransformOrigin="-0.48,0.627" HorizontalAlignment="Right" Width="30" Grid.Row="2" Height="16" VerticalAlignment="Bottom" Style="{DynamicResource TextBlockValidationStyle}"/>
+                        <TextBlock x:Name="Text3" Margin="67,13,0,0" TextWrapping="Wrap" Text="Decimals" RenderTransformOrigin="0.146,1.25" Grid.Row="2" Grid.Column="1" Height="16" HorizontalAlignment="Left" Width="48" VerticalAlignment="Bottom"/>
+                        <TextBox x:Name="testName" Height="23" TextWrapping="Wrap" Style="{StaticResource TextBoxStyle}" Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" HorizontalAlignment="Left" Width="160" LostFocus="textBox_LostFocus" Margin="10" Grid.Column="1" Grid.Row="0"/>
+                        <TextBox x:Name="units" Height="23" Margin="10,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBoxStyle}" Text="{Binding units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" LostFocus="textBox_LostFocus" RenderTransformOrigin="0.179,0.522" HorizontalAlignment="Left" Width="40" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom"/>
                         <ComboBox x:Name="decimalsSelector" SelectedIndex="2" Margin="130,0,0,0"  SelectedValue="{Binding decimals, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" RenderTransformOrigin="1.076,0.676" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderBrush="Black" Style="{StaticResource ComboBoxFlatStyle}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Width="40" Height="22" VerticalAlignment="Bottom"/>
                         <TextBlock Margin="0,10,10,10" Foreground="#575C5C" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" HorizontalAlignment="Right" Width="69" Text="Subcategory" Grid.Row="1"/>
                         <ComboBox x:Name="categorySelector" SelectionChanged="categorySelector_SelectionChanged" SelectedValue="{Binding categoryId, Mode=TwoWay}" SelectedIndex="0" DisplayMemberPath="name" SelectedValuePath="id" Margin="10,10,0,10" RenderTransformOrigin="0.963,0.571" Style="{StaticResource ComboBoxFlatStyle}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="160"/>
@@ -271,7 +271,7 @@
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Foreground="#575C5C" HorizontalAlignment="Right" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" Width="48" Height="16" Margin="10" Grid.Row="1" VerticalAlignment="Bottom"><Run Text="Formula"/><LineBreak/><Run/></TextBlock>
-                            <TextBlock Foreground="#575C5C" HorizontalAlignment="Right" Margin="0,30,10,0" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" Width="46" Text="Ratings" Height="19" VerticalAlignment="Top"/>
+                            <TextBlock HorizontalAlignment="Right" Margin="0,30,10,0" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" Width="46" Text="Ratings" Height="19" VerticalAlignment="Top" Style="{DynamicResource TextBlockValidationStyle}"/>
                             <TabControl Name="GenderTab" Grid.Column="1" Grid.RowSpan="2" Margin="10,0,10,10" BorderThickness="0" >
                                 <TabControl.Resources>
                                     <Style TargetType="TabPanel">

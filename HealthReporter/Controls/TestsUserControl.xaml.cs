@@ -16,7 +16,6 @@ namespace HealthReporter.Controls
     public partial class TestsUserControl : UserControl
     {
         private MainWindow _parent;
-        private static Test selectedTest;
         public TestsUserControl(MainWindow parent)
         {          
             InitializeComponent();
@@ -52,6 +51,7 @@ namespace HealthReporter.Controls
 
         private void btn_AddNewCategory(object sender, RoutedEventArgs e)
         {
+            if (!validation2()) return;
             TestCategory category = (TestCategory)catsDataGrid.SelectedItem;
             byte[] parentId = null;
             if (category != null)
@@ -203,6 +203,7 @@ namespace HealthReporter.Controls
 
         private void btn_AddNewTest(object sender, RoutedEventArgs e)
         {
+            if (!validation2()) return;
             Test newTest = new Test() { };
             newTest.id = System.Guid.NewGuid().ToByteArray();
             newTest.name = "No Name";
@@ -226,18 +227,20 @@ namespace HealthReporter.Controls
                 if (lTest.test.id.SequenceEqual(newTest.id)) testsDataGrid.SelectedItem = lTest;
             }
             findTestTotal();
+            validation2();
         }
 
         private void catsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a catecory is selected
         {
             var grid = sender as DataGrid;
             var selected = grid.SelectedItems;
-
+    
             if (selected.Count > 0)
             {
                 TestCategory category = (TestCategory)selected[0];
                 updateTestsColumn(category);
             }
+
         }
         
         private void testsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a test is selected
@@ -249,7 +252,6 @@ namespace HealthReporter.Controls
             {
                 LastTest ltest = (LastTest)selected[0];
                 Test test = ltest.test;
-                selectedTest = test;
                 updateTestView(test);
                 
                 testDetailDatagrid.Visibility = Visibility.Visible;
@@ -502,6 +504,7 @@ namespace HealthReporter.Controls
                 }
                 else MessageBox.Show("Invalid age group.");
                 updateTestView(test);
+                validation2();
             }
         }
 
@@ -521,6 +524,7 @@ namespace HealthReporter.Controls
             repo.removeRatingsByAge((Test)testName.DataContext, last);
 
             updateTestView((Test)testName.DataContext);
+            validation2();
         }
 
         private int parse_age(string ageStr, bool last, int i)
@@ -575,7 +579,7 @@ namespace HealthReporter.Controls
 
                 IList<Test> tests = testRepo.FindAll();
                 findTestTotal();
-               
+                validation2();
             }
         }
 
@@ -623,6 +627,7 @@ namespace HealthReporter.Controls
 
         private void btn_Clients(object sender, RoutedEventArgs e)
         {
+            if (!validation2()) return;
             ClientUserControl obj = new ClientUserControl(_parent);
             _parent.stkTest.Children.Clear();
             _parent.stkTest.Children.Add(obj);
@@ -632,6 +637,7 @@ namespace HealthReporter.Controls
 
         private void btn_Tests(object sender, RoutedEventArgs e)
         {
+            if (!validation2()) return;
             TestsUserControl obj = new TestsUserControl(_parent);
             _parent.stkTest.Children.Clear();
             _parent.stkTest.Children.Add(obj);
@@ -641,6 +647,7 @@ namespace HealthReporter.Controls
 
         private void filterSearchBox(object sender, TextChangedEventArgs e)
         {
+            if (!validation2()) return;
             string searchBy = search.Text;
 
             TestCategory selectedcategory = (TestCategory)catsDataGrid.SelectedItem;
@@ -667,6 +674,26 @@ namespace HealthReporter.Controls
         }
 
         private void TextBox_SourceUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
+        {
+            validation2();
+        }
+
+        private bool validation2()
+        {
+            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).units == "" || MenAgesTab.Items.Count == 0))
+            {
+                catsDataGrid.IsEnabled = false;
+                testsDataGrid.IsEnabled = false;
+                search.IsEnabled = false;
+                return false;
+            }
+            catsDataGrid.IsEnabled = true;
+            testsDataGrid.IsEnabled = true;
+            search.IsEnabled = true;
+            return true;
+        }
+
+        private void textBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var rep = new TestRepository();
             rep.Update((Test)testName.DataContext);
