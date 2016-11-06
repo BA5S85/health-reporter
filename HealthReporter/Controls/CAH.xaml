@@ -16,12 +16,11 @@
                 <Border BorderBrush="Gray" BorderThickness="1" Background="White" Margin="223,18,209,405" CornerRadius="12">
                     <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="{} {0} {1}, {2}, {3} &#x0a; {4}">
+                            <MultiBinding StringFormat="{} {0} {1}, {2}, {3} &#x0a;">
                                 <Binding Path="firstName" />
                                 <Binding Path="lastName" />
                                 <Binding Path="age" />
                                 <Binding Path="gender" />
-                                <Binding Path="groupName" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>

@@ -164,9 +164,9 @@ namespace HealthReporter.Controls
         
         private void btn_NewAppraisal(object sender, RoutedEventArgs e)
         {
-            //this._parent.stkTest.Children.Clear();
-            //CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent,client);
-            //this._parent.stkTest.Children.Add(obj);
+            this._parent.stkTest.Children.Clear();
+            CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent,client);
+            this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
