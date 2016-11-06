@@ -29,6 +29,8 @@ namespace HealthReporter.Controls
             InitializeComponent();
             this._parent = parentWindow;
 
+            grid.DataContext = new TestCategory();
+
             var repo = new TestCategoryRepository();
 
             IList<TestCategory> tests = repo.FindRootCategories();
@@ -58,7 +60,11 @@ namespace HealthReporter.Controls
 
         private void btn_CreateNewTestCategory(object sender, RoutedEventArgs e)
         {
-            //TODO: add validation also.
+            if (string.IsNullOrWhiteSpace(name.Text))
+            {
+                return;
+            }
+
             byte[] parentId = null;
             var parentCategory = (TestCategory)parentSelector.SelectedItem;
             if (parentCategory != null)

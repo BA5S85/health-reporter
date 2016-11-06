@@ -60,8 +60,8 @@
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Border BorderBrush="LightSkyBlue" BorderThickness="2">
-                <Grid Grid.Row="0" Background="LightSkyBlue" HorizontalAlignment="Stretch" ShowGridLines="False" >
+            <Border BorderBrush="#FFF0F0F0" BorderThickness="2">
+                <Grid Grid.Row="0" Background="White" HorizontalAlignment="Stretch" ShowGridLines="False" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="35"/>
@@ -101,8 +101,8 @@
                         <RowDefinition Height="35" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Categorys</TextBlock>
-                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name" IsEnabled="{Binding validation2()}" SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False"  SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
+                    <TextBlock Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Categories</TextBlock>
+                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name"  SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False"  SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
@@ -489,17 +489,6 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <!--<TextBlock x:Name="searchTests" HorizontalAlignment="Left" Margin="60,60,0,0" TextWrapping="Wrap" Text="Search tests" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="0"/>-->
-                    <!--<TextBox x:Name="search" HorizontalAlignment="Left" Height="23" Margin="20,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" TextChanged="filterSearchBox" Grid.ColumnSpan="2" Grid.Column="0">
-                            <TextBox.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="4"/>
-                                </Style>
-                            </TextBox.Resources>
-                        </TextBox>-->
-                    <!--<TextBlock x:Name="noOfTests" HorizontalAlignment="Left" Margin="68,63,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.469,-1.188" Width="17" Grid.Column="2"/>-->
-                    <!--<TextBlock x:Name="Text0" HorizontalAlignment="Left" Margin="95,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.469,-1.188" Width="31" Text="Tests" Grid.Column="2"/>-->
-
                 </Grid>
             </Grid>
         </Grid>

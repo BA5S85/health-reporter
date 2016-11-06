@@ -34,8 +34,8 @@
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Border BorderBrush="LightSkyBlue" BorderThickness="2">
-                <Grid Grid.Row="0" Background="LightSkyBlue" HorizontalAlignment="Stretch" ShowGridLines="False" >
+            <Border BorderBrush="#FFF0F0F0" BorderThickness="2">
+                <Grid Grid.Row="0" Background="White" HorizontalAlignment="Stretch" ShowGridLines="False" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="35"/>

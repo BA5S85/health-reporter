@@ -2,6 +2,7 @@
 using Insight.Database;
 using HealthReporter.Utilities;
 using System;
+using System.ComponentModel;
 
 namespace HealthReporter.Models
 {
@@ -39,7 +40,7 @@ namespace HealthReporter.Models
         }
     }
 
-    class TestCategory : IHasPrimaryKey
+    class TestCategory : IHasPrimaryKey, INotifyPropertyChanged, IDataErrorInfo
     {
         public byte[] GetPrimaryKey()
         {
@@ -58,6 +59,92 @@ namespace HealthReporter.Models
         public int position { get; set; }
         public string updated { get; set; }
         public string uploaded { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                OnPropertyChanged("name");
+            }
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        #region IDataErrorInfo Members
+        string IDataErrorInfo.Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        string IDataErrorInfo.this[string propertyName]
+        {
+            get
+            {
+                return GetValidationError(propertyName);
+            }
+        }
+
+
+        #endregion
+
+        #region Validation
+
+        static readonly string[] ValidatedProperties = { "name" };
+
+        public bool IsValid
+        {
+            get
+            {
+                foreach (string property in ValidatedProperties)
+                {
+                    if (GetValidationError(property) != null)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        string GetValidationError(string propertyName)
+        {
+            return ValidateCategoryName();
+        }
+
+        private string ValidateCategoryName()
+        {
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                return "A category name cannot be empty";
+            }
+            else
+            {
+                return null;
+            }
+        }
+        #endregion
     }
 
 
