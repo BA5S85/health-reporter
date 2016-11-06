@@ -6,6 +6,8 @@ build:
   verbosity: minimal
 after_build:
 - cmd: 7z a release.zip %APPVEYOR_BUILD_FOLDER%\HealthReporter\bin\Release\*
+before_test:
+- cmd: cp -R %APPVEYOR_BUILD_FOLDER%\HealthReporter\bin\Release %APPVEYOR_BUILD_FOLDER%\HealthReporter\bin\Debug
 artifacts:
 - path: release.zip
   name: release
