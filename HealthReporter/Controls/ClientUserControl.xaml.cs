@@ -45,6 +45,8 @@ namespace HealthReporter.Controls
 
             NoCards.Visibility = Visibility.Visible;
             search.Visibility = Visibility.Hidden;
+            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
+            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
 
             btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
 
@@ -239,6 +241,8 @@ namespace HealthReporter.Controls
                 NoCards.Visibility = Visibility.Hidden;
                 search.Visibility = Visibility.Visible;
                 search.Visibility = Visibility.Hidden;
+                openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+                openAppraisalHistoryLabel.Visibility = Visibility.Visible;
                 allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
 
                 return;
@@ -252,8 +256,10 @@ namespace HealthReporter.Controls
             clientDetailDatagrid.Visibility = Visibility.Hidden;
             delete.Visibility = Visibility.Hidden;
             NoCards.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
+            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
 
-            
+
 
             if (this._group!=null && this._client != null && validationCheck() == false)
             {
@@ -275,6 +281,8 @@ namespace HealthReporter.Controls
                 clientDetailDatagrid.Visibility = Visibility.Visible;
                 NoCards.Visibility = Visibility.Hidden;
                 search.Visibility = Visibility.Visible;
+                openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+                openAppraisalHistoryLabel.Visibility = Visibility.Visible;
 
                 return;
             }
@@ -348,7 +356,9 @@ namespace HealthReporter.Controls
                     this._client = selClient;
                     NoCards.Visibility = Visibility.Hidden;
                     clientDetailDatagrid.Visibility = Visibility.Visible;
-                    
+                    openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+                    openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+
                     clientDetailDatagrid.DataContext = selClient;
                 }
 
@@ -375,6 +385,8 @@ namespace HealthReporter.Controls
                     clientDetailDatagrid.Visibility = Visibility.Hidden;
                     delete.Visibility = Visibility.Hidden;
                     NoCards.Visibility = Visibility.Visible;
+                    openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
+                    openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
                 }
                 else
                 {
@@ -382,7 +394,9 @@ namespace HealthReporter.Controls
                     delete.Visibility = Visibility.Visible;
                     clientDetailDatagrid.Visibility = Visibility.Visible;
                     NoCards.Visibility = Visibility.Hidden;
-                   
+                    openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+                    openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+
                     SaveClientInfo(this._client);
 
 
@@ -681,6 +695,14 @@ namespace HealthReporter.Controls
 
 
         }
+
+        private void btn_OpenAppraisalHistory(object sender, RoutedEventArgs e)
+        {
+            Client client = (Client)clientDataGrid.SelectedItem;
+            CAH obj = new CAH(this._parent, client);
+            this.Opacity = 0.3;
+            this._parent.stkTest.Children.Add(obj);
         }
+    }
     }
 

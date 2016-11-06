@@ -11,7 +11,7 @@
                 <DropShadowEffect BlurRadius="7" Direction="300" ShadowDepth="4" />
             </Border.Effect>
         </Border>
-        <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="10">
+        <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />

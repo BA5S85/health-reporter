@@ -36,28 +36,28 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="#FFF0F0F0" BorderThickness="2">
                 <Grid Grid.Row="0" Background="White" HorizontalAlignment="Stretch" ShowGridLines="False" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" VerticalAlignment="Bottom">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  VerticalAlignment="Center">
-                        <Button Background="White" x:Name="btnShowClients" Content="Clients" Click="btn_Clients"   VerticalAlignment="Top" BorderBrush="LightGray" Height="20"   Grid.Column="2" HorizontalAlignment="Center" Width="90">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="10,0,0,10"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <Button BorderBrush="LightGray" Width="90" Background="White" x:Name="btnShowTests" Content="Tests" Click="btn_Tests"  VerticalAlignment="Top"  Height="20"  Grid.Column="2" HorizontalAlignment="Center" >
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="0,10,10,0"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
-                </Border>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                            <Button Background="White" x:Name="btnShowClients" Content="Clients" Click="btn_Clients"   VerticalAlignment="Top" BorderBrush="LightGray" Height="20"   Grid.Column="2" HorizontalAlignment="Center" Width="90">
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="10,0,0,10"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button BorderBrush="LightGray" Width="90" Background="White" x:Name="btnShowTests" Content="Tests" Click="btn_Tests"  VerticalAlignment="Top"  Height="20"  Grid.Column="2" HorizontalAlignment="Center" >
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="0,10,10,0"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </Border>
                     <TextBlock Grid.Row="1" x:Name="clientTotal" HorizontalAlignment="Center" Foreground="DarkSlateGray" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
@@ -262,7 +262,15 @@
                     </DataGrid>
                 </Grid>
                 <GridSplitter Grid.Column="3" Width="3" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" ResizeDirection="Columns" />
-                <Grid  x:Name="clientDetailMain" Grid.Column="5">
+                <Button Visibility="Hidden" Grid.Column="4" Margin="20" x:Name="openAppraisalHistoryBtn" ContextMenuService.IsEnabled="False" Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30" BorderBrush="#FFA2B2BD" Background="White" FontSize="16" Width="30" Click="btn_OpenAppraisalHistory">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="4"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Label Visibility="Hidden" Grid.Column="4" x:Name="openAppraisalHistoryLabel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,22,52,0" Width="129">Show appraisal history</Label>
+                <Grid x:Name="clientDetailMain" Grid.Column="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60" />
                         <RowDefinition Height="*"/>
@@ -376,7 +384,7 @@
                     <TextBlock HorizontalAlignment="Center"  VerticalAlignment="Top" x:Name="NoCards" Visibility="Hidden" Grid.Row="1" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="2"  Foreground="LightSlateGray" FontSize="14">
                         No Cards
                     </TextBlock>
-                    <Button  Grid.Row="2" Margin="20,20,20,20" x:Name="addStuff" ContextMenuService.IsEnabled="False" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="30" BorderBrush="#FFA2B2BD"  Background="White" FontSize="16"  Width="30">
+                    <Button Grid.Row="2" Margin="20,20,20,20" x:Name="addStuff" ContextMenuService.IsEnabled="False" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="30" BorderBrush="#FFA2B2BD"  Background="White" FontSize="16"  Width="30">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>
