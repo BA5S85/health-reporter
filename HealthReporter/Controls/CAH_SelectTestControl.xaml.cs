@@ -44,7 +44,9 @@ namespace HealthReporter.Controls
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
-            this._parent.stkTest.Children.Clear();
+            int childNumber = this._parent.stkTest.Children.Count;
+            this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+
             CAH obj = new CAH(this._parent,client);
             this._parent.stkTest.Children.Add(obj);
         }
@@ -52,21 +54,21 @@ namespace HealthReporter.Controls
         private void btn_OK(object sender, RoutedEventArgs e)
         {
            
-            foreach (var item in listBox.SelectedItems)
-            {
-                Test test = (Test)item;
-                tests.Add(test);
-               // MessageBox.Show(test.name, "Message");
-            }
-            if (tests.Count < 1)
-            {
-                MessageBox.Show("Please select test/tests.", "Message");
-            }
-            else { 
-                this._parent.stkTest.Children.Clear();
-                CAH_AddNewAppraisalControl obj = new CAH_AddNewAppraisalControl(this._parent, client, tests);
-                this._parent.stkTest.Children.Add(obj);
-            }
+            //foreach (var item in listBox.SelectedItems)
+            //{
+            //    Test test = (Test)item;
+            //    tests.Add(test);
+            //   // MessageBox.Show(test.name, "Message");
+            //}
+            //if (tests.Count < 1)
+            //{
+            //    MessageBox.Show("Please select test/tests.", "Message");
+            //}
+            //else { 
+            //    this._parent.stkTest.Children.Clear();
+            //    CAH_AddNewAppraisalControl obj = new CAH_AddNewAppraisalControl(this._parent, client, tests);
+            //    this._parent.stkTest.Children.Add(obj);
+            //}
         }
     }
 }

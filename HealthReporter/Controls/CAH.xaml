@@ -47,7 +47,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="602,62,0,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
+                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="600,62,0,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
                 <Button x:Name="button2_Copy1" Content="+" HorizontalAlignment="Left" Margin="114,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_AddTest" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
