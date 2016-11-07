@@ -157,22 +157,24 @@ namespace HealthReporter.Controls
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
-            this._parent.stkTest.Children.Clear();
-            ClientUserControl obj = new ClientUserControl(this._parent);
-            this._parent.stkTest.Children.Add(obj);
+            int childNumber = this._parent.stkTest.Children.Count;
+            this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+            this._parent.stkTest.Children[childNumber - 2].Opacity = 1;
         }
         
         private void btn_NewAppraisal(object sender, RoutedEventArgs e)
         {
-            this._parent.stkTest.Children.Clear();
-            CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent,client);
+            NewAppraisalStep1Control obj = new NewAppraisalStep1Control(this._parent);
             this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
         {
+            int childNumber = this._parent.stkTest.Children.Count;
+            this._parent.stkTest.Children.RemoveAt(childNumber - 1);
 
-           
+            CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client);
+            this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_Report(object sender, RoutedEventArgs e)

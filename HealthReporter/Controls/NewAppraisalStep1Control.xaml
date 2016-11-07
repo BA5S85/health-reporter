@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="HealthReporter.Controls.NewAppraisalStep1Control"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HealthReporter.Controls"
+        mc:Ignorable="d" Height="485" Width="680">
+    <Grid>
+        <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="7" Direction="300" ShadowDepth="4" />
+            </Border.Effect>
+        </Border>
+        <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Center" Margin="0,100,0,0" TextWrapping="Wrap" Text="New Appraisal" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="100" FontSize="14"/>
+                <Grid Name="grid" Grid.Row="1">
+                    <TextBlock HorizontalAlignment="Center" Margin="-160,0,0,0" TextWrapping="Wrap" Text="Appraiser's name" VerticalAlignment="Top"/>
+                    <TextBox x:Name="appraisersName" HorizontalAlignment="Center" Height="23" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150">
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Style.Setters>
+                                    <Setter Property="BorderThickness" Value="0 0 0 1"></Setter>
+                                </Style.Setters>
+                                <Style.Triggers>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderThickness" Value="0 0 0 2"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBlock HorizontalAlignment="Center" Margin="-160,70,0,0" TextWrapping="Wrap" Text="Date of appraisal" VerticalAlignment="Top" RenderTransformOrigin="0.783,0.564"/>
+                    <DatePicker Margin="100,0,0,0" HorizontalAlignment="Center" x:Name="dateOfAppraisal" Height="25" Width="140"  DisplayDate="2016-09-29" 
+                                        SelectedDate="{Binding date, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                        IsTodayHighlighted="False" FirstDayOfWeek="Monday" Validation.ErrorTemplate="{x:Null}" >
+                        <DatePicker.Resources>
+                            <Style TargetType="{x:Type DatePicker}">
+                                <Style.Setters>
+                                    <Setter Property="BorderThickness" Value="0 0 0 1"></Setter>
+                                </Style.Setters>
+                                <Style.Triggers>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderThickness" Value="0 0 0 2"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Button Content="Next"  HorizontalAlignment="Center" Margin="100,0,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Background="White">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Button Content="Back" HorizontalAlignment="Center" Margin="-100,0,0,0" VerticalAlignment="Top" Width="75" BorderBrush="#FFA2B2BD" Background="White" Click="btn_Back">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

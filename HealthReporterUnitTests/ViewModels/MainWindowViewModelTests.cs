@@ -110,7 +110,7 @@ namespace HealthReporterUnitTests
             lastName.Enter("Test perenimi");
             TextBox email = window.Get<TextBox>("email");
             email.Enter("test@test.ee");
-
+            window.Get<Button>("allClientsButton").Click();
             groups.Rows[0].Click();
 
             int newClientCount = clients.Rows.Count;

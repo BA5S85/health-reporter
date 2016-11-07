@@ -121,6 +121,9 @@
     <Compile Include="Controls\ClientUserControl.xaml.cs">
       <DependentUpon>ClientUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NewAppraisalStep1Control.xaml.cs">
+      <DependentUpon>NewAppraisalStep1Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TestsUserControl.xaml.cs">
       <DependentUpon>TestsUserControl.xaml</DependentUpon>
     </Compile>
@@ -158,6 +161,10 @@
     <Page Include="Controls\ClientUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\NewAppraisalStep1Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TestsUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
