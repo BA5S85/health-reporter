@@ -9,6 +9,7 @@ using TestStack.White.UIItems.WindowItems;
 using TestStack.White.Factory;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.UIItems.WPFUIItems;
+using TestStack.White.UIItems.ListBoxItems;
 
 // https://msdn.microsoft.com/en-us/library/ms182532.aspx
 
@@ -116,6 +117,35 @@ namespace HealthReporterUnitTests
             int newClientCount = clients.Rows.Count;
             application.Close();
             Assert.AreEqual(clientCount + 1, newClientCount, 0, "Wrong number of clients after adding one.");
+        }
+
+        [TestMethod]
+        public void TestAddTestCategory()
+        {
+            string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.TestRunDirectory));
+            string applicationPath = Path.Combine(solutionDir, "HealthReporter/bin/Debug/HealthReporter.exe");
+            Application application = Application.Launch(applicationPath);
+            Window window = application.GetWindow("Health Reporter", InitializeOption.NoCache);
+
+            window.Get<Button>("btnShowTests").Click();
+            ListView categories = window.Get<ListView>("catsDataGrid");
+            var rows = categories.Rows;
+            int catsCount = rows.Count;
+            Console.WriteLine(catsCount);
+
+            window.Get<Button>("addStuffButton").Click();
+
+            PopUpMenu menu = window.Popup;
+            menu.Item("New category").Click();
+
+            window.Get<TextBox>("name").Enter("Testkategooria");
+            window.Get<ComboBox>("parentSelector").Select("");
+            window.Get<Button>("createCategory").Click();
+
+            int newCatsCount = window.Get<ListView>("catsDataGrid").Rows.Count;
+            Console.WriteLine(newCatsCount);
+            application.Close();
+            Assert.AreEqual(catsCount + 1, newCatsCount, 0, "Wrong number of test categories after adding one.");
         }
     }
 }
