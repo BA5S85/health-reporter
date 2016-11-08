@@ -38,6 +38,11 @@ namespace HealthReporter.Models
         {
             return DatabaseUtility.getConnection().QuerySql<TestCategory>("SELECT * FROM test_categories WHERE id = @ParentId", cat);
         }
+
+        public void Delete(TestCategory cat)
+        {
+            var connection = DatabaseUtility.getConnection().InsertSql("DELETE FROM test_categories WHERE id = @id", cat);
+        }
     }
 
     class TestCategory : IHasPrimaryKey, INotifyPropertyChanged, IDataErrorInfo

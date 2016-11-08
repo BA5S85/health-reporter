@@ -62,7 +62,6 @@ namespace HealthReporter.Models
             cmd.Parameters.AddWithValue("@labelId", old.labelId);
             cmd.Parameters.AddWithValue("@testId", old.testId);
             cmd.ExecuteNonQuery();
-            cmd.ExecuteNonQuery();
         }
     }
 

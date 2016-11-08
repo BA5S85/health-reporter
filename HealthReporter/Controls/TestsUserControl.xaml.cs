@@ -697,5 +697,25 @@ namespace HealthReporter.Controls
             var rep = new TestRepository();
             rep.Update((Test)testName.DataContext);
         }
+
+        private void MenuItem_DeleteCategory(object sender, RoutedEventArgs e)
+        {
+            if (testsDataGrid.Items.Count > 0)
+            {
+                MessageBox.Show("Please add tests from this category to another category.");
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the selected category?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                if (result == MessageBoxResult.Yes)
+                {
+                    TestCategory cat = (TestCategory)catsDataGrid.SelectedItem;
+                    var rep = new TestCategoryRepository();
+                    rep.Delete(cat);
+
+                    catsDataGrid.ItemsSource = rep.FindRootCategories();
+                }
+            }
+        }
     }
 }

@@ -107,6 +107,11 @@
                             <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
                         <DataGrid.Resources>
+                            <ContextMenu x:Key="GridContextMenu">
+                                <ContextMenu.Items>
+                                    <MenuItem Header="Delete" Click="MenuItem_DeleteCategory"/>
+                                </ContextMenu.Items>
+                            </ContextMenu>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
                                     <Trigger Property="DataGridCell.IsSelected" Value="True">
@@ -130,6 +135,7 @@
                                 <Setter Property="Height" Value="23"/>
                                 <Setter Property="Background" Value="AliceBlue"/>
                                 <Setter Property="Margin" Value="15,0,0,0" />
+                                <Setter Property="ContextMenu" Value="{StaticResource GridContextMenu}" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightBlue"/>
