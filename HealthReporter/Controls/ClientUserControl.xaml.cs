@@ -699,8 +699,10 @@ namespace HealthReporter.Controls
         private void btn_OpenAppraisalHistory(object sender, RoutedEventArgs e)
         {
             Client client = (Client)clientDataGrid.SelectedItem;
-            CAH obj = new CAH(this._parent, client);
+            Models.Group group = (Models.Group)groupDataGrid.SelectedItem;
+            CAH obj = new CAH(this._parent, client, group);
             this.Opacity = 0.3;
+            this.IsEnabled = false;
             this._parent.stkTest.Children.Add(obj);
         }
     }

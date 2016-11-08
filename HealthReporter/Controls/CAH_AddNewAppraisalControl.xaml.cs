@@ -22,6 +22,7 @@ namespace HealthReporter.Controls
     public partial class CAH_AddNewAppraisalControl : UserControl
     {
         private Client client;
+        private Group group;
         private List<Test> tests;
         private MainWindow _parent;
 
@@ -30,12 +31,13 @@ namespace HealthReporter.Controls
             InitializeComponent();
         }
 
-        public CAH_AddNewAppraisalControl(MainWindow _parent, Client client, List<Test> tests)
+        public CAH_AddNewAppraisalControl(MainWindow _parent, Client client, List<Test> tests, Group group)
         {
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
             this.tests = tests;
+            this.group = group;
 
             AddFields.ItemsSource = tests;
         }
@@ -43,8 +45,8 @@ namespace HealthReporter.Controls
         private void btn_Back(object sender, RoutedEventArgs e)
         {
             this._parent.stkTest.Children.Clear();
-            CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client);
-            this._parent.stkTest.Children.Add(obj);
+            //CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client, group, appraiser, appraisal);
+            //this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_OK(object sender, RoutedEventArgs e)
@@ -116,7 +118,7 @@ namespace HealthReporter.Controls
 
 
                     this._parent.stkTest.Children.Clear();
-                    CAH obj = new CAH(this._parent, client);
+                    CAH obj = new CAH(this._parent, client, group);
                     this._parent.stkTest.Children.Add(obj);
                 }
                 catch

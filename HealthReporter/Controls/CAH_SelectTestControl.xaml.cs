@@ -23,10 +23,13 @@ namespace HealthReporter.Controls
     {
         private Client client;
         private MainWindow _parent;
+        private Group group;
+        private Appraiser appraiser;
+        private Appraisal appraisal;
         private List<Test> tests = new List<Test>();
      
 
-        public CAH_SelectTestControl(MainWindow _parent, Client client)
+        public CAH_SelectTestControl(MainWindow _parent, Client client, Group group, Appraiser appraiser, Appraisal appraisal)
         {
 
             var repo = new TestRepository();
@@ -35,8 +38,11 @@ namespace HealthReporter.Controls
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
+            this.client = client;
+            this.group = group;
+            this.appraiser = appraiser;
+            this.appraisal = appraisal;
 
-            
             listBox.ItemsSource = tests;
            
            
@@ -46,29 +52,73 @@ namespace HealthReporter.Controls
         {
             int childNumber = this._parent.stkTest.Children.Count;
             this._parent.stkTest.Children.RemoveAt(childNumber - 1);
-
-            CAH obj = new CAH(this._parent,client);
-            this._parent.stkTest.Children.Add(obj);
+            
         }
 
         private void btn_OK(object sender, RoutedEventArgs e)
         {
-           
-            //foreach (var item in listBox.SelectedItems)
-            //{
-            //    Test test = (Test)item;
-            //    tests.Add(test);
-            //   // MessageBox.Show(test.name, "Message");
-            //}
-            //if (tests.Count < 1)
-            //{
-            //    MessageBox.Show("Please select test/tests.", "Message");
-            //}
-            //else { 
-            //    this._parent.stkTest.Children.Clear();
-            //    CAH_AddNewAppraisalControl obj = new CAH_AddNewAppraisalControl(this._parent, client, tests);
-            //    this._parent.stkTest.Children.Add(obj);
-            //}
+
+            foreach (var item in listBox.SelectedItems)
+            {
+                Test test = (Test)item;
+                tests.Add(test);
+                // MessageBox.Show(test.name, "Message");
+            }
+            if (tests.Count < 1)
+            {
+                MessageBox.Show("Please select test/tests.", "Message");
+            }
+            else
+            {
+                int childNumber = this._parent.stkTest.Children.Count;
+                this._parent.stkTest.Children.RemoveRange(childNumber - 3, childNumber);
+                CAH obj = new CAH(this._parent, client, group);
+                this._parent.stkTest.Children.Add(obj);
+
+
+                //try
+                //{
+
+
+                //    List<Appraisal_tests> testsList = new List<Appraisal_tests>();
+
+                //    for (int i = 0; i < listBox.Items.Count; i++)
+                //    {
+                //        ContentPresenter c = (ContentPresenter)listBox.ItemContainerGenerator.ContainerFromItem(listBox.Items[i]);
+
+                //        Test test = tests[i];
+
+
+
+                //        //Appraisal_tests object
+                //        Appraisal_tests o = new Appraisal_tests();
+                //        o.appraisalId = appraisal.id;
+                //        o.testId = test.id;
+                //        o.score = decimal.Parse("2.5");
+                //        o.note = "note";
+                //        o.trial1 = decimal.Parse("2.5");
+                //        o.trial2 = 0;
+                //        o.trial3 = 0;
+
+                //        testsList.Add(o);
+                //    }
+
+
+
+
+                //    AppraisalsRepository repo = new AppraisalsRepository();
+                //    repo.Insert(appraisal, appraiser, testsList);
+
+
+                //    this._parent.stkTest.Children.Clear();
+                //    CAH obj = new CAH(this._parent, client, group);
+                //    this._parent.stkTest.Children.Add(obj);
+                //}
+                //catch
+                //{
+                //    MessageBox.Show("You must insert at least one Trial for every test or you entered something wrong into the trials fields", "Message");
+                //}
+            }
         }
     }
 }

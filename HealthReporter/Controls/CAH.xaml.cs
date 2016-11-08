@@ -22,20 +22,21 @@ namespace HealthReporter.Controls
     public partial class CAH : UserControl
     {
         private Client client;
+        private Group group;
         private MainWindow _parent;
 
 
         public CAH(MainWindow _parent)
-        {
-       
+        {     
             this._parent = _parent;
         }
 
-        public CAH(MainWindow _parent, Client client) : this(_parent)
+        public CAH(MainWindow _parent, Client client, Group group) : this(_parent)
         {
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
+            this.group = group;
 
             Client client1 = this.client;
 
@@ -49,7 +50,7 @@ namespace HealthReporter.Controls
             }
 
             ClientInfo.DataContext = client1;
-
+            ClientGroup.DataContext = group;
 
             //Finding all appraisal results of client
             var repo = new AppraisalsRepository();
@@ -152,7 +153,6 @@ namespace HealthReporter.Controls
 
             dataGrid.ItemsSource = result;
 
-
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -160,21 +160,22 @@ namespace HealthReporter.Controls
             int childNumber = this._parent.stkTest.Children.Count;
             this._parent.stkTest.Children.RemoveAt(childNumber - 1);
             this._parent.stkTest.Children[childNumber - 2].Opacity = 1;
+            this._parent.stkTest.Children[childNumber - 2].IsEnabled = true;
         }
         
         private void btn_NewAppraisal(object sender, RoutedEventArgs e)
         {
-            NewAppraisalStep1Control obj = new NewAppraisalStep1Control(this._parent);
+            NewAppraisalStep1Control obj = new NewAppraisalStep1Control(this._parent, client, group);
             this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
         {
-            int childNumber = this._parent.stkTest.Children.Count;
-            this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+            //int childNumber = this._parent.stkTest.Children.Count;
+            //this._parent.stkTest.Children.RemoveAt(childNumber - 1);
 
-            CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client);
-            this._parent.stkTest.Children.Add(obj);
+            //CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client, group);
+            //this._parent.stkTest.Children.Add(obj);
         }
 
         private void btn_Report(object sender, RoutedEventArgs e)

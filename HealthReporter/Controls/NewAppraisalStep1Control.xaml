@@ -36,8 +36,8 @@
                         </TextBox.Style>
                     </TextBox>
                     <TextBlock HorizontalAlignment="Center" Margin="-160,70,0,0" TextWrapping="Wrap" Text="Date of appraisal" VerticalAlignment="Top" RenderTransformOrigin="0.783,0.564"/>
-                    <DatePicker Margin="100,0,0,0" HorizontalAlignment="Center" x:Name="dateOfAppraisal" Height="25" Width="140"  DisplayDate="2016-09-29" 
-                                        SelectedDate="{Binding date, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                    <DatePicker  Margin="100,0,0,0" HorizontalAlignment="Center" x:Name="date" Height="25" Width="140"  DisplayDate="2016-09-29" 
+                                        Text="{Binding date, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                         IsTodayHighlighted="False" FirstDayOfWeek="Monday" Validation.ErrorTemplate="{x:Null}" >
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePicker}">
@@ -54,7 +54,7 @@
                     </DatePicker>
                 </Grid>
                 <Grid Grid.Row="2">
-                    <Button Content="Next"  HorizontalAlignment="Center" Margin="100,0,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Background="White">
+                    <Button Content="Next" HorizontalAlignment="Center" Margin="354,0,250,0" VerticalAlignment="Top" Width="75" BorderBrush="#FFA2B2BD" Background="White" Click="btn_Next">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>

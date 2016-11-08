@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthReporter.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,17 +21,48 @@ namespace HealthReporter.Controls
     public partial class NewAppraisalStep1Control : UserControl
     {
         public MainWindow _parent;
+        private Client client;
+        private Group group;
 
-        public NewAppraisalStep1Control(MainWindow parentWindow)
+        public NewAppraisalStep1Control(MainWindow parentWindow, Client client, Group group)
         {
             InitializeComponent();
             this._parent = parentWindow;
+            this.client = client;
+            this.group = group;
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
             int childNumber = this._parent.stkTest.Children.Count;
             this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+        }
+
+        private void btn_Next(object sender, RoutedEventArgs e)
+        {
+
+            try {
+                Appraiser appraiser = new Appraiser();
+                appraiser.id = System.Guid.NewGuid().ToByteArray();
+                appraiser.name = appraisersName.Text.ToString();
+
+                //Appraisal object
+                Appraisal appraisal = new Appraisal();
+                appraisal.id = System.Guid.NewGuid().ToByteArray();
+                appraisal.appraiserId = appraiser.id;
+                appraisal.clientId = client.id;
+                DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
+                appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
+
+                CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client, group, appraiser, appraisal);
+
+                this._parent.stkTest.Children.Add(obj);
+
+            } catch
+            {
+                MessageBox.Show("Please enter appraiser's name and appraisal date.");
+            }
+            
         }
     }
 }

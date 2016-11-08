@@ -14,16 +14,26 @@
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Grid>
                 <Border BorderBrush="Gray" BorderThickness="1" Background="White" Margin="223,18,209,405" CornerRadius="12">
-                    <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{} {0} {1}, {2}, {3} &#x0a;">
-                                <Binding Path="firstName" />
-                                <Binding Path="lastName" />
-                                <Binding Path="age" />
-                                <Binding Path="gender" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} {0} {1}, {2}, {3}">
+                                    <Binding Path="firstName" />
+                                    <Binding Path="lastName" />
+                                    <Binding Path="age" />
+                                    <Binding Path="gender" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock x:Name="ClientGroup" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} {0}">
+                                    <Binding Path="name" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                  
                 </Border>
                 <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="43,18,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Back" BorderBrush="#FFA2B2BD" Background="White">
                     <Button.Resources>
