@@ -32,23 +32,6 @@ namespace HealthReporter.Controls
             grid.DataContext = new TestCategory();
 
             var repo = new TestCategoryRepository();
-
-            IList<TestCategory> tests = repo.FindRootCategories();
-
-            if (tests.Count() > 0)
-            {
-                tests.Add(new TestCategory());
-            }
-
-            parentSelector.ItemsSource = tests;
-            if (parentCategory != null)
-            {
-                int index = Helpers<TestCategory>.GetIndexById(tests, parentCategory);
-                if (index >= 0)
-                {
-                    parentSelector.SelectedIndex = index;
-                }
-            }
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -66,11 +49,11 @@ namespace HealthReporter.Controls
             }
 
             byte[] parentId = null;
-            var parentCategory = (TestCategory)parentSelector.SelectedItem;
-            if (parentCategory != null)
-            {
-                parentId = parentCategory.id;
-            }
+            //var parentCategory = (TestCategory)parentSelector.SelectedItem;
+            //if (parentCategory != null)
+            //{
+            //    parentId = parentCategory.id;
+            //}
             var testCategory = new TestCategory() { name = this.name.Text, parentId = parentId };
 
             var repo = new TestCategoryRepository();

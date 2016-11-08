@@ -221,9 +221,9 @@ namespace HealthReporter.Controls
             catsDataGrid.SelectedIndex = -1;
             catsDataGrid.SelectedIndex = i;
 
-            foreach(LastTest lTest in testsDataGrid.Items)
+            foreach(Test test in testsDataGrid.Items)
             {
-                if (lTest.test.id.SequenceEqual(newTest.id)) testsDataGrid.SelectedItem = lTest;
+                if (test.id.SequenceEqual(newTest.id)) testsDataGrid.SelectedItem = test;
             }
             findTestTotal();
             validation2();
@@ -249,8 +249,7 @@ namespace HealthReporter.Controls
 
             if (selected.Count > 0)
             {
-                LastTest ltest = (LastTest)selected[0];
-                Test test = ltest.test;
+                Test test = (Test)selected[0];
                 updateTestView(test);
                 
                 testDetailDatagrid.Visibility = Visibility.Visible;
@@ -311,21 +310,7 @@ namespace HealthReporter.Controls
             IList<Test> tsts = repo.GetTestsByCategory(cat);
             cat_tests.AddRange(tsts);
 
-            IList<LastTest> tests = new List<LastTest>();
-            for (int i = 0; i < cat_tests.Count; i++)
-            {
-                if (i + 1 < cat_tests.Count)
-                {
-                    if (!cat_tests[i].categoryId.SequenceEqual(cat_tests[i + 1].categoryId))
-                    {
-                        tests.Add(new LastTest() { isLast = true, test = cat_tests[i] });
-                    }
-                    else tests.Add(new LastTest() { isLast = false, test = cat_tests[i] });
-                }
-                else tests.Add(new LastTest() { isLast = false, test = cat_tests[i] });
-            }
-            testsDataGrid.ItemsSource = tests;
-            
+            testsDataGrid.ItemsSource = cat_tests;           
         }
 
         //updates test fields
@@ -598,11 +583,6 @@ namespace HealthReporter.Controls
             public string interval { get; set; }
             public Rating rating { get; set; }
         }
-        class LastTest
-        {
-            public bool isLast { get; set; }
-            public Test test { get; set; }
-        }
         class TabItem
         {
             public TabItem()
@@ -653,22 +633,8 @@ namespace HealthReporter.Controls
             
             var repo = new TestRepository();
             IList<Test> result = repo.FindSearchResult(searchBy, selectedcategory);
-            
-
-            IList<LastTest> tests = new List<LastTest>();
-            for (int i = 0; i < result.Count; i++)
-            {
-                if (i + 1 < result.Count)
-                {
-                    if (!result[i].categoryId.SequenceEqual(result[i + 1].categoryId))
-                    {
-                        tests.Add(new LastTest() { isLast = true, test = result[i] });
-                    }
-                    else tests.Add(new LastTest() { isLast = false, test = result[i] });
-                }
-                else tests.Add(new LastTest() { isLast = false, test = result[i] });
-            }
-            testsDataGrid.ItemsSource = tests;
+           
+            testsDataGrid.ItemsSource = result;
             testsDataGrid.SelectedIndex = 0;
         }
 

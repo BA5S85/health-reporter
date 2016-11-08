@@ -195,9 +195,9 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <DataGrid Grid.Row="1" Focusable="True" Grid.Column="0" x:Name="testsDataGrid" SelectionMode="Single" IsReadOnly="True" SelectedValuePath="test.name" CanUserSortColumns="False" HeadersVisibility="None" AutoGenerateColumns="False"  SelectionChanged="testsDataGrid_SelectionChanged" Background="{x:Null}" GridLinesVisibility="None" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" >
+                    <DataGrid Grid.Row="1" Focusable="True" Grid.Column="0" x:Name="testsDataGrid" SelectionMode="Single" IsReadOnly="True" SelectedValuePath="name" CanUserSortColumns="False" HeadersVisibility="None" AutoGenerateColumns="False"  SelectionChanged="testsDataGrid_SelectionChanged" Background="{x:Null}" GridLinesVisibility="None" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding test.name}" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridCell}">
@@ -227,10 +227,6 @@
                                         <Setter Property="Background" Value="#eee9e9"/>
                                         <Setter Property="Margin" Value="15,0,0,0" />
                                     </Trigger>
-                                    <DataTrigger Binding="{Binding isLast}" Value="true">
-                                        <Setter Property="BorderThickness" Value="0, 0, 0, 2"/>
-                                        <Setter Property="BorderBrush" Value="#606464"/>
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
