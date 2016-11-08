@@ -51,7 +51,18 @@ namespace HealthReporter.Models
         }
         public void Update(Rating old, Rating newR)
         {
-            var res =DatabaseUtility.getConnection().QuerySql<Rating>("UPDATE ratings SET normF='" + newR.normF + "', normM='" + newR.normM + "' , labelId=@labelId, updated = CURRENT_TIMESTAMP WHERE testId=@testId AND age=@age AND normM=@normM AND normF=@normF", old);
+            var cmd = DatabaseUtility.getConnection().CreateCommand();
+            cmd.CommandText = "UPDATE ratings SET normF= @newNormF, normM=@newNormM, labelId=@newLabelId, updated = CURRENT_TIMESTAMP WHERE testId=@testId AND age=@age AND normM=@normM AND normF=@normF";
+            cmd.Parameters.AddWithValue("@newNormF", newR.normF);
+            cmd.Parameters.AddWithValue("@newNormM", newR.normM);
+            cmd.Parameters.AddWithValue("@newLabelId", newR.labelId);
+            cmd.Parameters.AddWithValue("@age", old.age);
+            cmd.Parameters.AddWithValue("@normF", old.normF);
+            cmd.Parameters.AddWithValue("@normM", old.normM);
+            cmd.Parameters.AddWithValue("@labelId", old.labelId);
+            cmd.Parameters.AddWithValue("@testId", old.testId);
+            cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
         }
     }
 

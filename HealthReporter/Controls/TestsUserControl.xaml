@@ -300,7 +300,7 @@
                                                 <DataTemplate>
                                                     <DataGrid x:Name="menRatingsDatagrid" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" Unloaded="menRatingsDatagrid_Unloaded" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" PreviewKeyDown="KeyDownHandler" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}" IsReadOnly="False" HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
-                                                            <DataGridTextColumn Header="Score" Binding="{Binding normM, UpdateSourceTrigger = PropertyChanged}"  Width="0.5*" CanUserSort="False"/>
+                                                            <DataGridTextColumn Header="Score" Binding="{Binding normM, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>
@@ -384,7 +384,7 @@
                                                 <DataTemplate>
                                                     <DataGrid x:Name="WomenRatingsDatagrid" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionMode="Single" Unloaded="WomenRatingsDatagrid_Unloaded" RowDetailsVisibilityMode="Collapsed" IsReadOnly="False" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}"  HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
-                                                            <DataGridTextColumn Header="Score" Binding="{Binding normF, UpdateSourceTrigger = PropertyChanged}"  Width="0.5*" CanUserSort="False"/>
+                                                            <DataGridTextColumn Header="Score" Binding="{Binding normF, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>

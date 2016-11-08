@@ -129,7 +129,6 @@ namespace HealthReporter.Controls
                 if (ratings.Count > itemIndex)
                 {
                     Rating dbRating = ratings[itemIndex];
-                    dbRating.labelId = rat.labelId; //Not good! Needs to be fixed in the future.
                     ratingRep.Update(dbRating, rat);
                     testRep.Update(test);
                 }
