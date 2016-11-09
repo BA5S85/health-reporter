@@ -140,7 +140,6 @@ namespace HealthReporterUnitTests
             menu.Item("New category").Click();
 
             window.Get<TextBox>("name").Enter("Testkategooria");
-            window.Get<ComboBox>("parentSelector").Select("");
             window.Get<Button>("createCategory").Click();
 
             int newCatsCount = window.Get<ListView>("catsDataGrid").Rows.Count;
@@ -168,7 +167,6 @@ namespace HealthReporterUnitTests
                 menu.Item("New category").Click();
 
                 window.Get<TextBox>("name").Enter("Testkategooria");
-                window.Get<ComboBox>("parentSelector").Select("");
                 window.Get<Button>("createCategory").Click();
             }
             categories = window.Get<ListView>("catsDataGrid");
