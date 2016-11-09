@@ -112,8 +112,8 @@
     <Compile Include="Controls\CAH_AddNewAppraisalControl.xaml.cs">
       <DependentUpon>CAH_AddNewAppraisalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CAH_SelectTestControl.xaml.cs">
-      <DependentUpon>CAH_SelectTestControl.xaml</DependentUpon>
+    <Compile Include="Controls\NewAppraisalStep2Control.xaml.cs">
+      <DependentUpon>NewAppraisalStep2Control.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CAH.xaml.cs">
       <DependentUpon>CAH.xaml</DependentUpon>
@@ -150,7 +150,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\CAH_SelectTestControl.xaml">
+    <Page Include="Controls\NewAppraisalStep2Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

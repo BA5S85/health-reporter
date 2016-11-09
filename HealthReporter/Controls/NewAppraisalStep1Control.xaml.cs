@@ -42,11 +42,12 @@ namespace HealthReporter.Controls
         {
 
             try {
+                // New appraiser object
                 Appraiser appraiser = new Appraiser();
                 appraiser.id = System.Guid.NewGuid().ToByteArray();
                 appraiser.name = appraisersName.Text.ToString();
 
-                //Appraisal object
+                // New appraisal object
                 Appraisal appraisal = new Appraisal();
                 appraisal.id = System.Guid.NewGuid().ToByteArray();
                 appraisal.appraiserId = appraiser.id;
@@ -54,13 +55,12 @@ namespace HealthReporter.Controls
                 DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
                 appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
 
-                CAH_SelectTestControl obj = new CAH_SelectTestControl(this._parent, client, group, appraiser, appraisal);
-
+                NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
                 this._parent.stkTest.Children.Add(obj);
 
             } catch
             {
-                MessageBox.Show("Please enter appraiser's name and appraisal date.");
+                MessageBox.Show("Please enter appraiser's name and/or appraisal's date.");
             }
             
         }

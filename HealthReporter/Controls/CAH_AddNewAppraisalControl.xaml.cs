@@ -114,7 +114,7 @@ namespace HealthReporter.Controls
 
 
                     AppraisalsRepository repo = new AppraisalsRepository();
-                    repo.Insert(appraisal, appraiser, testsList);
+                    repo.Insert(appraisal, appraiser);
 
 
                     this._parent.stkTest.Children.Clear();

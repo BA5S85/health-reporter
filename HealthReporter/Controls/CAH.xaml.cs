@@ -40,14 +40,14 @@ namespace HealthReporter.Controls
 
             Client client1 = this.client;
 
-            if (client1.gender == "1"|| client1.gender == "Male")
-            {
-                client1.gender = "Male";
-            }
-            else
-            {
-                client1.gender = "Female";
-            }
+            //if (client1.gender == "1"|| client1.gender == "Male")
+            //{
+            //    client1.gender = "Male";
+            //}
+            //else
+            //{
+            //    client1.gender = "Female";
+            //}
 
             ClientInfo.DataContext = client1;
             ClientGroup.DataContext = group;
