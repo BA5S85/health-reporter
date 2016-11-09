@@ -5,6 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
              mc:Ignorable="d" Height="485" Width="680">
+    <UserControl.Resources>
+        <local:InvertBoolConverter x:Key="invertBoolConverter"/>
+        <Image x:Key="Dustbin" Source="/Images/dustbin.png" Stretch="Uniform"/>
+    </UserControl.Resources>
     <Grid>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Border.Effect>
@@ -13,18 +17,68 @@
         </Border>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Grid>
-                <TextBlock x:Name="textBlock4" HorizontalAlignment="Center" Margin="0,32,0,0" TextWrapping="Wrap" Text="Select Test" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="76" FontSize="14"/>
-                <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="251" Margin="83,86,0,0" VerticalAlignment="Top" Width="242" SelectionMode="Multiple">
+                <ListBox x:Name="listBox" Visibility="Visible" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple" Height="337" Width="238" Margin="72,71,0,0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-
-                                <TextBlock Text="{Binding name}" />
-
-                            </StackPanel>
+                            <TextBlock Text="{Binding test.name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="IsSelected" Value="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+                <ListBox x:Name="presetBox" Visibility="Visible" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple" Height="192" Width="155" Margin="440,71,0,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding name}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <Button x:Name="deletePresetButton" Content="{StaticResource Dustbin}" Padding="6" Margin="0,277,84,177" Width="30" Height="30" Click="deletePresetButton_Click" Background="White" RenderTransformOrigin="-2.595,1" HorizontalAlignment="Right" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="4"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger 
+                     Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
+                                    <Setter Property="Button.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button x:Name="viewTests" Content="View tests" Padding="6" Margin="0,277,130,177" Width="73" Height="30" Click="viewTests_Click" Background="White" RenderTransformOrigin="-2.595,1" HorizontalAlignment="Right" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="4"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger 
+                     Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
+                                    <Setter Property="Button.Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <TextBlock Text="Add these tests to a preset" Margin="110,421,424,45"></TextBlock>
+                <Button HorizontalAlignment="Left" x:Name="addTestsToPreset" ContextMenuService.IsEnabled="False"  Content="+" Margin="72,0,0,41" VerticalAlignment="Bottom" Click="btn_AddTestsToPreset" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="33">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="4"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <TextBlock x:Name="textBlock4" HorizontalAlignment="Center" Margin="84,43,481,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="114" FontSize="14"><Run Text="Choose "/><Run Text="T"/><Run Text="ests"/></TextBlock>
                 <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="474,423,0,0" VerticalAlignment="Top" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
@@ -39,6 +93,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
+                <TextBlock x:Name="textBlock4_Copy" HorizontalAlignment="Center" Margin="462,43,103,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="114" FontSize="14"><Run Text="Choose "/><Run Text="Presets"/></TextBlock>
             </Grid>
         </Border>
     </Grid>

@@ -257,7 +257,7 @@ namespace HealthReporter.Controls
             else testDetailDatagrid.Visibility = Visibility.Hidden;
         }
 
-        private void menRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e)
+        private void menRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e) //trying to fix DeferRefresh error
         {
             var grid = (DataGrid)sender;
             grid.CommitEdit(DataGridEditingUnit.Row, true);

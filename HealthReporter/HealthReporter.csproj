@@ -88,6 +88,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.103\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -106,6 +108,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AddNewPresetControl.xaml.cs">
+      <DependentUpon>AddNewPresetControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AddNewTestCategoryControl.xaml.cs">
       <DependentUpon>AddNewTestCategoryControl.xaml</DependentUpon>
     </Compile>
@@ -142,6 +147,10 @@
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="ViewModels\InputDialog.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="Controls\AddNewPresetControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AddNewTestCategoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

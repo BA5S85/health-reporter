@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HealthReporter.Models;
+using System.Diagnostics;
 
 namespace HealthReporter.Controls
 {
@@ -37,13 +38,19 @@ namespace HealthReporter.Controls
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
-            this.client = client;
             this.group = group;
             this.appraiser = appraiser;
             this.appraisal = appraisal;
 
-            listBox.ItemsSource = tests;           
+            showTests();
+
+            var rep = new PresetRepository();
+            IList<Preset> presets = new List<Preset>();
+            presets = rep.FindAll();       
+            presetBox.ItemsSource = presets;
         }
+
+
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
@@ -51,13 +58,47 @@ namespace HealthReporter.Controls
             this._parent.stkTest.Children.RemoveAt(childNumber - 1);            
         }
 
+        private void btn_AddTestsToPreset(object sender, RoutedEventArgs e)
+        {
+            IList<Test> tests = new List<Test>();
+            foreach(ListBoxItem item in listBox.Items)
+            {            
+                if (item.isSelected)
+                {
+                    tests.Add(item.test);
+                }
+            }
+            if(tests.Count == 0)
+            {
+                MessageBox.Show("Please select tests");
+                return;
+            }
+
+            AddNewPresetControl obj = new AddNewPresetControl(this._parent, tests, client, group, appraiser, appraisal);
+            this.Opacity = 0.3;
+            this._parent.stkTest.Children.Add(obj);
+        }
+
         private void btn_OK(object sender, RoutedEventArgs e)
         {
             foreach (var item in listBox.SelectedItems)
             {
-                Test test = (Test)item;
+                ListBoxItem lbItem = (ListBoxItem)item;
+                Test test = lbItem.test;
                 tests.Add(test);
             }
+            //adds preset tests to tests
+            var rep = new PresetTestRepository();
+            var testRep = new TestRepository();
+            foreach (Preset preset in presetBox.SelectedItems)
+            {
+                IList<PresetTest> preTests = rep.FindPresetTests(preset);
+                foreach (PresetTest preTest in preTests)
+                {
+                    tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
+                }
+            }
+
             if (tests.Count < 1)
             {
                 MessageBox.Show("Please select test/tests.", "Message");
@@ -82,10 +123,89 @@ namespace HealthReporter.Controls
                 
 
                 this._parent.stkTest.Children.Add(obj);
-
-               
-
             }
+        }
+
+        class ListBoxItem
+        {
+            public ListBoxItem()
+            {
+            }
+            public Test test { get; set; }
+            public bool isSelected { get; set; }
+        }
+
+        private void showTests() 
+        {
+            var repo = new TestRepository();
+
+            IList<ListBoxItem> items = new List<ListBoxItem>();
+
+            IList<Test> tests = repo.FindAll();
+            int i = 0;
+            foreach (Test t in tests)
+            {
+                    bool isA = i%2 == 0;
+                    i++;
+                    items.Add(new ListBoxItem() { test = t, isSelected = false });
+             }
+            listBox.ItemsSource = items;
+        }
+
+        private void deletePresetButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the selected presets?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            if (result == MessageBoxResult.Yes)
+            {
+                var rep = new PresetTestRepository();
+                var repo = new PresetRepository();
+                foreach(Preset preset in presetBox.SelectedItems)
+                {
+                    rep.Delete(preset);
+                    repo.Delete(preset);
+                }
+
+                IList<Preset> presets = new List<Preset>();
+                presets = repo.FindAll();
+                presetBox.ItemsSource = presets;
+            }
+        }
+
+        private void viewTests_Click(object sender, RoutedEventArgs e)
+        {
+            var rep = new PresetTestRepository();
+            var testRep = new TestRepository();
+            List<Test> tests = new List<Test>();
+            foreach (Preset preset in presetBox.SelectedItems)
+            {
+                IList<PresetTest> preTests = rep.FindPresetTests(preset);
+                foreach (PresetTest preTest in preTests)
+                {
+                    tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
+                }
+            }
+            String str = "";
+            foreach(Test test in tests)
+            {
+                str += test.name + " \n";
+            }
+            MessageBox.Show(str);
+
+        }
+    }
+
+    public class InvertBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            bool booleanValue = (bool)value;
+            return !booleanValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter,System.Globalization. CultureInfo culture)
+        {
+            bool booleanValue = (bool)value;
+            return !booleanValue;
         }
     }
 }
