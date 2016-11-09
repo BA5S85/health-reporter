@@ -107,6 +107,11 @@
                             <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
                         <DataGrid.Resources>
+                            <ContextMenu x:Key="GridContextMenu">
+                                <ContextMenu.Items>
+                                    <MenuItem Header="Delete" Click="MenuItem_DeleteCategory"/>
+                                </ContextMenu.Items>
+                            </ContextMenu>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
                                     <Trigger Property="DataGridCell.IsSelected" Value="True">
@@ -130,6 +135,7 @@
                                 <Setter Property="Height" Value="23"/>
                                 <Setter Property="Background" Value="AliceBlue"/>
                                 <Setter Property="Margin" Value="15,0,0,0" />
+                                <Setter Property="ContextMenu" Value="{StaticResource GridContextMenu}" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightBlue"/>
@@ -189,9 +195,9 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <DataGrid Grid.Row="1" Focusable="True" Grid.Column="0" x:Name="testsDataGrid" SelectionMode="Single" IsReadOnly="True" SelectedValuePath="test.name" CanUserSortColumns="False" HeadersVisibility="None" AutoGenerateColumns="False"  SelectionChanged="testsDataGrid_SelectionChanged" Background="{x:Null}" GridLinesVisibility="None" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" >
+                    <DataGrid Grid.Row="1" Focusable="True" Grid.Column="0" x:Name="testsDataGrid" SelectionMode="Single" IsReadOnly="True" SelectedValuePath="name" CanUserSortColumns="False" HeadersVisibility="None" AutoGenerateColumns="False"  SelectionChanged="testsDataGrid_SelectionChanged" Background="{x:Null}" GridLinesVisibility="None" BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding test.name}" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding name}" Width="*"/>
                         </DataGrid.Columns>
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type DataGridCell}">
@@ -221,10 +227,6 @@
                                         <Setter Property="Background" Value="#eee9e9"/>
                                         <Setter Property="Margin" Value="15,0,0,0" />
                                     </Trigger>
-                                    <DataTrigger Binding="{Binding isLast}" Value="true">
-                                        <Setter Property="BorderThickness" Value="0, 0, 0, 2"/>
-                                        <Setter Property="BorderBrush" Value="#606464"/>
-                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGrid.RowStyle>
@@ -300,7 +302,7 @@
                                                 <DataTemplate>
                                                     <DataGrid x:Name="menRatingsDatagrid" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" Unloaded="menRatingsDatagrid_Unloaded" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" PreviewKeyDown="KeyDownHandler" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}" IsReadOnly="False" HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
-                                                            <DataGridTextColumn Header="Score" Binding="{Binding normM, UpdateSourceTrigger = PropertyChanged}"  Width="0.5*" CanUserSort="False"/>
+                                                            <DataGridTextColumn Header="Score" Binding="{Binding normM, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>
@@ -384,7 +386,7 @@
                                                 <DataTemplate>
                                                     <DataGrid x:Name="WomenRatingsDatagrid" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionMode="Single" Unloaded="WomenRatingsDatagrid_Unloaded" RowDetailsVisibilityMode="Collapsed" IsReadOnly="False" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}"  HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
-                                                            <DataGridTextColumn Header="Score" Binding="{Binding normF, UpdateSourceTrigger = PropertyChanged}"  Width="0.5*" CanUserSort="False"/>
+                                                            <DataGridTextColumn Header="Score" Binding="{Binding normF, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>
