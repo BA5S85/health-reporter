@@ -31,10 +31,7 @@ namespace HealthReporter.Controls
      
 
         public NewAppraisalStep2Control(MainWindow _parent, Client client, Group group, Appraiser appraiser, Appraisal appraisal)
-        {
-            var repo = new TestRepository();
-            IList<Test> tests = repo.FindAll();
-            
+        {           
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
@@ -42,15 +39,24 @@ namespace HealthReporter.Controls
             this.appraiser = appraiser;
             this.appraisal = appraisal;
 
-            showTests();
-
+  
             var rep = new PresetRepository();
             IList<Preset> presets = new List<Preset>();
             presets = rep.FindAll();       
             presetBox.ItemsSource = presets;
+
+            var catRep = new TestCategoryRepository();
+            IList<TestCategory> cats = catRep.FindAll();
+
+            IList<RowItem> items = new List<RowItem>();
+
+            foreach (TestCategory cat in cats)
+            {
+                items.Add(new RowItem() { category = cat, categoryTests = getListBoxItems(cat) });
+            }
+
+            catsDataGrid.ItemsSource = items;
         }
-
-
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
@@ -61,11 +67,15 @@ namespace HealthReporter.Controls
         private void btn_AddTestsToPreset(object sender, RoutedEventArgs e)
         {
             IList<Test> tests = new List<Test>();
-            foreach(ListBoxItem item in listBox.Items)
-            {            
-                if (item.isSelected)
+            foreach(RowItem item in catsDataGrid.Items)
+            {
+                IList<ListBoxItem> lbItems = item.categoryTests;
+                foreach(ListBoxItem lbItem in lbItems)
                 {
-                    tests.Add(item.test);
+                    if (lbItem.isSelected)
+                    {
+                        tests.Add(lbItem.test);
+                    }
                 }
             }
             if(tests.Count == 0)
@@ -81,12 +91,19 @@ namespace HealthReporter.Controls
 
         private void btn_OK(object sender, RoutedEventArgs e)
         {
-            foreach (var item in listBox.SelectedItems)
+            foreach (RowItem item in catsDataGrid.Items)
             {
-                ListBoxItem lbItem = (ListBoxItem)item;
-                Test test = lbItem.test;
-                tests.Add(test);
+                IList<ListBoxItem> lbItems = item.categoryTests;
+                foreach(ListBoxItem lbItem in lbItems)
+                {
+                    if (lbItem.isSelected)
+                    {
+                        tests.Add(lbItem.test); //ADDS ALL TESTS!! even if they are already in the history view
+                    }
+                }
             }
+            //TODO: if test is already added from selection dont add it from presets again
+
             //adds preset tests to tests
             var rep = new PresetTestRepository();
             var testRep = new TestRepository();
@@ -133,23 +150,29 @@ namespace HealthReporter.Controls
             }
             public Test test { get; set; }
             public bool isSelected { get; set; }
+            public bool isEnabled { get; set; }
         }
 
-        private void showTests() 
+        class RowItem
+        {
+            public RowItem()
+            {
+            }
+            public TestCategory category { get; set; }
+            public IList<ListBoxItem> categoryTests { get; set; }
+        }
+
+        private IList<ListBoxItem> getListBoxItems(TestCategory cat) 
         {
             var repo = new TestRepository();
+            IList<Test> tests = repo.GetTestsByCategory(cat);
 
             IList<ListBoxItem> items = new List<ListBoxItem>();
-
-            IList<Test> tests = repo.FindAll();
-            int i = 0;
             foreach (Test t in tests)
             {
-                    bool isA = i%2 == 0;
-                    i++;
-                    items.Add(new ListBoxItem() { test = t, isSelected = false });
+                    items.Add(new ListBoxItem() { test = t, isSelected = false, isEnabled=true });
              }
-            listBox.ItemsSource = items;
+            return items;
         }
 
         private void deletePresetButton_Click(object sender, RoutedEventArgs e)

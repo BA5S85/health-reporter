@@ -17,18 +17,28 @@
         </Border>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Grid>
-                <ListBox x:Name="listBox" Visibility="Visible" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple" Height="337" Width="238" Margin="72,71,0,0">
-                    <ListBox.ItemTemplate>
+                <DataGrid x:Name="catsDataGrid" Margin="37,71,439,109" GridLinesVisibility="None"  AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding category.name}" Width="*"/>
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding test.name}"/>
+                            <ListBox x:Name="listBox" Visibility="Visible" BorderThickness="0" ItemsSource="{Binding categoryTests}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionMode="Multiple" Margin="10,0,0,0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding test.name}" Height="25" Margin="0,7,0,0" VerticalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="IsSelected" Value="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                        <Setter Property="IsEnabled" Value="{Binding isEnabled, Mode=OneTime}"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="IsSelected" Value="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
+                    </DataGrid.RowDetailsTemplate>
+                </DataGrid>
                 <ListBox x:Name="presetBox" Visibility="Visible" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple" Height="192" Width="155" Margin="440,71,0,0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -70,8 +80,8 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <TextBlock Text="Add these tests to a preset" Margin="110,421,424,45"></TextBlock>
-                <Button HorizontalAlignment="Left" x:Name="addTestsToPreset" ContextMenuService.IsEnabled="False"  Content="+" Margin="72,0,0,41" VerticalAlignment="Bottom" Click="btn_AddTestsToPreset" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="33">
+                <TextBlock Text="Add these tests to a preset" Margin="84,421,450,45"></TextBlock>
+                <Button HorizontalAlignment="Left" x:Name="addTestsToPreset" ContextMenuService.IsEnabled="False"  Content="+" Margin="37,0,0,41" VerticalAlignment="Bottom" Click="btn_AddTestsToPreset" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="33">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="4"/>
