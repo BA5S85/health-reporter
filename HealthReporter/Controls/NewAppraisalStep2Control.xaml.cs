@@ -124,7 +124,22 @@ namespace HealthReporter.Controls
             {
                 // Adding appraiser and appraisal info to the database.
                 AppraisalsRepository repo = new AppraisalsRepository();
-                repo.Insert(appraisal, appraiser);
+                
+
+                //-----------------------delete later
+                List<Appraisal_tests> at = new List<Appraisal_tests>();
+                foreach (Test test in tests)
+                {
+                    Appraisal_tests one = new Appraisal_tests();
+                    one.appraisalId = appraisal.id;
+                    one.testId = test.id;
+                    one.score = Decimal.Parse("1");
+                    one.note = "Testnote";
+                    at.Add(one);
+
+                }
+                repo.Insert(appraisal, appraiser, at);
+                //-------------------
 
                 // Going to the Main appraisal history view
                 int childNumber = this._parent.stkTest.Children.Count;
@@ -132,11 +147,11 @@ namespace HealthReporter.Controls
 
                 CAH obj = new CAH(this._parent, client, group);
 
-                // Adding new column which header is appraisals date and what client can edit.
-                DataGridTextColumn textColumn = new DataGridTextColumn();
-                textColumn.Header = this.appraisal.date.ToString();
-               // textColumn.Binding = new Binding("FirstName");
-                obj.dataGrid.Columns.Add(textColumn);
+               // // Adding new column which header is appraisals date and what client can edit.
+               // DataGridTextColumn textColumn = new DataGridTextColumn();
+               // textColumn.Header = this.appraisal.date.ToString();
+               //// textColumn.Binding = new Binding("FirstName");
+                //obj.dataGrid.Columns.Add(textColumn);
                 
 
                 this._parent.stkTest.Children.Add(obj);

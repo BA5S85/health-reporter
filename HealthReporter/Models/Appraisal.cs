@@ -12,18 +12,18 @@ namespace HealthReporter.Models
 
     public class AppraisalsRepository
     {
-        public void Insert(Appraisal appraisal, Appraiser appraiser)
+        public void Insert(Appraisal appraisal, Appraiser appraiser, List<Appraisal_tests> tests)
         {
             var connection = DatabaseUtility.getConnection();
 
             var res = connection.InsertSql("INSERT INTO appraisals (id, appraiserId, clientId, date ) values(@id, @appraiserId, @clientId, @date)", appraisal);
             var res2 = connection.InsertSql("INSERT INTO appraisers (id, name) values(@id, @name)", appraiser);
 
-            // List<Appraisal_tests> tests
-            //foreach (Appraisal_tests test in tests)
-            //{
-            //    var res3 = connection.InsertSql("INSERT INTO appraisal_tests (appraisalId, testId, score, note, trial1, trial2, trial3) values(@appraisalId, @testId, @score, @note, @trial1, @trial2, @trial3)", test);
-            //}
+            
+            foreach (Appraisal_tests test in tests)
+            {
+                var res3 = connection.InsertSql("INSERT INTO appraisal_tests (appraisalId, testId, score, note, trial1, trial2, trial3) values(@appraisalId, @testId, @score, @note, @trial1, @trial2, @trial3)", test);
+            }
 
 
         }
