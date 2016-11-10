@@ -278,6 +278,7 @@ namespace HealthReporter.Controls
             allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
         }
 
+
         private void hideShowBtnGroups2()
         {
             allClientsButtonselected = false;
