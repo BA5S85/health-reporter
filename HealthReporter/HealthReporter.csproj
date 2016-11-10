@@ -114,9 +114,6 @@
     <Compile Include="Controls\AddNewTestCategoryControl.xaml.cs">
       <DependentUpon>AddNewTestCategoryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CAH_AddNewAppraisalControl.xaml.cs">
-      <DependentUpon>CAH_AddNewAppraisalControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NewAppraisalStep2Control.xaml.cs">
       <DependentUpon>NewAppraisalStep2Control.xaml</DependentUpon>
     </Compile>
@@ -152,10 +149,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\AddNewTestCategoryControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\CAH_AddNewAppraisalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

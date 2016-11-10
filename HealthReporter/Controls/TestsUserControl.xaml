@@ -166,18 +166,7 @@
                                             <Setter.Value>
                                                 <VisualBrush Stretch="None">
                                                     <VisualBrush.Visual>
-                                                        <TextBlock Text="Search" Foreground="Gray"/>
-                                                    </VisualBrush.Visual>
-                                                </VisualBrush>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="{x:Null}">
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <VisualBrush Stretch="None">
-                                                    <VisualBrush.Visual>
-                                                        <TextBlock Text="Search" Foreground="Gray"/>
+                                                        <TextBlock Text="Search" Foreground="#696969"/>
                                                     </VisualBrush.Visual>
                                                 </VisualBrush>
                                             </Setter.Value>

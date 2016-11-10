@@ -42,18 +42,19 @@ namespace HealthReporter.Controls
 
             groupDataGrid.ItemsSource = groups;
 
+            hideShowButtons();
 
+            btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
+          
+            findClientTotal();
+        }
+
+        private void hideShowButtons()
+        {
             NoCards.Visibility = Visibility.Visible;
             search.Visibility = Visibility.Hidden;
             openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
             openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
-
-            btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
-
-           
-
-            findClientTotal();
-
         }
 
         private void findClientTotal()
@@ -79,7 +80,6 @@ namespace HealthReporter.Controls
             (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Top;
             (sender as Button).ContextMenu.IsOpen = true;
         }
-
 
         private void btn_AddNewGroup(object sender, RoutedEventArgs e)
         {
@@ -115,8 +115,6 @@ namespace HealthReporter.Controls
             // Making clients grids empty
             clientDataGrid.ItemsSource = null;
             clientDetailDatagrid.DataContext = null;
-
-
         }
 
         private void btn_AddNewClient(object sender, RoutedEventArgs e)
@@ -127,8 +125,6 @@ namespace HealthReporter.Controls
             }
             else
             {
-
-
                 //Cheking if there is any groups in the database
                 var groupRepo = new GroupRepository();
                 IList<Models.Group> groups = groupRepo.FindAll();
@@ -138,8 +134,6 @@ namespace HealthReporter.Controls
                 }
                 else
                 {
-
-
                     try
                     {
                         DateTime enteredDate = Convert.ToDateTime(DateTime.Now);
@@ -152,11 +146,9 @@ namespace HealthReporter.Controls
                             gender = "1",
                             birthDate = String.Format("{0:yyyy-MM-dd}", enteredDate)
                         };
-
                         var repo2 = new ClientRepository();
                         repo2.Insert(client);
                         this._client = client;
-
                     }
                     catch
                     {
@@ -178,17 +170,13 @@ namespace HealthReporter.Controls
                     firstName.SelectAll();
 
                     findClientTotal();
-
-
                 }
             }
         }
 
-
-        //Adding new group
+        //Adding New Group
         private void Add(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 var group = new Models.Group()
@@ -204,97 +192,65 @@ namespace HealthReporter.Controls
                 MessageBox.Show("Something went wrong with adding a new group.");
             }
 
-            //updating values in groups menu
+            // Updating values in groups menu
             var repo = new GroupRepository();
             IList<Models.Group> groups = repo.FindAll();
 
             groupDataGrid.ItemsSource = groups;
 
-
-
         }
 
         private bool messageShown=false;
 
+        private void showMessage()
+        {
+            if (messageShown == false)
+            {
+                MessageBox.Show("Please fill required fields");
+                messageShown = true;
+            }
+            else
+            {
+                messageShown = false;
+            }
+        }
+
         private void groupsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            //Validation (All clients tab selected)
             if (allClientsButtonselected == true && this._client != null && validationCheck() == false)
             {
                 groupDataGrid.IsEnabled = false;
-                if (messageShown == false)
-                {
-                    MessageBox.Show("Please fill required fields");
-                    messageShown = true;
-                }
-                else
-                {
-                    messageShown = false;
-                }
+                showMessage();
 
                 Dispatcher.BeginInvoke(new Action(delegate {
                     groupDataGrid.SelectedItem = this._group;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
-                groupDataGrid.IsEnabled = false;
-                groupDataGrid.IsEnabled = true;
-                clientDetailDatagrid.Visibility = Visibility.Visible;
-                NoCards.Visibility = Visibility.Hidden;
-                search.Visibility = Visibility.Visible;
-                search.Visibility = Visibility.Hidden;
-                openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-                openAppraisalHistoryLabel.Visibility = Visibility.Visible;
-                allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
 
+                hideShowBtnGroups();
                 return;
             }
 
-            allClientsButtonselected = false;
-            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#F0F8FF"));
+            hideShowBtnGroups2();
 
-            search.Visibility = Visibility.Hidden;
-            searchAllClients.Visibility = Visibility.Hidden;
-            clientDetailDatagrid.Visibility = Visibility.Hidden;
-            delete.Visibility = Visibility.Hidden;
-            NoCards.Visibility = Visibility.Visible;
-            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
-            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
-
-
-
+            //Validation per Group
             if (this._group!=null && this._client != null && validationCheck() == false)
             {
                 groupDataGrid.IsEnabled = false;
-                if (messageShown == false)
-                {
-                    MessageBox.Show("Please fill required fields");
-                    messageShown = true;
-                }else
-                {
-                    messageShown = false;
-                }
+                showMessage();
                
                 Dispatcher.BeginInvoke(new Action(delegate {
                     groupDataGrid.SelectedItem = this._group;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
-                groupDataGrid.IsEnabled = false;
-                groupDataGrid.IsEnabled = true;
-                clientDetailDatagrid.Visibility = Visibility.Visible;
-                NoCards.Visibility = Visibility.Hidden;
-                search.Visibility = Visibility.Visible;
-                openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-                openAppraisalHistoryLabel.Visibility = Visibility.Visible;
-
+               
+                hideShowBtnGroups3();
                 return;
             }
+
             SaveClientInfo(this._client);
 
-
             Models.Group selectedGroup = (Models.Group)groupDataGrid.SelectedItem;
-
-
             this._group = selectedGroup;
-
-
 
             var repo = new ClientRepository();
             if (this._group != null)
@@ -307,34 +263,57 @@ namespace HealthReporter.Controls
                 {
                     clientDataGrid.SelectedIndex = 0;
                 }
-
-
             }
         }
         
+        private void hideShowBtnGroups()
+        {
+            groupDataGrid.IsEnabled = false;
+            groupDataGrid.IsEnabled = true;
+            clientDetailDatagrid.Visibility = Visibility.Visible;
+            NoCards.Visibility = Visibility.Hidden;
+            search.Visibility = Visibility.Hidden;
+            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
+        }
+
+        private void hideShowBtnGroups2()
+        {
+            allClientsButtonselected = false;
+            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#F0F8FF"));
+            search.Visibility = Visibility.Hidden;
+            searchAllClients.Visibility = Visibility.Hidden;
+            clientDetailDatagrid.Visibility = Visibility.Hidden;
+            delete.Visibility = Visibility.Hidden;
+            NoCards.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
+            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
+        }
+
+        private void hideShowBtnGroups3()
+        {
+            groupDataGrid.IsEnabled = false;
+            groupDataGrid.IsEnabled = true;
+            clientDetailDatagrid.Visibility = Visibility.Visible;
+            NoCards.Visibility = Visibility.Hidden;
+            search.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+        }
 
         private void clientDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this._client != null && validationCheck() == false)
             {
                 clientDataGrid.IsEnabled = false;
-                if (messageShown == false)
-                {
-                    MessageBox.Show("Please fill required fields");
-                    messageShown = true;
-                }
-                else
-                {
-                    messageShown = false;
-                }
+                showMessage();
+
                 Dispatcher.BeginInvoke(new Action(delegate {
                     clientDataGrid.SelectedItem = this._client;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
                 clientDataGrid.IsEnabled = false;
                 clientDataGrid.IsEnabled = true;
-
-               
-
 
                 return;
             }
@@ -342,31 +321,23 @@ namespace HealthReporter.Controls
             // When all clients tab is selected
             if (this.allClientsButtonselected == true)
             {
-
-                allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
-                Client selClient = (Client)clientDataGrid.SelectedItem;
-                searchAllClients.Visibility = Visibility.Visible;
-                search.Visibility = Visibility.Hidden;
-
+                hideShowClients();
+                Client selClient = (Client)clientDataGrid.SelectedItem;              
  
                 if (selClient != null)
-                {
-                    
+                {                    
                     SaveClientInfo(this._client);
                     this._client = selClient;
-                    NoCards.Visibility = Visibility.Hidden;
-                    clientDetailDatagrid.Visibility = Visibility.Visible;
-                    openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-                    openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+                    hideShowClients1();
 
                     clientDetailDatagrid.DataContext = selClient;
                 }
 
             }
+
             //Otherwise some group is selected
             else
             {
-
                 var repo = new ClientRepository();
                 int clientCount = 0;
 
@@ -374,43 +345,60 @@ namespace HealthReporter.Controls
                 if (this._group != null)
                 {
                     IList<Client> clients = repo.GetClientsByGroupName(this._group);
-                    clientCount = clients.Count;
-                    
+                    clientCount = clients.Count;                   
                     SaveClientInfo(this._client);
                 }
 
                 //Checking if we have clients under selected group
                 if (clientCount <= 0)
                 {
-                    clientDetailDatagrid.Visibility = Visibility.Hidden;
-                    delete.Visibility = Visibility.Hidden;
-                    NoCards.Visibility = Visibility.Visible;
-                    openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
-                    openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
+                    hideShowClients3();
                 }
                 else
                 {
-
-                    delete.Visibility = Visibility.Visible;
-                    clientDetailDatagrid.Visibility = Visibility.Visible;
-                    NoCards.Visibility = Visibility.Hidden;
-                    openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-                    openAppraisalHistoryLabel.Visibility = Visibility.Visible;
-
+                    hideShowClients4();
                     SaveClientInfo(this._client);
-
 
                     Client selectedClient = (Client)clientDataGrid.SelectedItem;
                     this._client = selectedClient;
 
-
                     clientDetailDatagrid.DataContext = this._client;
-
                 }
-
 
             }
         }
+
+        private void hideShowClients()
+        {
+            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
+            searchAllClients.Visibility = Visibility.Visible;
+            search.Visibility = Visibility.Hidden;
+        }
+        private void hideShowClients1()
+        {
+            NoCards.Visibility = Visibility.Hidden;
+            clientDetailDatagrid.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+        }
+
+        private void hideShowClients3()
+        {
+            clientDetailDatagrid.Visibility = Visibility.Hidden;
+            delete.Visibility = Visibility.Hidden;
+            NoCards.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
+            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
+        }
+        private void hideShowClients4()
+        {
+            delete.Visibility = Visibility.Visible;
+            clientDetailDatagrid.Visibility = Visibility.Visible;
+            NoCards.Visibility = Visibility.Hidden;
+            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+        }
+
         private bool validationCheck()
         {
             if (String.IsNullOrWhiteSpace(this._client.firstName) || String.IsNullOrWhiteSpace(this._client.lastName) ||
@@ -422,34 +410,27 @@ namespace HealthReporter.Controls
             return true;
         }
 
-
         private void SaveClientInfo(Client client)
         {
-
             if (client != null)
-            {
-               
+            {               
                 var repo = new ClientRepository();
                 DateTime enteredDate = Convert.ToDateTime(client.birthDate.ToString());
-                client.birthDate = String.Format("{0:yyyy-MM-dd}", enteredDate);
-                //MessageBox.Show(client.gender, "Message");
+                client.birthDate = String.Format("{0:yyyy-MM-dd}", enteredDate);                
                
                 repo.Update(client);
             }
-
-
         }
-
 
         private void btn_Delete(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to delete this?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to delete this?", "Delete Confirmation", 
+                System.Windows.MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 Client client = this._client;
                 var repo = new ClientRepository();
                 repo.Delete(client);
-
                 
                 //updating values in clients menu
                 var repoClient = new ClientRepository();
@@ -464,11 +445,6 @@ namespace HealthReporter.Controls
             }
         }
 
-
-
-
-
-
         private void btn_Clients(object sender, RoutedEventArgs e)
         {
             if (this._client != null && validationCheck() == false)
@@ -480,10 +456,7 @@ namespace HealthReporter.Controls
 
             ClientUserControl obj = new ClientUserControl(_parent);
             _parent.stkTest.Children.Clear();
-            _parent.stkTest.Children.Add(obj);
-            //btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
-            //btnShowTests.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
-
+            _parent.stkTest.Children.Add(obj);         
         }
 
         private void btn_Tests(object sender, RoutedEventArgs e)
@@ -499,12 +472,8 @@ namespace HealthReporter.Controls
 
             TestsUserControl obj = new TestsUserControl(_parent);
             _parent.stkTest.Children.Clear();
-            _parent.stkTest.Children.Add(obj);
-            //btnShowTests.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0F0F0"));
-            //btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
+            _parent.stkTest.Children.Add(obj);          
         }
-
-
 
         private void groupDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -515,62 +484,48 @@ namespace HealthReporter.Controls
                     if (groupDataGrid.SelectedItem is Models.Group)
                     {
                         var row = (Models.Group)groupDataGrid.SelectedItem;
-
-                        if (row != null)
-                        {
-
+                        if (row != null) {
                             var group = this._group;
                             group.name = (e.EditingElement as TextBox).Text;
 
-
                             var repo = new GroupRepository();
                             repo.Update(group);
-
                         }
                     }
                 }
             }
             catch (Exception)
             {
-            }
-
-            //MessageBox.Show((e.EditingElement as TextBox).Text.ToString());
-
+            }           
             groupDataGrid.IsReadOnly = true;
         }
 
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
             Keyboard.ClearFocus();
             groupDataGrid.IsReadOnly = true;
-
         }
 
         private void MenuItem_Delete(object sender, RoutedEventArgs e)
         {
-              //Finding the item what we are going to delete.
-                var item = (MenuItem)sender;
+            //Finding the item what we are going to delete.
+            var item = (MenuItem)sender;
             var contextMenu = (ContextMenu)item.Parent;
             var item2 = (DataGrid)contextMenu.PlacementTarget;
             var deleteobj = (Models.Group)item2.SelectedCells[0].Item;
 
             MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to delete this?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
-            {
-              
-
+            {             
             var repo = new GroupRepository();
             repo.Delete(deleteobj);
 
             // Updating Group menu
             var repoGroup = new GroupRepository();
             IList<Models.Group> groups = repoGroup.FindAll();
-
      
-            groupDataGrid.ItemsSource = groups;
-           
+            groupDataGrid.ItemsSource = groups;          
 
             // Making clients grids empty
             clientDataGrid.ItemsSource = null;
@@ -583,24 +538,17 @@ namespace HealthReporter.Controls
 
         private void MenuItem_Rename(object sender, RoutedEventArgs e)
         {
-
             //Finding the item what we are going to rename.
             var item = (MenuItem)sender;
             var contextMenu = (ContextMenu)item.Parent;
             var item2 = (DataGrid)contextMenu.PlacementTarget;
             var renameobj = (Models.Group)item2.SelectedCells[0].Item;
-
            
             // Adding focus on the rename obj row
-
-            groupDataGrid.Focus();
-          
+            groupDataGrid.Focus();        
             groupDataGrid.SelectedItem = renameobj;          
             groupDataGrid.IsReadOnly = false;
-            groupDataGrid.BeginEdit();
-           
-
-
+            groupDataGrid.BeginEdit();          
         }
         
 
@@ -625,11 +573,8 @@ namespace HealthReporter.Controls
             var repo = new ClientRepository();
             IList<Client> clients = repo.FindSearchResult(searchBy, this._group);
 
-
             clientDataGrid.ItemsSource = clients;
-            clientDataGrid.SelectedIndex = 0;
-            
-            
+            clientDataGrid.SelectedIndex = 0;                        
           }
 
         private void filterSearchBoxAllClients(object sender, TextChangedEventArgs e)
@@ -652,19 +597,14 @@ namespace HealthReporter.Controls
 
             var repo = new ClientRepository();
             IList<Client> clients = repo.FindSearchResultAllClients(searchBy);
-
-
             clientDataGrid.ItemsSource = clients;
             clientDataGrid.SelectedIndex = 0;
-
-
         }
 
         private void search_GotFocus(object sender, RoutedEventArgs e)
         {
             if (this._client != null && validationCheck() == false)
-            {
-               
+            {              
                 return;
             }
             SaveClientInfo(this._client);
@@ -673,7 +613,6 @@ namespace HealthReporter.Controls
 
         private void btn_ShowAllClients(object sender, RoutedEventArgs e)
         {
-
             if (this._client != null && validationCheck() == false)
             {
                 MessageBox.Show("Please fill required fields");
@@ -683,17 +622,14 @@ namespace HealthReporter.Controls
             var repo = new ClientRepository();
             groupDataGrid.SelectedItem = null;
 
-
             allClientsButtonselected = true;
 
-        IList<Client> clients = repo.FindAll();
+            IList<Client> clients = repo.FindAll();
                
             clientDataGrid.ItemsSource = clients;
             clientDataGrid.SelectedIndex = 0;
 
             allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
-
-
         }
 
         private void btn_OpenAppraisalHistory(object sender, RoutedEventArgs e)
@@ -707,4 +643,3 @@ namespace HealthReporter.Controls
         }
     }
     }
-
