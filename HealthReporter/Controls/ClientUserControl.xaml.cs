@@ -62,7 +62,7 @@ namespace HealthReporter.Controls
             // Total client amount
             var repoC = new ClientRepository();
             IList<Client> allclients = repoC.FindAll();
-
+              
             clientTotal.Text = allclients.Count.ToString() + " Clients";
         }
 
@@ -312,6 +312,7 @@ namespace HealthReporter.Controls
                 Dispatcher.BeginInvoke(new Action(delegate {
                     clientDataGrid.SelectedItem = this._client;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
+
                 clientDataGrid.IsEnabled = false;
                 clientDataGrid.IsEnabled = true;
 
