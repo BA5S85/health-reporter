@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HealthReporter.Models;
+using System.Data;
 
 namespace HealthReporter.Controls
 {
@@ -82,7 +83,9 @@ namespace HealthReporter.Controls
                             Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
                             newOne2.date = date;
                             newOne2.appraiser = "";
-                            newOne2.score = 0;
+                            newOne2.score = -1;
+                            newOne2.applId = new byte[] { };
+                            newOne2.tId= new byte[] { };
                             newOne.list.Add(newOne2);
                         }
                         else
@@ -91,6 +94,8 @@ namespace HealthReporter.Controls
                             newOne2.date = item.date;
                             newOne2.appraiser = item.AppraisersName;
                             newOne2.score = item.Score;
+                            newOne2.applId = item.applId;
+                            newOne2.tId = item.tId;
                             newOne.list.Add(newOne2);
                         }
                     }
@@ -110,6 +115,8 @@ namespace HealthReporter.Controls
                                     elem.appraiser = item.date;
                                     elem.date = date;
                                     elem.score = item.Score;
+                                    elem.applId = item.applId;
+                                    elem.tId = item.tId;
                                 }
 
                             }
@@ -165,6 +172,44 @@ namespace HealthReporter.Controls
         private void btn_Report(object sender, RoutedEventArgs e)
         {
            
+        }
+
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+            //MessageBox.Show(elem.TestName);
+        }
+
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            var editedTextbox = e.EditingElement as TextBox;           
+            FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+            
+            DataGridColumn col1 = e.Column;
+            int index = col1.DisplayIndex;           
+           
+            Date_Score_Appraiser elem2 = elem.list[index - 2];
+
+            if (elem2.score != -1)
+            {
+                Appraisal_tests appTest = new Appraisal_tests();
+                appTest.testId = elem2.tId;
+                appTest.appraisalId = elem2.applId;
+                if (editedTextbox.Text.ToString() != "")
+                {
+                    appTest.score = Decimal.Parse(editedTextbox.Text);
+                    var repo = new Appraisal_tests_repository();
+                    repo.Update(appTest);
+                }
+
+            }else
+            {
+               
+            }
+           
+
+            //Date_Score_Appraiser cellValue = elem[index];
+
         }
     }
 }

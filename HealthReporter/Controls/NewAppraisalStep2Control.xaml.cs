@@ -133,7 +133,7 @@ namespace HealthReporter.Controls
                     Appraisal_tests one = new Appraisal_tests();
                     one.appraisalId = appraisal.id;
                     one.testId = test.id;
-                    one.score = Decimal.Parse("1");
+                    one.score = Decimal.Parse("0");
                     one.note = "Testnote";
                     at.Add(one);
 
