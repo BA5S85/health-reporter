@@ -48,13 +48,31 @@ namespace HealthReporter.Controls
             var catRep = new TestCategoryRepository();
             IList<TestCategory> cats = catRep.FindAll();
 
+            var testRep = new TestRepository();
+            IList<Test> tests = testRep.FindAll();
+            var aprep = new AppraisalsRepository();
+            IList<Test> historyTests = aprep.FindAppraisalTests(this.client);
+
             IList<RowItem> items = new List<RowItem>();
 
+            //getsListBoxItems
             foreach (TestCategory cat in cats)
             {
-                items.Add(new RowItem() { category = cat, categoryTests = getListBoxItems(cat) });
+                IList<ListBoxItem> lbitems = new List<ListBoxItem>();
+                foreach (Test t in tests)
+                {
+                    if (t.categoryId.SequenceEqual(cat.id))
+                    {
+                        bool isSelected = false;
+                        foreach (Test hist in historyTests)
+                        {
+                            if (hist.name == t.name) isSelected = true;
+                        }
+                        lbitems.Add(new ListBoxItem() { test = t, isSelected = isSelected, isEnabled = !isSelected });
+                    }
             }
-
+                items.Add(new RowItem() { category = cat, categoryTests = lbitems});
+            }
             catsDataGrid.ItemsSource = items;
         }
 
@@ -180,12 +198,19 @@ namespace HealthReporter.Controls
         private IList<ListBoxItem> getListBoxItems(TestCategory cat) 
         {
             var repo = new TestRepository();
+            var rep = new AppraisalsRepository();
             IList<Test> tests = repo.GetTestsByCategory(cat);
+            IList<Test> historyTests = rep.FindAppraisalTests(this.client);
 
             IList<ListBoxItem> items = new List<ListBoxItem>();
             foreach (Test t in tests)
             {
-                    items.Add(new ListBoxItem() { test = t, isSelected = false, isEnabled=true });
+                bool isSelected = false;
+                foreach(Test hist in historyTests)
+                {
+                    if (hist.name == t.name) isSelected = true;
+                }
+                    items.Add(new ListBoxItem() { test = t, isSelected = true, isEnabled = !isSelected});
              }
             return items;
         }
@@ -227,8 +252,7 @@ namespace HealthReporter.Controls
             {
                 str += test.name + " \n";
             }
-            MessageBox.Show(str);
-
+            MessageBox.Show(str); 
         }
     }
 

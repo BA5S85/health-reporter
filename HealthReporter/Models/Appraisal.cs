@@ -34,6 +34,12 @@ namespace HealthReporter.Models
 
         }
 
+        public IList<Test> FindAppraisalTests(Client client)
+        {
+            return DatabaseUtility.getConnection().QuerySql<Test>("SELECT * FROM appraisals inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId=@id ", client);
+
+        }
+
     }
 
     public class Appraisal
