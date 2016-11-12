@@ -636,6 +636,7 @@ namespace HealthReporter.Controls
 
         private void btn_OpenAppraisalHistory(object sender, RoutedEventArgs e)
         {
+            SaveClientInfo(this._client);
             Client client = (Client)clientDataGrid.SelectedItem;
             Models.Group group = (Models.Group)groupDataGrid.SelectedItem;
             CAH obj = new CAH(this._parent, client, group);
