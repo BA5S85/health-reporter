@@ -109,17 +109,32 @@ namespace HealthReporter.Controls
 
         private void btn_OK(object sender, RoutedEventArgs e)
         {
+
+            //Finding all appraisal dates of client
+            List<string> dates = new List<string>();
+            var repo = new AppraisalsRepository();
+            IList<HistoryTableItem> history = repo.FindAll(client);
+
+            foreach (HistoryTableItem item in history)
+            {
+                if (item.date != null && !dates.Contains(item.date.ToString()))
+                {
+                    dates.Add(item.date.ToString());
+                }
+            }
+
             foreach (RowItem item in catsDataGrid.Items)
             {
                 IList<ListBoxItem> lbItems = item.categoryTests;
                 foreach(ListBoxItem lbItem in lbItems)
                 {
-                    if (lbItem.isSelected && lbItem.isEnabled)
+                    if (lbItem.isSelected && lbItem.isEnabled || !dates.Contains(appraisal.date))
                     {
                         tests.Add(lbItem.test); //adds only tests that are not in history view already
                     }
                 }
             }
+
             //adds preset tests to tests if they are not already there and if they are not already in the history
             var rep = new PresetTestRepository();
             var testRep = new TestRepository();
@@ -148,11 +163,7 @@ namespace HealthReporter.Controls
             }
             else
             {
-                // Adding appraiser and appraisal info to the database.
-                AppraisalsRepository repo = new AppraisalsRepository();
-                
-
-                //-----------------------delete later
+               
                 List<Appraisal_tests> at = new List<Appraisal_tests>();
                 foreach (Test test in tests)
                 {
@@ -164,20 +175,12 @@ namespace HealthReporter.Controls
 
                 }
                 repo.Insert(appraisal, appraiser, at);
-                //-------------------
-
+              
                 // Going to the Main appraisal history view
                 int childNumber = this._parent.stkTest.Children.Count;
                 this._parent.stkTest.Children.RemoveRange(childNumber - 3, childNumber);
 
-                CAH obj = new CAH(this._parent, client, group);
-
-               // // Adding new column which header is appraisals date and what client can edit.
-               // DataGridTextColumn textColumn = new DataGridTextColumn();
-               // textColumn.Header = this.appraisal.date.ToString();
-               //// textColumn.Binding = new Binding("FirstName");
-                //obj.dataGrid.Columns.Add(textColumn);
-                
+                CAH obj = new CAH(this._parent, client, group);                
 
                 this._parent.stkTest.Children.Add(obj);
             }

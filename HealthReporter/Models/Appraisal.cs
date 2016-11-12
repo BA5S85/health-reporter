@@ -74,6 +74,7 @@ namespace HealthReporter.Models
     {
         public string TestName { get; set; }
         public string units { get; set; }
+        public byte[] tId { get; set; }
         public List<Date_Score_Appraiser> list { get; set; }
 
 

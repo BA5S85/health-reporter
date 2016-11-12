@@ -79,6 +79,7 @@ namespace HealthReporter.Controls
                     FullHistoryDatagrid newOne = new FullHistoryDatagrid();
                     newOne.TestName = item.TestName;
                     newOne.units = item.Units;
+                    newOne.tId = item.tId;
                     newOne.list = new List<Date_Score_Appraiser>();
 
                     foreach (string date in dates)
@@ -239,6 +240,8 @@ namespace HealthReporter.Controls
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+
             scala.Children.Clear();
 
             Rectangle line = new Rectangle();
