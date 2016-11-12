@@ -16,17 +16,18 @@
             </Border.Effect>
         </Border>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
-            <Grid>
+            <Grid VerticalAlignment="Center">
                 <DataGrid x:Name="catsDataGrid" Margin="37,71,439,109" GridLinesVisibility="None"  AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding category.name}" Width="*"/>
                     </DataGrid.Columns>
                     <DataGrid.RowDetailsTemplate>
                         <DataTemplate>
-                            <ListBox x:Name="listBox" Visibility="Visible" BorderThickness="0" ItemsSource="{Binding categoryTests}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionMode="Multiple" Margin="10,0,0,0">
+                            <ListBox x:Name="listBox" TextOptions.TextFormattingMode="Display" Visibility="Visible" BorderThickness="0" ItemsSource="{Binding categoryTests}" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionMode="Multiple" Margin="10,0,0,0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding test.name}" Height="25" Margin="0,7,0,0" VerticalAlignment="Stretch"/>
+                                        <TextBlock TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType"  Text="{Binding test.name}" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" />
+
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                                 <ListBox.ItemContainerStyle>

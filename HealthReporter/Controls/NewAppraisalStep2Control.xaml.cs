@@ -114,27 +114,35 @@ namespace HealthReporter.Controls
                 IList<ListBoxItem> lbItems = item.categoryTests;
                 foreach(ListBoxItem lbItem in lbItems)
                 {
-                    if (lbItem.isSelected)
+                    if (lbItem.isSelected && lbItem.isEnabled)
                     {
-                        tests.Add(lbItem.test); //ADDS ALL TESTS!! even if they are already in the history view
+                        tests.Add(lbItem.test); //adds only tests that are not in history view already
                     }
                 }
             }
-            //TODO: if test is already added from selection dont add it from presets again
-
-            //adds preset tests to tests
+            //adds preset tests to tests if they are not already there and if they are not already in the history
             var rep = new PresetTestRepository();
             var testRep = new TestRepository();
+            var aprep = new AppraisalsRepository();
+            IList<Test> historyTests = aprep.FindAppraisalTests(this.client);
             foreach (Preset preset in presetBox.SelectedItems)
             {
                 IList<PresetTest> preTests = rep.FindPresetTests(preset);
                 foreach (PresetTest preTest in preTests)
                 {
-                    tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
+                    bool isHist = false;
+                    foreach(Test histTest in historyTests)
+                    {
+                        if (preTest.testId.SequenceEqual(histTest.id)) isHist = true;
+                    }
+                    foreach (Test test in this.tests)
+                    {
+                        if (preTest.testId.SequenceEqual(test.id)) isHist = true;
+                    }
+                    if(!isHist) tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
                 }
             }
-
-            if (tests.Count < 1)
+            if (tests.Count < 1 && historyTests.Count < 1)
             {
                 MessageBox.Show("Please select test/tests.", "Message");
             }
