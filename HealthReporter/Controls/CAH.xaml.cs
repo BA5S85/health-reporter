@@ -137,7 +137,7 @@ namespace HealthReporter.Controls
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
                 Binding binding =   new Binding("list[" + i + "]");
-                binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
                 textColumn.Binding = binding;
 
                 Style style = new Style(typeof(DataGridCell))
@@ -181,14 +181,18 @@ namespace HealthReporter.Controls
            
         }
 
-        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void dataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            //FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
-            //MessageBox.Show(elem.TestName);
+            e.Cancel = true;
         }
 
+        private void dataGrid_CurrentCellChanged(object sender, EventArgs e)
+        {
+            dataGrid.CommitEdit();
+        }
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+          
             var editedTextbox = e.EditingElement as TextBox;           
             FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
 
@@ -256,7 +260,11 @@ namespace HealthReporter.Controls
                 }
             }
 
+         
+
 
         }
+
+      
     }
 }
