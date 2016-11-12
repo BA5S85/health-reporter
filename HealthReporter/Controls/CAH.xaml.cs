@@ -50,7 +50,6 @@ namespace HealthReporter.Controls
             ClientInfo.DataContext = client1;
             ClientGroup.DataContext = group;
 
-
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
 
@@ -107,10 +106,9 @@ namespace HealthReporter.Controls
                     }
                     result.Add(newOne);
                 }
-                //Kui tulemuses on testinimi olemas
+                
                 else
-                {
-                   
+                {                  
                             FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
                             foreach (Date_Score_Appraiser elem in getElem.list)
                             {
@@ -121,10 +119,7 @@ namespace HealthReporter.Controls
                                     elem.score = item.Score;
                                     elem.applId = item.applId;
                                     elem.tId = item.tId;
-                                }
-                               
-
-                          
+                                }                                                        
                     }
                 }
             }
@@ -133,7 +128,6 @@ namespace HealthReporter.Controls
             int i = 0;
             foreach (string elem in dates)
             {
-
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
                 Binding binding =   new Binding("list[" + i + "]");
@@ -150,9 +144,7 @@ namespace HealthReporter.Controls
 
                 dataGrid.Columns.Add(textColumn);
                 i++;
-
             }
-
             dataGrid.ItemsSource = result;
 
         }
@@ -172,13 +164,11 @@ namespace HealthReporter.Controls
         }
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
-        {
-           
+        {          
         }
 
         private void btn_Report(object sender, RoutedEventArgs e)
-        {
-           
+        {          
         }
 
         private void dataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -209,36 +199,26 @@ namespace HealthReporter.Controls
             appTest.appraisalId = elem2.applId;
             appTest.score = elem2.score;
 
-
             var repo = new Appraisal_tests_repository();
            
             if (editedTextbox.Text.ToString() != "")
                 {
                 if (elem2.applId!=null)
-                {
-                    
+                {             
                     try
                     {
                         System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
                         customCulture.NumberFormat.NumberDecimalSeparator = ".";
-
                         System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
                         
-                        decimal test1 = decimal.Parse(editedTextbox.Text);
-                        // var value = Decimal.Parse(editedTextbox.Text, CultureInfo.InvariantCulture);
-
-                        appTest.score = test1;
-                       
-
-
+                        decimal test1 = decimal.Parse(editedTextbox.Text);                       
+                        appTest.score = test1;                       
                         repoAT.Update(appTest);
                     }
                     catch
-                    {
-                           
+                    {                           
                     }
-                }else {
-                    
+                }else {                    
                     foreach(FullHistoryDatagrid item in dataGrid.Items)
                     {
                         foreach(Date_Score_Appraiser item2 in item.list)
@@ -251,20 +231,27 @@ namespace HealthReporter.Controls
                                 repoAT.Insert(appTest);
                                 return;
                             }
-                        }
-                        
-                      
-
-                    }
-                   
+                        }                                             
+                    }                   
                 }
-            }
-
-         
-
-
+            }         
         }
 
-      
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            scala.Children.Clear();
+
+            Rectangle line = new Rectangle();
+            line.Fill = System.Windows.Media.Brushes.Green;
+            line.Height = 5;
+            line.Width = 50;
+            Rectangle line2 = new Rectangle();
+            line2.Fill = System.Windows.Media.Brushes.Yellow;
+            line2.Height = 5;
+            line2.Width = 50;
+            scala.Children.Add(line);
+            scala.Children.Add(line2);
+
+        }
     }
 }
