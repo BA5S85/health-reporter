@@ -31,5 +31,19 @@ namespace HealthReporter.Models
             var res = connection.InsertSql("UPDATE appraisal_tests set score=" + appraisal_test.score + " WHERE appraisalId=@appraisalId and testId=@testId", appraisal_test);
 
         }
+
+        public void Insert(Appraisal_tests test)
+        {
+            var connection = DatabaseUtility.getConnection();
+            var res3 = connection.InsertSql("INSERT INTO appraisal_tests (appraisalId, testId, score, note) values(@appraisalId, @testId, @score, @note)", test);
+
+
+        }
+        public IList<Appraisal_tests> FindAll()
+        {
+            return DatabaseUtility.getConnection().QuerySql<Appraisal_tests>("SELECT * FROM appraisal_tests");
+        }
+
+       
     }
 }

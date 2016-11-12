@@ -22,7 +22,7 @@ namespace HealthReporter.Models
             
             foreach (Appraisal_tests test in tests)
             {
-                var res3 = connection.InsertSql("INSERT INTO appraisal_tests (appraisalId, testId, score, note, trial1, trial2, trial3) values(@appraisalId, @testId, @score, @note, @trial1, @trial2, @trial3)", test);
+                var res3 = connection.InsertSql("INSERT INTO appraisal_tests (appraisalId, testId, score, note) values(@appraisalId, @testId, @score, @note)", test);
             }
 
 
@@ -100,7 +100,7 @@ namespace HealthReporter.Models
         }
         public override string ToString()
         {
-            if (score.ToString() == "-1")
+            if (score.ToString() == "0")
             {
                 return "";
             }

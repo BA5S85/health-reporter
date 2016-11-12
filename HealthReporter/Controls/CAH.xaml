@@ -66,7 +66,7 @@
                     </Button.Resources>
                 </Button>
                 <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="112,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
-                <DataGrid CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,134,0,0" VerticalAlignment="Top" Height="204" Width="444">
+                <DataGrid CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,134,0,0" VerticalAlignment="Top" Height="204" Width="444">
                     <DataGrid.Columns>
                         <DataGridTextColumn IsReadOnly="True" Header="TestName" Binding="{Binding TestName}"  Width="200"/>
                         <DataGridTextColumn IsReadOnly="True" Header="units" Binding="{Binding units}" >

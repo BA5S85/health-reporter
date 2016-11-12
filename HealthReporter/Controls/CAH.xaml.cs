@@ -82,10 +82,10 @@ namespace HealthReporter.Controls
                         {
                             Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
                             newOne2.date = date;
-                            newOne2.appraiser = "";
-                            newOne2.score = -1;
-                            newOne2.applId = new byte[] { };
-                            newOne2.tId= new byte[] { };
+                            newOne2.appraiser = item.AppraisersName;
+                            newOne2.score = 0;
+                            newOne2.applId = null;
+                            newOne2.tId= item.tId;
                             newOne.list.Add(newOne2);
                         }
                         else
@@ -101,26 +101,24 @@ namespace HealthReporter.Controls
                     }
                     result.Add(newOne);
                 }
+                //Kui tulemuses on testinimi olemas
                 else
                 {
-                    foreach (string date in dates)
-                    {
-                        if (item.date == date)
-                        {
+                   
                             FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
                             foreach (Date_Score_Appraiser elem in getElem.list)
                             {
-                                if (date == elem.date)
+                                if (item.date == elem.date)
                                 {
-                                    elem.appraiser = item.date;
-                                    elem.date = date;
+                                    elem.appraiser = item.AppraisersName;
+                                    elem.date = item.date;
                                     elem.score = item.Score;
                                     elem.applId = item.applId;
                                     elem.tId = item.tId;
                                 }
+                               
 
-                            }
-                        }
+                          
                     }
                 }
             }
@@ -184,31 +182,63 @@ namespace HealthReporter.Controls
         {
             var editedTextbox = e.EditingElement as TextBox;           
             FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
-            
+
             DataGridColumn col1 = e.Column;
-            int index = col1.DisplayIndex;           
-           
+            int index = col1.DisplayIndex;
+
             Date_Score_Appraiser elem2 = elem.list[index - 2];
+            var repoAT= new Appraisal_tests_repository();
 
-            if (elem2.score != -1)
-            {
-                Appraisal_tests appTest = new Appraisal_tests();
-                appTest.testId = elem2.tId;
-                appTest.appraisalId = elem2.applId;
-                if (editedTextbox.Text.ToString() != "")
+            IList<Appraisal_tests> history = repoAT.FindAll();
+
+            Appraisal_tests appTest = new Appraisal_tests();
+            appTest.testId = elem2.tId;
+            appTest.appraisalId = elem2.applId;
+            appTest.score = elem2.score;
+
+
+            var repo = new Appraisal_tests_repository();
+            //MessageBox.Show(((Int32)(BitConverter.ToInt16(elem2.applId, 0))).ToString());
+            if (editedTextbox.Text.ToString() != "")
                 {
-                    appTest.score = Decimal.Parse(editedTextbox.Text);
-                    var repo = new Appraisal_tests_repository();
-                    repo.Update(appTest);
+                if (elem2.applId!=null)
+                {
+                    MessageBox.Show("here");
+                    try
+                    {
+
+                        appTest.score = Decimal.Parse(editedTextbox.Text);
+                       
+
+                        repoAT.Update(appTest);
+                    }
+                    catch
+                    {
+
+                    }
+                }else {
+                    
+                    foreach(FullHistoryDatagrid item in dataGrid.Items)
+                    {
+                        foreach(Date_Score_Appraiser item2 in item.list)
+                        {
+                            if (item2.date == elem2.date && item2.applId!=null)
+                            {
+                                appTest.appraisalId = item2.applId;
+                                appTest.score = Decimal.Parse(editedTextbox.Text);
+
+                                repoAT.Insert(appTest);
+                                return;
+                            }
+                        }
+                        
+                      
+
+                    }
+                   
                 }
-
-            }else
-            {
-               
             }
-           
 
-            //Date_Score_Appraiser cellValue = elem[index];
 
         }
     }
