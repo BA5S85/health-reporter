@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HealthReporter.Models;
 using System.Data;
+using System.Globalization;
 
 namespace HealthReporter.Controls
 {
@@ -34,6 +35,11 @@ namespace HealthReporter.Controls
 
         public CAH(MainWindow _parent, Client client, Group group) : this(_parent)
         {
+
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
@@ -130,7 +136,10 @@ namespace HealthReporter.Controls
 
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
-                textColumn.Binding = new Binding("list[" + i + "]");
+                Binding binding =   new Binding("list[" + i + "]");
+                binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                textColumn.Binding = binding;
+
                 Style style = new Style(typeof(DataGridCell))
                 {
                     Setters = {
@@ -198,23 +207,31 @@ namespace HealthReporter.Controls
 
 
             var repo = new Appraisal_tests_repository();
-            //MessageBox.Show(((Int32)(BitConverter.ToInt16(elem2.applId, 0))).ToString());
+           
             if (editedTextbox.Text.ToString() != "")
                 {
                 if (elem2.applId!=null)
                 {
-                    MessageBox.Show("here");
+                    
                     try
                     {
+                        System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+                        customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
-                        appTest.score = Decimal.Parse(editedTextbox.Text);
+                        System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+                        
+                        decimal test1 = decimal.Parse(editedTextbox.Text);
+                        // var value = Decimal.Parse(editedTextbox.Text, CultureInfo.InvariantCulture);
+
+                        appTest.score = test1;
                        
+
 
                         repoAT.Update(appTest);
                     }
                     catch
                     {
-
+                           
                     }
                 }else {
                     
