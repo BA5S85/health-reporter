@@ -42,7 +42,7 @@
             <sys:String>Healthy</sys:String>
             <sys:String>Considerable Risk</sys:String>
             <sys:String>High Risk</sys:String>
-            <sys:String>Uhealthy</sys:String>
+            <sys:String>Unhealthy</sys:String>
             <sys:String>Healthy</sys:String>
         </x:Array>
         <x:Array x:Key="RatingColors" Type="Brush">

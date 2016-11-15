@@ -28,7 +28,10 @@ namespace HealthReporter.Models
         {
             return DatabaseUtility.getConnection().QuerySql<Rating>("SELECT * FROM ratings");
         }
-
+        internal IList<Rating> getRatingsByTestId(FullHistoryDatagrid elem)
+        {
+            return DatabaseUtility.getConnection().QuerySql<Rating>("SELECT * FROM ratings WHERE testId = @tId", elem);
+        }
         public IList<Rating> getTestRatings(Test test)
         {
             return DatabaseUtility.getConnection().QuerySql<Rating>("SELECT * FROM ratings WHERE testId = @id", test);
@@ -63,6 +66,11 @@ namespace HealthReporter.Models
             cmd.Parameters.AddWithValue("@testId", old.testId);
             cmd.ExecuteNonQuery();
         }
+
+        public IList<RatingMeaning> findLabelsWithMeanings(int age, FullHistoryDatagrid item)
+        {
+            return DatabaseUtility.getConnection().QuerySql<RatingMeaning>("SELECT rating_labels.name, rating_labels.rating  FROM ratings inner join rating_labels on ratings.labelId= rating_labels.id where age="+age+" and ratings.testId=@tId" ,item);
+        }
     }
 
     class Rating
@@ -74,5 +82,12 @@ namespace HealthReporter.Models
         public decimal normM { get; set; }
         public string updated { get; set; }
         public string uploaded { get; set; }
+    }
+
+    class RatingMeaning
+    {
+        public string name { get; set; }
+        public int rating { get; set; }
+       
     }
 }

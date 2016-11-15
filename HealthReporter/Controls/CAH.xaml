@@ -66,7 +66,17 @@
                     </Button.Resources>
                 </Button>
                 <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="112,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
-                <DataGrid SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,134,0,0" VerticalAlignment="Top" Height="204" Width="444">
+                <DataGrid  CanUserSortColumns="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="114,134,0,0" VerticalAlignment="Top" Height="204" Width="444">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <EventSetter Event="Click" Handler="getHeaderName" />
+                            <Style.Triggers>
+                                <!--<Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="GhostWhite"/>
+                                </Trigger>-->
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
                         <DataGridTextColumn IsReadOnly="True" Header="TestName" Binding="{Binding TestName}"  Width="200"/>
                         <DataGridTextColumn IsReadOnly="True" Header="units" Binding="{Binding units}" >
@@ -78,7 +88,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid x:Name="diagrams" Margin="114,357,121,36">
+                <Grid x:Name="diagrams" Margin="43,357,42,36">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -88,17 +98,25 @@
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.25*"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" x:Name="stackpanel"/>
-                        <TextBlock Grid.Column="1" x:Name="ageslabel"/>
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0" x:Name="stackpanel" Margin="10,6,0,0"/>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,6,10,0" Grid.Column="1" x:Name="ageslabel"/>
                     </Grid>
                     <StackPanel Orientation="Horizontal" x:Name="clientResult" Grid.Row="1"/>
                     <StackPanel Orientation="Horizontal" x:Name="scala" Grid.Row="2"/>
                     <StackPanel Orientation="Horizontal" x:Name="scalaNumbers" Grid.Row="3"/>
-
+                    <Border Grid.ColumnSpan="2" Grid.RowSpan="4" BorderBrush="Gainsboro" BorderThickness="1" >
+                        <Border.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </Border.Resources>
+                    </Border>
                 </Grid>
+               
             </Grid>
+                
         </Border>
     </Grid>
 </UserControl>

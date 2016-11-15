@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using HealthReporter.Models;
 using System.Data;
 using System.Globalization;
+using System.Windows.Controls.Primitives;
 
 namespace HealthReporter.Controls
 {
@@ -238,23 +239,133 @@ namespace HealthReporter.Controls
             }         
         }
 
+        private int rowIndex = 0;
+        private int columnIndex=0;       
+
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+            rowIndex = dataGrid.SelectedIndex;
 
-            scala.Children.Clear();
+            if (columnIndex > -1)
+            {
+                // Finding the selected cell object
+                FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+                Date_Score_Appraiser elem = selectedItem.list[columnIndex];
 
-            Rectangle line = new Rectangle();
-            line.Fill = System.Windows.Media.Brushes.Green;
-            line.Height = 5;
-            line.Width = 50;
-            Rectangle line2 = new Rectangle();
-            line2.Fill = System.Windows.Media.Brushes.Yellow;
-            line2.Height = 5;
-            line2.Width = 50;
-            scala.Children.Add(line);
-            scala.Children.Add(line2);
+                // Finding client age range
+                RatingRepository repo = new RatingRepository();
+                List<Rating> ratingsByTestId = repo.getRatingsByTestId(selectedItem).ToList();
 
+                var ageslist = new SortedSet<int>();
+
+                int min = 0;
+                int max = 0;
+
+                foreach(Rating rating in ratingsByTestId)
+                {
+                    ageslist.Add(rating.age);
+                }
+
+                foreach (int setElem in ageslist)
+                {
+                    
+                    if ( setElem < int.Parse(client.age))
+                    {
+                        min = setElem;
+
+                    }else
+                    {
+                        max = setElem;
+                        break;
+                    }
+                }
+                if (max <= 0)
+                {
+                    ageslabel.Text = "ages " + min.ToString() + "+";                  
+                }
+                else
+                {
+                    ageslabel.Text = "ages " + min.ToString() + "-" + (max - 1).ToString();
+                }
+
+                // Finding rating labels with meanings
+                stackpanel.Children.Clear();
+
+                IList<RatingMeaning> list = repo.findLabelsWithMeanings(min,selectedItem);
+
+                foreach(RatingMeaning obj in list)
+                {
+                    StackPanel stack = new StackPanel();
+                    stack.Orientation = Orientation.Horizontal;
+                    stack.Margin = new System.Windows.Thickness(5, 0, 5, 0);
+                    stack.VerticalAlignment = VerticalAlignment.Center;
+                    TextBlock txtBlock = new TextBlock();
+                   
+                    txtBlock.Text = " " + obj.name;
+                    Rectangle rec = new Rectangle();
+                    if (obj.rating == 0)
+                    {
+                        rec.Fill = System.Windows.Media.Brushes.Red;                       
+                    }
+                    else if(obj.rating == 1) {
+                        rec.Fill = System.Windows.Media.Brushes.Orange;
+                    }
+                    else if (obj.rating == 2)
+                    {
+                        rec.Fill = System.Windows.Media.Brushes.Yellow;
+                    }
+                    else if (obj.rating == 3)
+                    {
+                        rec.Fill = System.Windows.Media.Brushes.Green;
+                    }
+                    else if  (obj.rating == 4)
+                    {
+                        rec.Fill = System.Windows.Media.Brushes.Blue;
+                    }
+                    rec.Height = 10;
+                    rec.Width = 10;
+                    stack.Children.Add(rec);
+                    stack.Children.Add(txtBlock);               
+                    stackpanel.Children.Add(stack);
+                }
+
+                scala.Children.Clear();
+
+                //Future lines
+                //Rectangle line = new Rectangle();
+                //line.Fill = System.Windows.Media.Brushes.Green;
+                //line.Height = 5;
+                //line.Width = 50;
+                //Rectangle line2 = new Rectangle();
+                //line2.Fill = System.Windows.Media.Brushes.Yellow;
+                //line2.Height = 5;
+                //line2.Width = 50;
+                //scala.Children.Add(line);
+                //scala.Children.Add(line2);
+            }
+        }
+
+        DataGridColumnHeader lastObject;
+
+        private void getHeaderName(object sender, RoutedEventArgs e)
+        {
+            
+            if (lastObject != null)
+            {
+                lastObject.Background = Brushes.GhostWhite;
+                lastObject.BorderBrush = Brushes.LightGray;
+            }
+           
+            DataGridColumnHeader header = ((DataGridColumnHeader)sender);
+            string headerText = header.Content.ToString();
+
+            if(headerText != "TestName" && headerText != "units") {
+            lastObject = header;
+            header.Background= Brushes.Gainsboro;
+            
+            this.columnIndex = dataGrid.Columns.Single(c => c.Header.ToString() == headerText).DisplayIndex-2;
+            dataGrid.SelectedIndex = rowIndex;
+            }
         }
     }
 }
