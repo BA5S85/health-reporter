@@ -240,7 +240,8 @@ namespace HealthReporter.Controls
         }
 
         private int rowIndex = 0;
-        private int columnIndex=0;       
+        private int columnIndex=0;
+            
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -290,11 +291,25 @@ namespace HealthReporter.Controls
 
                 // Finding rating labels with meanings
                 stackpanel.Children.Clear();
+                scala.Children.Clear();
+                scala.ColumnDefinitions.Clear();
+                scalaNumbers.Children.Clear();
+                scalaNumbers.ColumnDefinitions.Clear();
+                clientResult.Children.Clear();
+                clientResult.ColumnDefinitions.Clear();
 
                 IList<RatingMeaning> list = repo.findLabelsWithMeanings(min,selectedItem);
-
-                foreach(RatingMeaning obj in list)
+                if (list.Count == 0)
                 {
+                    diagrams.Visibility = Visibility.Hidden;
+                    MessageBox.Show("To see diagram, please insert ratings with scores for the selected test in Test's tab");
+                }else {
+                    diagrams.Visibility = Visibility.Visible;
+                    int i = 0;
+
+                for (int j = 0; j < list.Count; j++)
+                {
+                    RatingMeaning obj = list[j];
                     StackPanel stack = new StackPanel();
                     stack.Orientation = Orientation.Horizontal;
                     stack.Margin = new System.Windows.Thickness(5, 0, 5, 0);
@@ -303,39 +318,144 @@ namespace HealthReporter.Controls
                    
                     txtBlock.Text = " " + obj.name;
                     Rectangle rec = new Rectangle();
+                    Rectangle line = new Rectangle();
+                    
                     if (obj.rating == 0)
                     {
-                        rec.Fill = System.Windows.Media.Brushes.Red;                       
+                        rec.Fill = System.Windows.Media.Brushes.Red;
+                        line.Fill = System.Windows.Media.Brushes.Red;
                     }
                     else if(obj.rating == 1) {
                         rec.Fill = System.Windows.Media.Brushes.Orange;
+                        line.Fill = System.Windows.Media.Brushes.Orange;
                     }
                     else if (obj.rating == 2)
                     {
                         rec.Fill = System.Windows.Media.Brushes.Yellow;
+                        line.Fill = System.Windows.Media.Brushes.Yellow;
                     }
                     else if (obj.rating == 3)
                     {
                         rec.Fill = System.Windows.Media.Brushes.Green;
+                        line.Fill = System.Windows.Media.Brushes.Green;
                     }
                     else if  (obj.rating == 4)
                     {
                         rec.Fill = System.Windows.Media.Brushes.Blue;
+                        line.Fill = System.Windows.Media.Brushes.Blue;
                     }
                     rec.Height = 10;
                     rec.Width = 10;
                     stack.Children.Add(rec);
                     stack.Children.Add(txtBlock);               
                     stackpanel.Children.Add(stack);
+
+                    
+                    line.Height = 5;
+                    if (this.client.gender == "1" && (j+1)!=list.Count)
+                    {
+                        ColumnDefinition c1 = new ColumnDefinition();
+                        c1.Width = new GridLength(Double.Parse((list[j+1].normM-obj.normM).ToString()), GridUnitType.Star);
+
+                        ColumnDefinition c2 = new ColumnDefinition();
+                        c2.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+
+                        TextBlock txtBlock2 = new TextBlock();
+                        txtBlock2.Text = obj.normM.ToString();
+
+                        scala.ColumnDefinitions.Add(c1);                        
+                        scala.Children.Add(line);
+                        scalaNumbers.ColumnDefinitions.Add(c2);
+                        scalaNumbers.Children.Add(txtBlock2);
+
+                        line.Width = 1000;
+                        Grid.SetColumn(line, i);
+                        Grid.SetColumn(txtBlock2, i);
+                        i++;
+                    }else if (this.client.gender == "1")
+                    {
+                        ColumnDefinition c1 = new ColumnDefinition();
+                        c1.Width = new GridLength(25, GridUnitType.Star);
+
+                        ColumnDefinition c2 = new ColumnDefinition();
+                        c2.Width = new GridLength(25, GridUnitType.Star);
+
+                        TextBlock txtBlock2 = new TextBlock();
+                        txtBlock2.Text = obj.normM.ToString();
+
+                        scala.ColumnDefinitions.Add(c1);
+                        scala.Children.Add(line);
+                        scalaNumbers.ColumnDefinitions.Add(c2);
+                        scalaNumbers.Children.Add(txtBlock2);
+
+                        line.Width = 1000;
+                        Grid.SetColumn(line, i);
+                        Grid.SetColumn(txtBlock2, i);
+                        i++;
+                    }
+                    else if (this.client.gender == "0" && (j + 1) != list.Count)
+                    {
+                        ColumnDefinition c1 = new ColumnDefinition();
+                        c1.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                        ColumnDefinition c2 = new ColumnDefinition();
+                        c2.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                        TextBlock txtBlock2 = new TextBlock();
+                        txtBlock2.Text = obj.normF.ToString();
+
+                        scala.ColumnDefinitions.Add(c1);
+                        scala.Children.Add(line);
+                        scalaNumbers.ColumnDefinitions.Add(c2);
+                        scalaNumbers.Children.Add(txtBlock2);
+
+                        line.Width = 1000;
+                        Grid.SetColumn(line, i);
+                        Grid.SetColumn(txtBlock2, i);
+                       
+                        i++;
+                    }
+                    else if (this.client.gender == "0")
+                    {
+                        ColumnDefinition c1 = new ColumnDefinition();
+                        c1.Width = new GridLength(25, GridUnitType.Star);
+
+                        ColumnDefinition c2 = new ColumnDefinition();
+                        c2.Width = new GridLength(25, GridUnitType.Star);
+
+                        TextBlock txtBlock2 = new TextBlock();
+                        txtBlock2.Text = obj.normF.ToString();
+
+                        scala.ColumnDefinitions.Add(c1);
+                        scala.Children.Add(line);
+                        scalaNumbers.ColumnDefinitions.Add(c2);
+                        scalaNumbers.Children.Add(txtBlock2);
+
+                        line.Width = 1000;
+                        Grid.SetColumn(line, i);
+                        Grid.SetColumn(txtBlock2, i);
+                        i++;
+                    }
+
+                 
                 }
 
-                scala.Children.Clear();
+             
+                //Rectangle line2 = new Rectangle();
+                //line2.Fill = System.Windows.Media.Brushes.Black;
 
-                //Future lines
-                //Rectangle line = new Rectangle();
-                //line.Fill = System.Windows.Media.Brushes.Green;
-                //line.Height = 5;
-                //line.Width = 50;
+                //line2.Height = 5;
+                //line2.Width = 50;
+
+                //ColumnDefinition c3 = new ColumnDefinition();
+                //c3.Width = new GridLength(Double.Parse(elem.score.ToString()), GridUnitType.Star);
+
+              
+                //clientResult.ColumnDefinitions.Add(c3);
+                //clientResult.Children.Add(line2);
+                //line2.Width = 1000;
+                //Grid.SetColumn(line2, 0);
+               
                 //Rectangle line2 = new Rectangle();
                 //line2.Fill = System.Windows.Media.Brushes.Yellow;
                 //line2.Height = 5;
@@ -343,6 +463,7 @@ namespace HealthReporter.Controls
                 //scala.Children.Add(line);
                 //scala.Children.Add(line2);
             }
+        }
         }
 
         DataGridColumnHeader lastObject;

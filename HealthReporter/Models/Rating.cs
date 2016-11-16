@@ -69,7 +69,7 @@ namespace HealthReporter.Models
 
         public IList<RatingMeaning> findLabelsWithMeanings(int age, FullHistoryDatagrid item)
         {
-            return DatabaseUtility.getConnection().QuerySql<RatingMeaning>("SELECT rating_labels.name, rating_labels.rating  FROM ratings inner join rating_labels on ratings.labelId= rating_labels.id where age="+age+" and ratings.testId=@tId" ,item);
+            return DatabaseUtility.getConnection().QuerySql<RatingMeaning>("SELECT rating_labels.name, rating_labels.rating, ratings.normF, ratings.normM FROM ratings inner join rating_labels on ratings.labelId= rating_labels.id where age="+age+" and ratings.testId=@tId" ,item);
         }
     }
 
@@ -88,6 +88,9 @@ namespace HealthReporter.Models
     {
         public string name { get; set; }
         public int rating { get; set; }
-       
+        public decimal normF { get; set; }
+        public decimal normM { get; set; }
+
+
     }
 }

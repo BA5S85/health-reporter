@@ -103,10 +103,10 @@
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="0" x:Name="stackpanel" Margin="10,6,0,0"/>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,6,10,0" Grid.Column="1" x:Name="ageslabel"/>
                     </Grid>
-                    <StackPanel Orientation="Horizontal" x:Name="clientResult" Grid.Row="1"/>
-                    <StackPanel Orientation="Horizontal" x:Name="scala" Grid.Row="2"/>
-                    <StackPanel Orientation="Horizontal" x:Name="scalaNumbers" Grid.Row="3"/>
-                    <Border Grid.ColumnSpan="2" Grid.RowSpan="4" BorderBrush="Gainsboro" BorderThickness="1" >
+                    <Grid x:Name="clientResult" Grid.Row="1" Margin="10,0"/>
+                    <Grid x:Name="scala" Grid.Row="2" Margin="10,0"/>
+                    <Grid x:Name="scalaNumbers" Grid.Row="3"  Margin="10,0" />
+                    <Border Grid.RowSpan="4" BorderBrush="Gainsboro" BorderThickness="1" >
                         <Border.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
