@@ -128,7 +128,7 @@ namespace HealthReporter.Controls
                 IList<ListBoxItem> lbItems = item.categoryTests;
                 foreach(ListBoxItem lbItem in lbItems)
                 {
-                    if (lbItem.isSelected && lbItem.isEnabled || !dates.Contains(appraisal.date))
+                    if (lbItem.isSelected && lbItem.isEnabled || lbItem.isSelected && !dates.Contains(appraisal.date))
                     {
                         tests.Add(lbItem.test); //adds only tests that are not in history view already
                     }
