@@ -10,101 +10,134 @@
         <Image x:Key="Dustbin" Source="/Images/dustbin.png" Stretch="Uniform"/>
     </UserControl.Resources>
     <Grid>
+        
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="7" Direction="300" ShadowDepth="4" />
             </Border.Effect>
         </Border>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
-            <Grid VerticalAlignment="Center">
-                <DataGrid x:Name="catsDataGrid" Margin="37,71,439,109" GridLinesVisibility="None"  AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding category.name}" Width="*"/>
-                    </DataGrid.Columns>
-                    <DataGrid.RowDetailsTemplate>
-                        <DataTemplate>
-                            <ListBox x:Name="listBox" TextOptions.TextFormattingMode="Display" Visibility="Visible" BorderThickness="0" ItemsSource="{Binding categoryTests}" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionMode="Multiple" Margin="10,0,0,0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType"  Text="{Binding test.name}" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" x:Name="textBlock4" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"  Foreground="SlateGray"  FontSize="14"><Run Text="Choose "/><Run Text="T"/><Run Text="ests"/></TextBlock>
+                    <GridSplitter Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                    <DataGrid Grid.Row="2" x:Name="catsDataGrid"  GridLinesVisibility="None"  AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding category.name}" Width="*"/>
+                        </DataGrid.Columns>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ListBox x:Name="listBox" TextOptions.TextFormattingMode="Display" Visibility="Visible" BorderThickness="0" ItemsSource="{Binding categoryTests}" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectionMode="Multiple" Margin="10,0,0,0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType"  Text="{Binding test.name}" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" />
 
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="IsSelected" Value="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                                        <Setter Property="IsEnabled" Value="{Binding isEnabled, Mode=OneTime}"/>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                        </DataTemplate>
-                    </DataGrid.RowDetailsTemplate>
-                </DataGrid>
-                <ListBox x:Name="presetBox" Visibility="Visible" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionMode="Multiple" Height="192" Width="155" Margin="440,71,0,0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding name}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <Button x:Name="deletePresetButton" Content="{StaticResource Dustbin}" Padding="6" Margin="0,277,84,177" Width="30" Height="30" Click="deletePresetButton_Click" Background="White" RenderTransformOrigin="-2.595,1" HorizontalAlignment="Right" >
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                    <Button.Style>
-                        <Style>
-                            <Style.Triggers>
-                                <DataTrigger 
-                     Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
-                                    <Setter Property="Button.Visibility" Value="Hidden"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button x:Name="viewTests" Content="View tests" Padding="6" Margin="0,277,130,177" Width="73" Height="30" Click="viewTests_Click" Background="White" RenderTransformOrigin="-2.595,1" HorizontalAlignment="Right" >
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                    <Button.Style>
-                        <Style>
-                            <Style.Triggers>
-                                <DataTrigger 
-                     Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
-                                    <Setter Property="Button.Visibility" Value="Hidden"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <TextBlock Text="Add these tests to a preset" Margin="84,421,450,45"></TextBlock>
-                <Button HorizontalAlignment="Left" x:Name="addTestsToPreset" ContextMenuService.IsEnabled="False"  Content="+" Margin="37,0,0,41" VerticalAlignment="Bottom" Click="btn_AddTestsToPreset" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="33">
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                <TextBlock x:Name="textBlock4" HorizontalAlignment="Center" Margin="84,43,481,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="114" FontSize="14"><Run Text="Choose "/><Run Text="T"/><Run Text="ests"/></TextBlock>
-                <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="554,423,0,0" VerticalAlignment="Top" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Left" Margin="656,423,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Click="btn_OK" Background="White">
-                    <Button.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="4"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                <TextBlock x:Name="textBlock4_Copy" HorizontalAlignment="Center" Margin="462,43,103,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="114" FontSize="14"><Run Text="Choose "/><Run Text="Presets"/></TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="IsSelected" Value="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                            <Setter Property="IsEnabled" Value="{Binding isEnabled, Mode=OneTime}"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                    <GridSplitter Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                    <Grid Grid.Row="4" Background="AliceBlue" >
+                        <Button HorizontalAlignment="Left" x:Name="addTestsToPreset" ContextMenuService.IsEnabled="False"  Content="+" Margin="37,0,0,41" VerticalAlignment="Bottom" Click="btn_AddTestsToPreset" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="33">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        <TextBlock Text="Add these tests to a preset" Margin="83,36,166,41" ></TextBlock>
+                    </Grid>
+                </Grid>
+                <GridSplitter Grid.Column="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Columns"/>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Foreground="SlateGray" Grid.Row="0" x:Name="textBlock4_Copy" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="14"><Run Text="Choose "/><Run Text="Presets"/></TextBlock>
+                    <GridSplitter Grid.Row="1"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                    <ListBox Grid.Row="2" x:Name="presetBox" Visibility="Visible" BorderThickness="0" SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <GridSplitter Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                    <Grid Grid.Row="4" Background="AliceBlue">
+                        <Button x:Name="deletePresetButton" Content="{StaticResource Dustbin}" Padding="6" Margin="37,0,0,41" Width="30" Height="30" Click="deletePresetButton_Click" Background="White" HorizontalAlignment="Left" VerticalAlignment="Bottom"   >
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger 
+                                             Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
+                                            <Setter Property="Button.Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="viewTests" Content="View tests" Padding="6" Margin="77,0,0,41" Width="73" Height="30" Click="viewTests_Click" Background="White" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger 
+                                            Binding ="{Binding ElementName=presetBox, Path=SelectedIndex}" Value="-1">
+                                            <Setter Property="Button.Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="button" Content="Back" HorizontalAlignment="Right" Margin="0,0,120,41"  VerticalAlignment="Bottom" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Right" Margin="0,0,37,41" VerticalAlignment="Bottom" Width="75" Click="btn_OK" Background="White">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

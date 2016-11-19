@@ -43,9 +43,10 @@ namespace HealthReporter.Controls
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
-            this._parent.stkTest.Children.Clear();
-            NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
-            this._parent.stkTest.Children.Add(obj);
+            int childNumber = this._parent.stkTest.Children.Count;
+            this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+            this._parent.stkTest.Children[childNumber - 2].Opacity = 1;
+            this._parent.stkTest.Children[childNumber - 2].IsEnabled = true;
         }
 
         private void btn_CreateNewPreset(object sender, RoutedEventArgs e)
@@ -71,7 +72,11 @@ namespace HealthReporter.Controls
             var repo = new PresetRepository();
             repo.Insert(new Preset() { id = presetId, name = name.Text });
 
-            this._parent.stkTest.Children.Clear();
+
+
+            int childNumber = this._parent.stkTest.Children.Count;
+            this._parent.stkTest.Children.RemoveAt(childNumber - 2);
+            
             NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
             this._parent.stkTest.Children.Add(obj);
 

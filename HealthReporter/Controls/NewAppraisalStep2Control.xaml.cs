@@ -78,8 +78,16 @@ namespace HealthReporter.Controls
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
-            int childNumber = this._parent.stkTest.Children.Count;
-            this._parent.stkTest.Children.RemoveAt(childNumber - 1);            
+            if (this._parent.stkTest.Children.Count > 4)
+            {
+                this._parent.stkTest.Children.RemoveRange(3, this._parent.stkTest.Children.Count);
+            }
+            else
+            {
+                int childNumber = this._parent.stkTest.Children.Count;
+                this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+            }
+                  
         }
 
         private void btn_AddTestsToPreset(object sender, RoutedEventArgs e)
@@ -104,6 +112,7 @@ namespace HealthReporter.Controls
 
             AddNewPresetControl obj = new AddNewPresetControl(this._parent, tests, client, group, appraiser, appraisal);
             this.Opacity = 0.3;
+            this.IsEnabled = false;
             this._parent.stkTest.Children.Add(obj);
         }
 
@@ -128,7 +137,7 @@ namespace HealthReporter.Controls
                 IList<ListBoxItem> lbItems = item.categoryTests;
                 foreach(ListBoxItem lbItem in lbItems)
                 {
-                    if (lbItem.isSelected && lbItem.isEnabled || lbItem.isSelected && !dates.Contains(appraisal.date))
+                    if (lbItem.isSelected && lbItem.isEnabled && !dates.Contains(appraisal.date))
                     {
                         tests.Add(lbItem.test); //adds only tests that are not in history view already
                     }
