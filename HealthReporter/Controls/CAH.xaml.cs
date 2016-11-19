@@ -302,8 +302,10 @@ namespace HealthReporter.Controls
                 if (list.Count == 0)
                 {
                     diagrams.Visibility = Visibility.Hidden;
-                    MessageBox.Show("To see diagram, please insert ratings with scores for the selected test in Test's tab");
+                    noDiagram.Visibility = Visibility.Visible;
+                  
                 }else {
+                    noDiagram.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
                     int i = 0;
 
@@ -362,6 +364,7 @@ namespace HealthReporter.Controls
 
                         TextBlock txtBlock2 = new TextBlock();
                         txtBlock2.Text = obj.normM.ToString();
+                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
 
                         scala.ColumnDefinitions.Add(c1);                        
                         scala.Children.Add(line);
@@ -382,6 +385,7 @@ namespace HealthReporter.Controls
 
                         TextBlock txtBlock2 = new TextBlock();
                         txtBlock2.Text = obj.normM.ToString();
+                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
 
                         scala.ColumnDefinitions.Add(c1);
                         scala.Children.Add(line);
@@ -403,6 +407,7 @@ namespace HealthReporter.Controls
 
                         TextBlock txtBlock2 = new TextBlock();
                         txtBlock2.Text = obj.normF.ToString();
+                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
 
                         scala.ColumnDefinitions.Add(c1);
                         scala.Children.Add(line);
@@ -425,6 +430,7 @@ namespace HealthReporter.Controls
 
                         TextBlock txtBlock2 = new TextBlock();
                         txtBlock2.Text = obj.normF.ToString();
+                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
 
                         scala.ColumnDefinitions.Add(c1);
                         scala.Children.Add(line);
@@ -473,7 +479,7 @@ namespace HealthReporter.Controls
             
             if (lastObject != null)
             {
-                lastObject.Background = Brushes.GhostWhite;
+                lastObject.Background = Brushes.White;
                 lastObject.BorderBrush = Brushes.LightGray;
             }
            

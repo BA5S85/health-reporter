@@ -23,6 +23,8 @@ namespace HealthReporter.Controls
         public MainWindow _parent;
         private Client client;
         private Group group;
+        private Appraiser appraiser;
+        private Appraisal appraisal;
 
         public NewAppraisalStep1Control(MainWindow parentWindow, Client client, Group group)
         {
@@ -30,6 +32,19 @@ namespace HealthReporter.Controls
             this._parent = parentWindow;
             this.client = client;
             this.group = group;
+            appraiser = new Appraiser();
+            appraiser.id = System.Guid.NewGuid().ToByteArray();
+            appraiser.name = "Enter Name";
+            name.DataContext = appraiser;
+
+            appraisal = new Appraisal();
+            appraisal.id = System.Guid.NewGuid().ToByteArray();
+            appraisal.appraiserId = appraiser.id;
+            appraisal.clientId = client.id;
+            appraisal.date = String.Format("{0:yyyy-MM-dd}", DateTime.Now);
+            date.DataContext = appraisal;
+
+           
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -41,17 +56,7 @@ namespace HealthReporter.Controls
         private void btn_Next(object sender, RoutedEventArgs e)
         {
 
-            try {
-                // New appraiser object
-                Appraiser appraiser = new Appraiser();
-                appraiser.id = System.Guid.NewGuid().ToByteArray();
-                appraiser.name = appraisersName.Text.ToString();
-
-                // New appraisal object
-                Appraisal appraisal = new Appraisal();
-                appraisal.id = System.Guid.NewGuid().ToByteArray();
-                appraisal.appraiserId = appraiser.id;
-                appraisal.clientId = client.id;
+            try {                
                 DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
                 appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
 
@@ -60,7 +65,7 @@ namespace HealthReporter.Controls
 
             } catch
             {
-                MessageBox.Show("Please enter appraiser's name and/or appraisal's date.");
+               
             }
             
         }

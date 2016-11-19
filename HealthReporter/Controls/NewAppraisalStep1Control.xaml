@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HealthReporter.Controls"
-        mc:Ignorable="d" Height="485" Width="680">
+        mc:Ignorable="d" Height="485" Width="800">
     <Grid>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Border.Effect>
@@ -21,7 +21,7 @@
                 <TextBlock Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Center" Margin="0,100,0,0" TextWrapping="Wrap" Text="New Appraisal" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="100" FontSize="14"/>
                 <Grid Name="grid" Grid.Row="1">
                     <TextBlock HorizontalAlignment="Center" Margin="-160,0,0,0" TextWrapping="Wrap" Text="Appraiser's name" VerticalAlignment="Top"/>
-                    <TextBox x:Name="appraisersName" HorizontalAlignment="Center" Height="23" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150">
+                    <TextBox Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="name" HorizontalAlignment="Center" Height="23" Margin="100,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Validation.ErrorTemplate="{x:Null}">
                         <TextBox.Style>
                             <Style TargetType="{x:Type TextBox}">
                                 <Style.Setters>
@@ -35,9 +35,10 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
+                    <Label x:Name="AdornerSite" Foreground="Red"  FontWeight="Bold" FontSize="8" Content="{Binding (Validation.Errors).CurrentItem.ErrorContent, ElementName=name}" Margin="374,28,275,114" />
                     <TextBlock HorizontalAlignment="Center" Margin="-160,70,0,0" TextWrapping="Wrap" Text="Date of appraisal" VerticalAlignment="Top" RenderTransformOrigin="0.783,0.564"/>
-                    <DatePicker  Margin="100,0,0,0" HorizontalAlignment="Center" x:Name="date" Height="25" Width="140"  DisplayDate="2016-09-29" 
-                                        Text="{Binding date, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                    <DatePicker  Margin="100,0,0,0" HorizontalAlignment="Center" x:Name="date" Height="25" Width="140"  
+                                        Text="{Binding date, StringFormat='d', ConverterCulture=en-GB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                         IsTodayHighlighted="False" FirstDayOfWeek="Monday" Validation.ErrorTemplate="{x:Null}" >
                         <DatePicker.Resources>
                             <Style TargetType="{x:Type DatePicker}">
@@ -52,6 +53,8 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
+                    <Label x:Name="AdornerSite2" Foreground="Red"  FontWeight="Bold" FontSize="8" Content="{Binding (Validation.Errors).CurrentItem.ErrorContent, ElementName=date}" Margin="374,98,275,44" />
+
                 </Grid>
                 <Grid Grid.Row="2">
                     <Button Content="Next" HorizontalAlignment="Center" Margin="354,0,250,0" VerticalAlignment="Top" Width="75" BorderBrush="#FFA2B2BD" Background="White" Click="btn_Next">

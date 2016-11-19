@@ -340,7 +340,7 @@
                         </StackPanel>
                         <TextBlock Foreground="LightSlateGray" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="5" x:Name="Text5" Text="Date of Birth" Margin="0,0,10,0"/>
                         <StackPanel Grid.Column="1" Grid.Row="5">
-                            <DatePicker Margin="10,0,0,0" HorizontalAlignment="Left" x:Name="birthDate"  Width="140"  DisplayDate="2016-09-29" 
+                            <DatePicker Margin="10,0,0,0" HorizontalAlignment="Left" x:Name="birthDate"  Width="140"  
                                         SelectedDate="{Binding birthDate, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                         IsTodayHighlighted="False" FirstDayOfWeek="Monday" Validation.ErrorTemplate="{x:Null}" >
                                 <DatePicker.Resources>

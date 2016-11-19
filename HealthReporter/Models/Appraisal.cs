@@ -42,16 +42,118 @@ namespace HealthReporter.Models
 
     }
 
-    public class Appraisal
+    public class Appraisal : INotifyPropertyChanged, IDataErrorInfo
     {
         public byte[] id { get; set; }
         public byte[] appraiserId { get; set; }
         public byte[] clientId { get; set; }
-        public string date { get; set; }
+       
         public string updated { get; set; }
+        private string _date;
 
-    }  
-   
+        public string date
+        {
+            get
+            {
+                return _date;
+            }
+            set
+            {
+                _date = value;
+                OnPropertyChanged("date");
+            }
+        }
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        #region IDataErrorInfo Members
+        string IDataErrorInfo.Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+
+
+        string IDataErrorInfo.this[string propertyName]
+        {
+            get
+            {
+                return GetValidationError(propertyName);
+            }
+        }
+
+
+        #endregion
+
+        #region Validation
+
+        static readonly string[] ValidatedProperties =
+       {
+            "date"
+        };
+
+        public bool IsValid
+        {
+            get
+            {
+                foreach (string property in ValidatedProperties)
+                {
+                    if (GetValidationError(property) != null)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        string GetValidationError(string propertyName)
+        {
+            string error = null;
+
+            switch (propertyName)
+            {
+                case "date":
+                    error = ValidateName();
+                    break;
+
+            }
+            return error;
+        }
+
+        private string ValidateName()
+        {
+            if (String.IsNullOrWhiteSpace(date))
+            {
+                return "Appraisal date can not be empty.";
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+
+    }
+
     public class HistoryTableItem
     {
         

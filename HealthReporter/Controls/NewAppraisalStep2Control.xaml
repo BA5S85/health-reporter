@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
-             mc:Ignorable="d" Height="485" Width="680">
+             mc:Ignorable="d" Height="485" Width="800">
     <UserControl.Resources>
         <local:InvertBoolConverter x:Key="invertBoolConverter"/>
         <Image x:Key="Dustbin" Source="/Images/dustbin.png" Stretch="Uniform"/>
@@ -90,14 +90,14 @@
                     </Button.Resources>
                 </Button>
                 <TextBlock x:Name="textBlock4" HorizontalAlignment="Center" Margin="84,43,481,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="114" FontSize="14"><Run Text="Choose "/><Run Text="T"/><Run Text="ests"/></TextBlock>
-                <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="474,423,0,0" VerticalAlignment="Top" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
+                <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="554,423,0,0" VerticalAlignment="Top" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="4"/>
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Left" Margin="568,423,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Click="btn_OK" Background="White">
+                <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Left" Margin="656,423,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Click="btn_OK" Background="White">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="4"/>
