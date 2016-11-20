@@ -32,7 +32,7 @@ namespace HealthReporter.Models
             return DatabaseUtility.getConnection().QuerySql<Test>("SELECT * FROM tests WHERE categoryId = @id", cat);
         }
 
-        public IList<Test> GetTestsByPresetTest(PresetTest test)
+        public IList<Test> GetTestByPresetTest(PresetTest test)
         {
             return DatabaseUtility.getConnection().QuerySql<Test>("SELECT * FROM tests WHERE id = @testId", test);
         }

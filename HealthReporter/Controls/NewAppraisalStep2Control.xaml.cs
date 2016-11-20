@@ -147,25 +147,33 @@ namespace HealthReporter.Controls
             //adds preset tests to tests if they are not already there and if they are not already in the history
             var rep = new PresetTestRepository();
             var testRep = new TestRepository();
-            var aprep = new AppraisalsRepository();
-            IList<Test> historyTests = aprep.FindAppraisalTests(this.client);
+            
             foreach (Preset preset in presetBox.SelectedItems)
             {
                 IList<PresetTest> preTests = rep.FindPresetTests(preset);
                 foreach (PresetTest preTest in preTests)
                 {
                     bool isHist = false;
-                    foreach(Test histTest in historyTests)
+                    foreach (RowItem item in catsDataGrid.Items)
                     {
-                        if (preTest.testId.SequenceEqual(histTest.id)) isHist = true;
+                        IList<ListBoxItem> lbItems = item.categoryTests;
+                        foreach (ListBoxItem lbItem in lbItems)
+                        {
+                            if (lbItem.isEnabled && !dates.Contains(appraisal.date) && lbItem.test.id.SequenceEqual(preTest.testId))
+                            {
+                                isHist = true;
+                            }
+                        }
                     }
                     foreach (Test test in this.tests)
                     {
-                        if (preTest.testId.SequenceEqual(test.id)) isHist = true;
+                        if (preTest.testId.SequenceEqual(test.id)) isHist = true; //kui see test on testide hulgas juba
                     }
-                    if(!isHist) tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
+                    if (!isHist) tests.Add(testRep.GetTestByPresetTest(preTest)[0]);  
                 }
             }
+            var aprep = new AppraisalsRepository();
+            IList<Test> historyTests = aprep.FindAppraisalTests(this.client);
             if (tests.Count < 1 && historyTests.Count < 1)
             {
                 MessageBox.Show("Please select test/tests.", "Message");
@@ -263,7 +271,7 @@ namespace HealthReporter.Controls
                 IList<PresetTest> preTests = rep.FindPresetTests(preset);
                 foreach (PresetTest preTest in preTests)
                 {
-                    tests.Add(testRep.GetTestsByPresetTest(preTest)[0]);
+                    tests.Add(testRep.GetTestByPresetTest(preTest)[0]);
                 }
             }
             String str = "";
