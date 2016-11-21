@@ -16,6 +16,8 @@ namespace HealthReporter.Controls
     public partial class TestsUserControl : UserControl
     {
         private MainWindow _parent;
+        private Models.TestCategory _category;
+
         public TestsUserControl(MainWindow parent)
         {          
             InitializeComponent();
@@ -51,16 +53,38 @@ namespace HealthReporter.Controls
 
         private void btn_AddNewCategory(object sender, RoutedEventArgs e)
         {
-            if (!validation2()) return;
-            TestCategory category = (TestCategory)catsDataGrid.SelectedItem;
-            byte[] parentId = null;
-            if (category != null)
+            try
             {
-                parentId = category.id;
+                var category = new Models.TestCategory()
+                {
+                    name = "untitled category",
+                };
+
+                var repo2 = new TestCategoryRepository();
+                repo2.Insert(category);
+                this._category = category;
             }
-            AddNewTestCategoryControl obj = new AddNewTestCategoryControl(this._parent, parentId);
-            this.Opacity = 0.3;
-            this._parent.stkTest.Children.Add(obj);
+            catch
+            {
+                MessageBox.Show("Something went wrong with adding a new category.");
+            }
+
+            // Updating Category menu
+            var repo = new TestCategoryRepository();
+            IList<Models.TestCategory> categories = repo.FindAll();
+
+            // Add focus on new added row, put row into editable mode          
+            int row = categories.Count - 1;
+            catsDataGrid.Focus();
+            catsDataGrid.ItemsSource = categories;
+            catsDataGrid.SelectedIndex = row;
+            catsDataGrid.CurrentCell = new DataGridCellInfo(catsDataGrid.Items[row], catsDataGrid.Columns[0]);
+            catsDataGrid.IsReadOnly = false;
+            catsDataGrid.BeginEdit();
+
+            // Making tests grids empty
+            testsDataGrid.ItemsSource = null;
+            testDetailMain.DataContext = null;
         }
 
         private void GenderTabsItemssource(System.Collections.ObjectModel.ObservableCollection<TabItem> list)
@@ -229,17 +253,43 @@ namespace HealthReporter.Controls
             validation2();
         }
 
+        private void catsDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            try
+            {
+                if (catsDataGrid.SelectedItem != null)
+                {
+                    if (catsDataGrid.SelectedItem is Models.TestCategory)
+                    {
+                        var row = (Models.TestCategory) catsDataGrid.SelectedItem;
+                        if (row != null)
+                        {
+                            var category = this._category;
+                            category.name = (e.EditingElement as TextBox).Text;
+
+                            var repo = new TestCategoryRepository();
+                            repo.Update(category);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            catsDataGrid.IsReadOnly = true;
+        }
+
         private void catsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a catecory is selected
         {
-            var grid = sender as DataGrid;
-            var selected = grid.SelectedItems;
-    
-            if (selected.Count > 0)
-            {
-                TestCategory category = (TestCategory)selected[0];
-                updateTestsColumn(category);
-            }
+            Models.TestCategory selectedCategory = (Models.TestCategory) catsDataGrid.SelectedItem;
+            this._category = selectedCategory;
 
+            var repo = new TestCategoryRepository();
+            if (this._category != null)
+            {
+                search.Visibility = Visibility.Visible;
+                updateTestsColumn(this._category);
+            }
         }
         
         private void testsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a test is selected
@@ -251,8 +301,11 @@ namespace HealthReporter.Controls
             {
                 Test test = (Test)selected[0];
                 updateTestView(test);
-                
+
                 testDetailDatagrid.Visibility = Visibility.Visible;
+
+                // Place a cursor to a testName textbox
+                testName.Focus();
             }
             else testDetailDatagrid.Visibility = Visibility.Hidden;
         }
@@ -635,7 +688,6 @@ namespace HealthReporter.Controls
             IList<Test> result = repo.FindSearchResult(searchBy, selectedcategory);
            
             testsDataGrid.ItemsSource = result;
-            testsDataGrid.SelectedIndex = 0;
         }
 
         private void TextBox_SourceUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)

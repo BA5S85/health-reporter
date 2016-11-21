@@ -102,9 +102,9 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Categories</TextBlock>
-                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name"  SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False"  SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
+                    <DataGrid Focusable="True" Grid.Row="1" Grid.Column="0" x:Name="catsDataGrid" HeadersVisibility="None" SelectedValuePath="name"  SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" GridLinesVisibility="None" AutoGenerateColumns="False" CellEditEnding="catsDataGrid_CellEditEnding" SelectionChanged="catsDataGrid_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding name}" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" Width="*"/>
                         </DataGrid.Columns>
                         <DataGrid.Resources>
                             <ContextMenu x:Key="GridContextMenu">

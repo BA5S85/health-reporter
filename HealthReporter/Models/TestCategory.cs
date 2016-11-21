@@ -43,6 +43,12 @@ namespace HealthReporter.Models
         {
             var connection = DatabaseUtility.getConnection().InsertSql("DELETE FROM test_categories WHERE id = @id", cat);
         }
+
+        public void Update(TestCategory cat)
+        {
+            var connection = DatabaseUtility.getConnection();
+            var res = connection.InsertSql("UPDATE test_categories set name='" + cat.name + "', updated = CURRENT_TIMESTAMP WHERE id=@id", cat);
+        }
     }
 
     class TestCategory : IHasPrimaryKey, INotifyPropertyChanged, IDataErrorInfo

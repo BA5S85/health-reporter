@@ -111,9 +111,6 @@
     <Compile Include="Controls\AddNewPresetControl.xaml.cs">
       <DependentUpon>AddNewPresetControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\AddNewTestCategoryControl.xaml.cs">
-      <DependentUpon>AddNewTestCategoryControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NewAppraisalStep2Control.xaml.cs">
       <DependentUpon>NewAppraisalStep2Control.xaml</DependentUpon>
     </Compile>
@@ -145,10 +142,6 @@
     <Compile Include="ViewModels\InputDialog.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="Controls\AddNewPresetControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\AddNewTestCategoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

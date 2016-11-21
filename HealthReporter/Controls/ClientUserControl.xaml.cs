@@ -174,32 +174,6 @@ namespace HealthReporter.Controls
             }
         }
 
-        //Adding New Group
-        private void Add(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var group = new Models.Group()
-                {
-                    name = "untitled group",
-                };
-
-                var repo2 = new GroupRepository();
-                repo2.Insert(group);
-            }
-            catch
-            {
-                MessageBox.Show("Something went wrong with adding a new group.");
-            }
-
-            // Updating values in groups menu
-            var repo = new GroupRepository();
-            IList<Models.Group> groups = repo.FindAll();
-
-            groupDataGrid.ItemsSource = groups;
-
-        }
-
         private bool messageShown=false;
 
         private void showMessage()
