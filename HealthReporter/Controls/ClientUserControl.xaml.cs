@@ -41,20 +41,44 @@ namespace HealthReporter.Controls
             IList<Models.Group> groups = repo.FindAll();
 
             groupDataGrid.ItemsSource = groups;
-
-            hideShowButtons();
+            groupDataGrid.SelectedIndex = 0;
+            hideClientDetails();
 
             btnShowClients.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
           
             findClientTotal();
         }
 
-        private void hideShowButtons()
+        private void showClientDetails()
+        {
+            NoCards.Visibility = Visibility.Hidden;
+
+            clientDetailDatagrid.Visibility = Visibility.Visible;
+            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
+            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+            delete.Visibility = Visibility.Visible;
+        }
+
+        private void hideClientDetails()
         {
             NoCards.Visibility = Visibility.Visible;
-            search.Visibility = Visibility.Hidden;
+
+            clientDetailDatagrid.Visibility = Visibility.Hidden;
             openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
             openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
+            delete.Visibility = Visibility.Hidden;
+        }
+
+        private void showSearch()
+        {
+            search.Visibility = Visibility.Visible;
+            searchAllClients.Visibility = Visibility.Hidden;
+        }
+
+        private void showAllClientSearch()
+        {
+            searchAllClients.Visibility = Visibility.Visible;
+            search.Visibility = Visibility.Hidden;
         }
 
         private void findClientTotal()
@@ -201,11 +225,21 @@ namespace HealthReporter.Controls
                     groupDataGrid.SelectedItem = this._group;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
 
-                hideShowBtnGroups();
+                groupDataGrid.IsEnabled = true;
+                search.Visibility = Visibility.Hidden;
+                showClientDetails();
+                
+                allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
+
                 return;
             }
 
-            hideShowBtnGroups2();
+            allClientsButtonselected = false;
+            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#F0F8FF"));
+            
+            hideClientDetails();
+            searchAllClients.Text = "";
+            search.Text = "";
 
             //Validation per Group
             if (this._group!=null && this._client != null && validationCheck() == false)
@@ -216,8 +250,12 @@ namespace HealthReporter.Controls
                 Dispatcher.BeginInvoke(new Action(delegate {
                     groupDataGrid.SelectedItem = this._group;
                 }), System.Windows.Threading.DispatcherPriority.Normal, null);
-               
-                hideShowBtnGroups3();
+
+                groupDataGrid.IsEnabled = true;
+
+                showSearch();
+                showClientDetails();
+
                 return;
             }
 
@@ -231,50 +269,9 @@ namespace HealthReporter.Controls
             {
                 search.Visibility = Visibility.Visible;
                 IList<Client> clients = repo.GetClientsByGroupName(this._group);
-                search.Text = "";
                 clientDataGrid.ItemsSource = clients;
-                if (clients.Count > 0)
-                {
-                    clientDataGrid.SelectedIndex = 0;
-                }
+                hideClientDetails();
             }
-        }
-        
-        private void hideShowBtnGroups()
-        {
-            groupDataGrid.IsEnabled = false;
-            groupDataGrid.IsEnabled = true;
-            clientDetailDatagrid.Visibility = Visibility.Visible;
-            NoCards.Visibility = Visibility.Hidden;
-            search.Visibility = Visibility.Hidden;
-            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
-            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
-        }
-
-
-        private void hideShowBtnGroups2()
-        {
-            allClientsButtonselected = false;
-            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#F0F8FF"));
-            search.Visibility = Visibility.Hidden;
-            searchAllClients.Visibility = Visibility.Hidden;
-            clientDetailDatagrid.Visibility = Visibility.Hidden;
-            delete.Visibility = Visibility.Hidden;
-            NoCards.Visibility = Visibility.Visible;
-            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
-            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
-        }
-
-        private void hideShowBtnGroups3()
-        {
-            groupDataGrid.IsEnabled = false;
-            groupDataGrid.IsEnabled = true;
-            clientDetailDatagrid.Visibility = Visibility.Visible;
-            NoCards.Visibility = Visibility.Hidden;
-            search.Visibility = Visibility.Visible;
-            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
         }
 
         private void clientDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -297,14 +294,16 @@ namespace HealthReporter.Controls
             // When all clients tab is selected
             if (this.allClientsButtonselected == true)
             {
-                hideShowClients();
+                allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
+                showAllClientSearch();
+
                 Client selClient = (Client)clientDataGrid.SelectedItem;              
  
                 if (selClient != null)
                 {                    
                     SaveClientInfo(this._client);
                     this._client = selClient;
-                    hideShowClients1();
+                    showClientDetails();
 
                     clientDetailDatagrid.DataContext = selClient;
                 }
@@ -328,11 +327,11 @@ namespace HealthReporter.Controls
                 //Checking if we have clients under selected group
                 if (clientCount <= 0)
                 {
-                    hideShowClients3();
+                    hideClientDetails();
                 }
                 else
                 {
-                    hideShowClients4();
+                    showClientDetails();
                     SaveClientInfo(this._client);
 
                     Client selectedClient = (Client)clientDataGrid.SelectedItem;
@@ -342,37 +341,9 @@ namespace HealthReporter.Controls
                 }
 
             }
-        }
 
-        private void hideShowClients()
-        {
-            allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
-            searchAllClients.Visibility = Visibility.Visible;
-            search.Visibility = Visibility.Hidden;
-        }
-        private void hideShowClients1()
-        {
-            NoCards.Visibility = Visibility.Hidden;
-            clientDetailDatagrid.Visibility = Visibility.Visible;
-            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
-        }
-
-        private void hideShowClients3()
-        {
-            clientDetailDatagrid.Visibility = Visibility.Hidden;
-            delete.Visibility = Visibility.Hidden;
-            NoCards.Visibility = Visibility.Visible;
-            openAppraisalHistoryBtn.Visibility = Visibility.Hidden;
-            openAppraisalHistoryLabel.Visibility = Visibility.Hidden;
-        }
-        private void hideShowClients4()
-        {
-            delete.Visibility = Visibility.Visible;
-            clientDetailDatagrid.Visibility = Visibility.Visible;
-            NoCards.Visibility = Visibility.Hidden;
-            openAppraisalHistoryBtn.Visibility = Visibility.Visible;
-            openAppraisalHistoryLabel.Visibility = Visibility.Visible;
+            // Place a cursor to a firstName textbox
+            firstName.Focus();
         }
 
         private bool validationCheck()
@@ -550,8 +521,8 @@ namespace HealthReporter.Controls
             IList<Client> clients = repo.FindSearchResult(searchBy, this._group);
 
             clientDataGrid.ItemsSource = clients;
-            clientDataGrid.SelectedIndex = 0;                        
-          }
+            hideClientDetails();                    
+        }
 
         private void filterSearchBoxAllClients(object sender, TextChangedEventArgs e)
         {
@@ -573,8 +544,9 @@ namespace HealthReporter.Controls
 
             var repo = new ClientRepository();
             IList<Client> clients = repo.FindSearchResultAllClients(searchBy);
+
             clientDataGrid.ItemsSource = clients;
-            clientDataGrid.SelectedIndex = 0;
+            hideClientDetails();
         }
 
         private void search_GotFocus(object sender, RoutedEventArgs e)
@@ -603,7 +575,9 @@ namespace HealthReporter.Controls
             IList<Client> clients = repo.FindAll();
                
             clientDataGrid.ItemsSource = clients;
-            clientDataGrid.SelectedIndex = 0;
+
+            hideClientDetails();
+            showAllClientSearch();
 
             allClientsButton.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ADD8E6"));
         }
