@@ -305,7 +305,8 @@ namespace HealthReporter.Controls
                 testDetailDatagrid.Visibility = Visibility.Visible;
 
                 // Place a cursor to a testName textbox
-                testName.Focus();
+                Keyboard.Focus(testName);
+                testName.Select(testName.Text.Length, 0);
             }
             else testDetailDatagrid.Visibility = Visibility.Hidden;
         }
@@ -697,7 +698,7 @@ namespace HealthReporter.Controls
 
         private bool validation2()
         {
-            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).units == "" || ((Test)testName.DataContext).units == null || MenAgesTab.Items.Count == 0))
+            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).name == "No Name"  || ((Test)testName.DataContext).units == "" || ((Test)testName.DataContext).units == null))
             {
                 catsDataGrid.IsEnabled = false;
                 testsDataGrid.IsEnabled = false;
@@ -712,6 +713,13 @@ namespace HealthReporter.Controls
 
         private void textBox_LostFocus(object sender, RoutedEventArgs e)
         {
+            TextBox tb = sender as TextBox;
+            if(tb.Name == "testName" && ((Test)testName.DataContext).name == "")
+            {
+                tb.FontStyle = FontStyles.Italic;
+                tb.Text = "No Name";
+                tb.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#575C5C");
+            }
             var rep = new TestRepository();
             rep.Update((Test)testName.DataContext);
         }
@@ -733,6 +741,16 @@ namespace HealthReporter.Controls
 
                     catsDataGrid.ItemsSource = rep.FindRootCategories();
                 }
+            }
+        }
+
+        private void testName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(testName.Text == "No Name")
+            {
+                testName.FontStyle = FontStyles.Normal;
+                testName.Text = "";
+                testName.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#000000");
             }
         }
     }

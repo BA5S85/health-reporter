@@ -222,14 +222,5 @@
 
             </Style.Triggers>
         </Style>
-        <Style x:Key="TextBlockValidationStyle" TargetType="TextBlock">
-            <Style.Triggers>
-                <DataTrigger 
-                     Binding ="{Binding ElementName=testsDataGrid, Path=IsEnabled}" Value="false">
-                    <Setter Property="Foreground" Value="Red"/>
-                </DataTrigger>
-            </Style.Triggers>
-            <Setter Property="Foreground" Value="#575C5C"/>
-        </Style>
     </Application.Resources>
 </Application>
