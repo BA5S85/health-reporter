@@ -55,7 +55,8 @@ namespace HealthReporter.Models
         public void Update(Rating old, Rating newR)
         {
             var cmd = DatabaseUtility.getConnection().CreateCommand();
-            cmd.CommandText = "UPDATE ratings SET normF= @newNormF, normM=@newNormM, labelId=@newLabelId, updated = CURRENT_TIMESTAMP WHERE testId=@testId AND age=@age AND normM=@normM AND normF=@normF";
+            if(old.labelId == null) cmd.CommandText = "UPDATE ratings SET normF= @newNormF, normM=@newNormM, labelId=@newLabelId, updated = CURRENT_TIMESTAMP WHERE testId=@testId AND age=@age AND normM=@normM AND normF=@normF AND labelId IS NULL";
+            else cmd.CommandText = "UPDATE ratings SET normF= @newNormF, normM=@newNormM, labelId=@newLabelId, updated = CURRENT_TIMESTAMP WHERE testId=@testId AND age=@age AND normM=@normM AND normF=@normF AND labelId=@labelId";
             cmd.Parameters.AddWithValue("@newNormF", newR.normF);
             cmd.Parameters.AddWithValue("@newNormM", newR.normM);
             cmd.Parameters.AddWithValue("@newLabelId", newR.labelId);
