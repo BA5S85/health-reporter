@@ -35,8 +35,6 @@ namespace HealthReporter.Controls
 
             decimalsSelector.ItemsSource = new List<int> { -2, -1, 0, 1, 2 };
 
-            categorySelector.ItemsSource = catRep.FindAll();
-
             btnShowTests.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
 
             findTestTotal();
@@ -230,6 +228,7 @@ namespace HealthReporter.Controls
             Test newTest = new Test() { };
             newTest.id = System.Guid.NewGuid().ToByteArray();
             newTest.name = "No Name";
+            newTest.weight = 1;
             if ((TestCategory)catsDataGrid.SelectedItem == null)
             {
                 MessageBox.Show("You have not created any categories yet");
@@ -323,28 +322,6 @@ namespace HealthReporter.Controls
             grid.CommitEdit(DataGridEditingUnit.Row, true);
         }
 
-        private void categorySelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            bool catChanged = saveChangesToDb((Test)testName.DataContext);
-            if (catChanged)
-            {
-                TestCategory selected = (TestCategory)categorySelector.SelectedItem;
-                if (selected != null && selected.parentId == null)
-                {
-                    catsDataGrid.SelectedValue = selected.name;
-                    updateTestsColumn(selected);
-                }
-                else if (selected != null)
-                {
-                    var repo = new TestCategoryRepository();
-                    TestCategory parent = repo.GetParent(selected)[0];
-                    catsDataGrid.SelectedValue = parent.name;
-                    updateTestsColumn(parent);
-                }
-                testsDataGrid.SelectedValue = ((Test)testName.DataContext).name;
-            }
-        }
-
         private void updateTestsColumn(TestCategory cat) //cat is a main category
         {
             var rep = new TestCategoryRepository();
@@ -374,7 +351,7 @@ namespace HealthReporter.Controls
             units.DataContext = test;
             TestDescriptionText.DataContext = test;
             decimalsSelector.DataContext = test;
-            categorySelector.DataContext = test;
+            weight.DataContext = test;
             FormulaTextF.DataContext = test;
             FormulaTextM.DataContext = test;
 
@@ -412,17 +389,6 @@ namespace HealthReporter.Controls
             GenderTabsItemssource(new System.Collections.ObjectModel.ObservableCollection<TabItem>(tabitems));
 
             if (tabitems.Count > 0) MenAgesTab.SelectedIndex = 0;
-
-            //show subcategory
-            var catRep = new TestCategoryRepository();
-            foreach (TestCategory cat in categorySelector.Items)
-            {
-                if (cat.id.SequenceEqual(catRep.GetCategoryByTest(test)[0].id))
-                {
-                    categorySelector.SelectedValue = cat.id;
-                    break;
-                }
-            }
         }
 
         private Brush ratingToColor(int rating)
@@ -626,7 +592,7 @@ namespace HealthReporter.Controls
             testName.DataContext = null;
             units.DataContext = null;
             decimalsSelector.DataContext = null;
-            categorySelector.DataContext = null;
+            weight.DataContext = null;
             TestDescriptionText.DataContext = null;
             FormulaTextF.DataContext = null;
             FormulaTextM.DataContext = null;           
@@ -719,6 +685,18 @@ namespace HealthReporter.Controls
                 tb.FontStyle = FontStyles.Italic;
                 tb.Text = "No Name";
                 tb.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#575C5C");
+            }
+            else if(tb.Name == "weight") //to allow user to enter doubles, we can't use OnPropertyChanged to update weight so it is updated here
+            {
+                try
+                {
+                    ((Test)testName.DataContext).weight = double.Parse(weight.Text, System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch(FormatException)
+                {
+                    MessageBox.Show("Weight must be a number.");
+                    return;
+                }
             }
             var rep = new TestRepository();
             rep.Update((Test)testName.DataContext);
