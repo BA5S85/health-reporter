@@ -786,5 +786,11 @@ namespace HealthReporter.Controls
         {
             e.Handled = true;
         }
+
+        private void menRatingsDatagrid_GotFocus(object sender, RoutedEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            grid.BeginEdit();
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace HealthReporter.Models
         }
         public void DeleteRating(Rating rating)
         {
-            var res = DatabaseUtility.getConnection().InsertSql("DELETE from ratings where testId=@testId AND age=@age AND normF=@normF AND normM=normM", rating);
+            var res = DatabaseUtility.getConnection().InsertSql("DELETE from ratings where testId=@testId AND age=@age AND normF=@normF AND normM=normM AND labelId=@labelId", rating);
         }
 
         public IList<Rating> FindAll()
