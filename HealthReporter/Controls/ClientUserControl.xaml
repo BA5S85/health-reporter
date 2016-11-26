@@ -342,7 +342,7 @@
                         <StackPanel Grid.Column="1" Grid.Row="5">
                             <DatePicker Margin="10,0,0,0" HorizontalAlignment="Left" x:Name="birthDate"  Width="140"  
                                         SelectedDate="{Binding birthDate, StringFormat='d', ConverterCulture=en-GB, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                                        IsTodayHighlighted="False" FirstDayOfWeek="Monday" Validation.ErrorTemplate="{x:Null}" >
+                                        IsTodayHighlighted="False" FirstDayOfWeek="Monday" CalendarOpened="birthDate_CalendarOpened" Validation.ErrorTemplate="{x:Null}" >
                                 <DatePicker.Resources>
                                     <Style TargetType="{x:Type DatePicker}">
                                         <Style.Setters>

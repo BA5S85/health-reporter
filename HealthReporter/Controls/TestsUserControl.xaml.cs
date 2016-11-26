@@ -17,6 +17,8 @@ namespace HealthReporter.Controls
     {
         private MainWindow _parent;
         private Models.TestCategory _category;
+        private IList<TabItem> _tabitems; //to updated rating tabcontrol without database when adding/deleting is cancelled
+        private int _selectedGroup = 0; //to select last tab which was selected before adding/deleting rating was cancelled
 
         public TestsUserControl(MainWindow parent)
         {          
@@ -96,6 +98,11 @@ namespace HealthReporter.Controls
             {
                 System.Windows.Controls.TabItem c = (System.Windows.Controls.TabItem)WomenAgesTab.ItemContainerGenerator.ContainerFromItem(WomenAgesTab.Items[i]);
                 if(c != null) c.Template = null;
+            }
+            if (list.Count != 0)
+            {
+                list.Add(new TabItem() { interval = new AgeInterval() { interval = "+" }, rowitems = new List<RowItem>() });
+                list.Add(new TabItem() { interval = new AgeInterval() { interval = "-" }, rowitems = new List<RowItem>() });
             }
             MenAgesTab.ItemsSource = list;
             WomenAgesTab.ItemsSource = list;
@@ -280,6 +287,7 @@ namespace HealthReporter.Controls
 
         private void catsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a catecory is selected
         {
+            e.Handled = true;
             Models.TestCategory selectedCategory = (Models.TestCategory) catsDataGrid.SelectedItem;
             this._category = selectedCategory;
 
@@ -293,6 +301,7 @@ namespace HealthReporter.Controls
         
         private void testsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) //is called when a test is selected
         {
+            e.Handled = true;
             var grid = sender as DataGrid;
             var selected = grid.SelectedItems;
 
@@ -387,8 +396,19 @@ namespace HealthReporter.Controls
                 tabitems.Add(new TabItem() { interval = ageint, rowitems = items});
             }
             GenderTabsItemssource(new System.Collections.ObjectModel.ObservableCollection<TabItem>(tabitems));
+            this._tabitems = tabitems;
 
-            if (tabitems.Count > 0) MenAgesTab.SelectedIndex = 0;
+            if (tabitems.Count > 0)
+            {
+                MenAgesTab.SelectedIndex = 0;
+                MenuItem mi = (MenuItem)addStuffButton.ContextMenu.Items[2];
+                mi.IsEnabled = false;
+            }
+            else
+            {
+                MenuItem mi = (MenuItem)addStuffButton.ContextMenu.Items[2];
+                mi.IsEnabled = true;
+            }
         }
 
         private Brush ratingToColor(int rating)
@@ -475,16 +495,13 @@ namespace HealthReporter.Controls
             int lastAge = 0;
             if (MenAgesTab.Items.Count > 0)
             {
-                TabItem item = (TabItem)MenAgesTab.Items[MenAgesTab.Items.Count - 1];
+                TabItem item = (TabItem)MenAgesTab.Items[MenAgesTab.Items.Count - 3];
                 lastAge = item.interval.rating.age;
             }
-
-            InputDialog inputDialog = new InputDialog("Please enter new age group:", lastAge + "-");
+            Test test = (Test)testName.DataContext;
+            InputDialog inputDialog = new InputDialog("Please enter age group for which you would like to add ratings:", lastAge + "-");
             if (inputDialog.ShowDialog() == true)
             {
-
-                Test test = (Test)testName.DataContext;
-
                 int frst = parse_age(inputDialog.Answer, true, 0);
                 int last = parse_age(inputDialog.Answer, true, 1);
 
@@ -493,42 +510,51 @@ namespace HealthReporter.Controls
                     var repo = new RatingRepository();
                     if (MenAgesTab.Items.Count == 0)
                     {
-                        repo.Insert(new Rating() { testId = test.id, age = frst});
-                        repo.Insert(new Rating() { testId = test.id, age = last + 1});
+                        repo.Insert(new Rating() { testId = test.id, age = frst });
+                        repo.Insert(new Rating() { testId = test.id, age = last + 1 });
                     }
-                    else if(((TabItem)MenAgesTab.Items[MenAgesTab.Items.Count-1]).interval.rating.age > frst) 
+                    else if (((TabItem)MenAgesTab.Items[MenAgesTab.Items.Count - 3]).interval.rating.age > frst)
                     {
-                        repo.Insert(new Rating() { testId = test.id, age = frst});
-                        repo.Insert(new Rating() { testId = test.id, age = last + 1});
+                        repo.Insert(new Rating() { testId = test.id, age = frst });
+                        repo.Insert(new Rating() { testId = test.id, age = last + 1 });
                     }
                     else
                     {
-                        repo.Insert(new Rating() { testId = test.id, age = last + 1});
+                        repo.Insert(new Rating() { testId = test.id, age = last + 1 });
                     }
                 }
                 else MessageBox.Show("Invalid age group.");
                 updateTestView(test);
                 validation2();
             }
+            else
+            {
+               GenderTabsItemssource(new System.Collections.ObjectModel.ObservableCollection<TabItem>(this._tabitems));
+               MenAgesTab.SelectedIndex = _selectedGroup;
+            }
+
         }
 
         private void btn_DeleteRating(object sender, RoutedEventArgs e) //deletes last rating
         {
-            if (testsDataGrid.SelectedIndex == -1)
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the last age group? All ratings associated with that age group will be deleted.", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBox.Show("Please select a test.");
-                return;
+                TabItem tabitem = (TabItem)MenAgesTab.Items[MenAgesTab.Items.Count - 3];
+                int last = tabitem.interval.rating.age;
+
+                var repo = new RatingRepository();
+                repo.removeRatingsByAge((Test)testName.DataContext, last);
+
+                updateTestView((Test)testName.DataContext);
+                validation2();
             }
-            if (MenAgesTab.Items.Count == 0) return;
-
-            TabItem tabitem = (TabItem)MenAgesTab.Items[MenAgesTab.Items.Count - 1];
-            int last = tabitem.interval.rating.age;
-
-            var repo = new RatingRepository();
-            repo.removeRatingsByAge((Test)testName.DataContext, last);
-
-            updateTestView((Test)testName.DataContext);
-            validation2();
+            else
+            {
+                GenderTabsItemssource(new System.Collections.ObjectModel.ObservableCollection<TabItem>(this._tabitems));
+                MenAgesTab.SelectedIndex = _selectedGroup;
+            }
         }
 
         private int parse_age(string ageStr, bool last, int i)
@@ -730,6 +756,35 @@ namespace HealthReporter.Controls
                 testName.Text = "";
                 testName.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#000000");
             }
+        }
+
+        private void MenAgesTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tc = sender as TabControl;
+            if (tc != null)
+            {
+                TabItem item = (TabItem)tc.SelectedItem;
+                if (item != null && item.interval.interval == "+") {
+                    if (e.RemovedItems.Count > 0) _selectedGroup = tc.Items.IndexOf(e.RemovedItems[0]);
+                    btn_AddNewAge(null, null);
+
+                }
+                else if(item != null && item.interval.interval == "-")
+                {
+                    if (e.RemovedItems.Count > 0) _selectedGroup = tc.Items.IndexOf(e.RemovedItems[0]);
+                    btn_DeleteRating(null, null);
+                }
+            }
+        }
+
+        private void ratingGridCombos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void menRatingsDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

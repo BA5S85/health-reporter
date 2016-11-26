@@ -592,5 +592,13 @@ namespace HealthReporter.Controls
             this.IsEnabled = false;
             this._parent.stkTest.Children.Add(obj);
         }
+
+        private void birthDate_CalendarOpened(object sender, RoutedEventArgs e)
+        {
+            DatePicker datepicker = (DatePicker)sender;
+            System.Windows.Controls.Primitives.Popup popup = (System.Windows.Controls.Primitives.Popup)datepicker.Template.FindName("PART_Popup", datepicker);
+            System.Windows.Controls.Calendar cal = (System.Windows.Controls.Calendar)popup.Child;
+            cal.DisplayMode = System.Windows.Controls.CalendarMode.Decade;
+        }
     }
     }
