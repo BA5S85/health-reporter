@@ -72,6 +72,18 @@ namespace HealthReporter.Models
         {
             return DatabaseUtility.getConnection().QuerySql<RatingMeaning>("SELECT rating_labels.name, rating_labels.rating, ratings.normF, ratings.normM FROM ratings inner join rating_labels on ratings.labelId= rating_labels.id where age="+age+" and ratings.testId=@tId" ,item);
         }
+
+        public IList<RatingMeaning> findHistoryTestRatings(int age, byte[] id)
+        {
+           var cmd = DatabaseUtility.getConnection().CreateCommand();
+           cmd.CommandText = "SELECT rating_labels.name, rating_labels.rating, ratings.normF, ratings.normM FROM ratings inner join rating_labels on ratings.labelId = rating_labels.id where age = @age AND ratings.testId = @tId";
+           cmd.Parameters.AddWithValue("@tId", id);
+           cmd.Parameters.AddWithValue("@age", age);
+           IList<RatingMeaning> ratings = cmd.Query<RatingMeaning>();
+            
+            return ratings;
+
+        }
     }
 
     class Rating
@@ -93,5 +105,20 @@ namespace HealthReporter.Models
         public decimal normM { get; set; }
 
 
+    }
+
+    public class ByteArrayComparer : IEqualityComparer<byte[]>
+    {
+        public bool Equals(byte[] a, byte[] b)
+        {
+            return a.SequenceEqual(b);
+        }
+
+        public int GetHashCode(byte[] key)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            return key.Sum(b => b);
+        }
     }
 }

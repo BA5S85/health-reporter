@@ -30,7 +30,7 @@ namespace HealthReporter.Controls
 
 
         public CAH(MainWindow _parent)
-        {     
+        {
             this._parent = _parent;
         }
 
@@ -54,6 +54,13 @@ namespace HealthReporter.Controls
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
 
+            //map that keeps latest appraisal date for every test in appraisal history
+            var latestDatesMap = new Dictionary<byte[], DateTime>(new ByteArrayComparer());
+            //map that keeps latest test score for every test in appraisal history
+            var latestTestScore = new Dictionary<byte[], decimal>(new ByteArrayComparer());
+            //map that keeps categoryId for every test
+            var testCategoriesMap = new Dictionary<byte[], byte[]>(new ByteArrayComparer());
+
             //Finding all appraisal results of client
             var repo = new AppraisalsRepository();
 
@@ -64,6 +71,32 @@ namespace HealthReporter.Controls
                 {
                     dates.Add(item.date.ToString());
                 }
+
+                //finding latest appraisal date for each test in appraisal history
+                if (item.date != null && item.Score != 0)
+                {
+                    DateTime date = DateTime.Parse(item.date);
+
+                    DateTime lastDate;
+                    if (latestDatesMap.TryGetValue(item.tId, out lastDate)) //map contains testId
+                    {
+                        if (date > lastDate)
+                        {
+                            latestDatesMap[item.tId] = date;
+                            latestTestScore[item.tId] = item.Score;
+                        }
+                    }
+                    else
+                    {
+                        latestDatesMap.Add(item.tId, date);
+                        latestTestScore.Add(item.tId, item.Score);
+                    }
+                    if(!testCategoriesMap.ContainsKey(item.tId)){
+                        testCategoriesMap.Add(item.tId, item.tCategory);
+                    }
+                }
+
+
             }
 
             dates.Sort((x, y) => DateTime.Parse(y).CompareTo(DateTime.Parse(x)));
@@ -92,7 +125,7 @@ namespace HealthReporter.Controls
                             newOne2.appraiser = item.AppraisersName;
                             newOne2.score = 0;
                             newOne2.applId = null;
-                            newOne2.tId= item.tId;
+                            newOne2.tId = item.tId;
                             newOne.list.Add(newOne2);
                         }
                         else
@@ -108,20 +141,20 @@ namespace HealthReporter.Controls
                     }
                     result.Add(newOne);
                 }
-                
+
                 else
-                {                  
-                            FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
-                            foreach (Date_Score_Appraiser elem in getElem.list)
-                            {
-                                if (item.date == elem.date)
-                                {
-                                    elem.appraiser = item.AppraisersName;
-                                    elem.date = item.date;
-                                    elem.score = item.Score;
-                                    elem.applId = item.applId;
-                                    elem.tId = item.tId;
-                                }                                                        
+                {
+                    FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
+                    foreach (Date_Score_Appraiser elem in getElem.list)
+                    {
+                        if (item.date == elem.date)
+                        {
+                            elem.appraiser = item.AppraisersName;
+                            elem.date = item.date;
+                            elem.score = item.Score;
+                            elem.applId = item.applId;
+                            elem.tId = item.tId;
+                        }
                     }
                 }
             }
@@ -132,7 +165,7 @@ namespace HealthReporter.Controls
             {
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
-                Binding binding =   new Binding("list[" + i + "]");
+                Binding binding = new Binding("list[" + i + "]");
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
                 textColumn.Binding = binding;
 
@@ -149,6 +182,139 @@ namespace HealthReporter.Controls
             }
             dataGrid.ItemsSource = result;
 
+            //categories datagrid
+            catsDataGrid.ItemsSource = findCatsDataGridItems(latestTestScore, testCategoriesMap);
+
+        }
+
+        private IList<CatsItem> findCatsDataGridItems(Dictionary<byte[], decimal> scoreMap, Dictionary<byte[], byte[]> categoryMap)
+        {
+            //default values just for testing
+            int weight = 1;
+            var converter = new BrushConverter();
+            var brush = (Brush)converter.ConvertFromString("green");
+
+
+            Dictionary<byte[], decimal> categoryScores = new Dictionary<byte[], decimal>(new ByteArrayComparer());
+            Dictionary<byte[], decimal> categoryMaxScores = new Dictionary<byte[], decimal>(new ByteArrayComparer());
+
+            IList<CatsItem> items = new List<CatsItem>();
+            /*
+            foreach (byte[] id in scoreMap.Keys)
+            {
+                byte[] catId;
+                categoryMap.TryGetValue(id, out catId);
+
+                decimal score;
+                if (categoryScores.TryGetValue(catId, out score))
+                {
+                    categoryScores[catId] = score + scoreMap[id] * weight;
+                }
+                else categoryScores.Add(catId, scoreMap[id] * weight);
+
+                //items.Add(new CatsItem() { category = cat, color = brush, percentage = "17.7%" });
+            }
+            */
+
+            var repo = new RatingRepository();
+            //Dictionary<byte[], IList<RatingMeaning>> allRatingMeanings = repo.findHistoryTestsRatings(int.Parse(this.client.age), scoreMap.Keys); //finds ratings for all tests in the history and returns dictionary(testId -> ratings) 
+            foreach (byte[] id in scoreMap.Keys)
+            {
+                int age = findAge(int.Parse(this.client.age), id);
+                IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, id);
+                decimal score = scoreMap[id];
+                RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
+                int scoreRating = scoreMeaning.rating;
+                int maxScoreRating = findMaxScoreRating(allRatingMeanings);
+
+                byte[] catId = categoryMap[id];
+
+                decimal catScore;
+                if (categoryScores.TryGetValue(catId, out catScore))
+                {
+                    categoryScores[catId] = catScore + scoreRating * weight;
+                    categoryMaxScores[catId] = categoryMaxScores[catId] + maxScoreRating * weight;
+                }
+                else
+                {
+                    categoryScores.Add(catId, scoreRating * weight);
+                    categoryMaxScores.Add(catId, maxScoreRating * weight);
+                }
+            }
+
+            var rep = new TestCategoryRepository();
+            IList<TestCategory> cats = rep.FindAll();
+
+            //find percentages
+            foreach (byte[] id in categoryScores.Keys)
+            {
+                decimal actual = categoryScores[id];
+                decimal max = categoryMaxScores[id];
+
+                decimal percentage = 0;
+                if (max != 0)
+                {
+                    percentage = (actual * 100) / max;
+                }
+                else
+                {
+                    percentage = 100;
+                }
+
+                    foreach (TestCategory cat in cats)
+                    {
+                        if (cat.id.SequenceEqual(id))
+                        {
+                            items.Add(new CatsItem() { category = cat, color = brush, percentage = percentage.ToString() + "%" });
+                        }
+                    }
+            }
+
+                return items;
+        }
+
+        private int findAge(int clientAge, byte[] id)
+        {
+            var repo = new RatingRepository();
+            IList<Rating> ratings = repo.getTestRatings(new Test() { id=id });
+            int age = ratings[0].age;
+            foreach(Rating rat in ratings)
+            {
+                if(clientAge > rat.age)
+                {
+                    age = rat.age;
+                }
+            }
+            return age;
+        }
+
+        private RatingMeaning findScoreMeaning(decimal score, IList<RatingMeaning> list)
+        {
+            if (list.Count == 0) return new RatingMeaning() { rating = 0};
+            RatingMeaning meaning = list[0];
+            foreach(RatingMeaning mean in list)
+            {
+                if(score > mean.normM)
+                {
+                    meaning = mean;
+                }
+            }
+            return meaning;
+        }
+
+        private int findMaxScoreRating(IList<RatingMeaning> list)
+        {
+            if (list.Count == 0) return 0;
+            int max = list[0].rating;
+            foreach (RatingMeaning mean in list)
+            {
+                if (mean.rating > max)
+                {
+                    max = mean.rating;
+                }
+            }
+            return max;
+
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -158,7 +324,7 @@ namespace HealthReporter.Controls
             this._parent.stkTest.Children[childNumber - 2].Opacity = 1;
             this._parent.stkTest.Children[childNumber - 2].IsEnabled = true;
         }
-        
+
         private void btn_NewAppraisal(object sender, RoutedEventArgs e)
         {
             NewAppraisalStep1Control obj = new NewAppraisalStep1Control(this._parent, client, group);
@@ -166,11 +332,11 @@ namespace HealthReporter.Controls
         }
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
-        {          
+        {
         }
 
         private void btn_Report(object sender, RoutedEventArgs e)
-        {          
+        {
         }
 
         private void dataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
@@ -184,15 +350,15 @@ namespace HealthReporter.Controls
         }
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-          
-            var editedTextbox = e.EditingElement as TextBox;           
+
+            var editedTextbox = e.EditingElement as TextBox;
             FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
 
             DataGridColumn col1 = e.Column;
             int index = col1.DisplayIndex;
 
             Date_Score_Appraiser elem2 = elem.list[index - 2];
-            var repoAT= new Appraisal_tests_repository();
+            var repoAT = new Appraisal_tests_repository();
 
             IList<Appraisal_tests> history = repoAT.FindAll();
 
@@ -202,30 +368,32 @@ namespace HealthReporter.Controls
             appTest.score = elem2.score;
 
             var repo = new Appraisal_tests_repository();
-           
+
             if (editedTextbox.Text.ToString() != "")
+            {
+                if (elem2.applId != null)
                 {
-                if (elem2.applId!=null)
-                {             
                     try
                     {
                         System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
                         customCulture.NumberFormat.NumberDecimalSeparator = ".";
                         System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-                        
-                        decimal test1 = decimal.Parse(editedTextbox.Text);                       
-                        appTest.score = test1;                       
+
+                        decimal test1 = decimal.Parse(editedTextbox.Text);
+                        appTest.score = test1;
                         repoAT.Update(appTest);
                     }
                     catch
-                    {                           
-                    }
-                }else {                    
-                    foreach(FullHistoryDatagrid item in dataGrid.Items)
                     {
-                        foreach(Date_Score_Appraiser item2 in item.list)
+                    }
+                }
+                else
+                {
+                    foreach (FullHistoryDatagrid item in dataGrid.Items)
+                    {
+                        foreach (Date_Score_Appraiser item2 in item.list)
                         {
-                            if (item2.date == elem2.date && item2.applId!=null)
+                            if (item2.date == elem2.date && item2.applId != null)
                             {
                                 appTest.appraisalId = item2.applId;
                                 appTest.score = Decimal.Parse(editedTextbox.Text);
@@ -233,15 +401,15 @@ namespace HealthReporter.Controls
                                 repoAT.Insert(appTest);
                                 return;
                             }
-                        }                                             
-                    }                   
+                        }
+                    }
                 }
-            }         
+            }
         }
 
         private int rowIndex = 0;
-        private int columnIndex=0;
-            
+        private int columnIndex = 0;
+
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -262,19 +430,20 @@ namespace HealthReporter.Controls
                 int min = 0;
                 int max = 0;
 
-                foreach(Rating rating in ratingsByTestId)
+                foreach (Rating rating in ratingsByTestId)
                 {
                     ageslist.Add(rating.age);
                 }
 
                 foreach (int setElem in ageslist)
                 {
-                    
-                    if ( setElem < int.Parse(client.age))
+
+                    if (setElem < int.Parse(client.age))
                     {
                         min = setElem;
 
-                    }else
+                    }
+                    else
                     {
                         max = setElem;
                         break;
@@ -282,7 +451,7 @@ namespace HealthReporter.Controls
                 }
                 if (max <= 0)
                 {
-                    ageslabel.Text = "ages " + min.ToString() + "+";                  
+                    ageslabel.Text = "ages " + min.ToString() + "+";
                 }
                 else
                 {
@@ -298,200 +467,227 @@ namespace HealthReporter.Controls
                 clientResult.Children.Clear();
                 clientResult.ColumnDefinitions.Clear();
 
-                IList<RatingMeaning> list = repo.findLabelsWithMeanings(min,selectedItem);
+                IList<RatingMeaning> list = repo.findLabelsWithMeanings(min, selectedItem);
                 if (list.Count == 0)
                 {
                     diagrams.Visibility = Visibility.Hidden;
                     noDiagram.Visibility = Visibility.Visible;
-                  
-                }else {
+
+                }
+                else
+                {
                     noDiagram.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
                     int i = 0;
 
-                for (int j = 0; j < list.Count; j++)
-                {
-                    RatingMeaning obj = list[j];
-                    StackPanel stack = new StackPanel();
-                    stack.Orientation = Orientation.Horizontal;
-                    stack.Margin = new System.Windows.Thickness(5, 0, 5, 0);
-                    stack.VerticalAlignment = VerticalAlignment.Center;
-                    TextBlock txtBlock = new TextBlock();
-                   
-                    txtBlock.Text = " " + obj.name;
-                    Rectangle rec = new Rectangle();
-                    Rectangle line = new Rectangle();
-                    
-                    if (obj.rating == 0)
+                    for (int j = 0; j < list.Count; j++)
                     {
-                        rec.Fill = System.Windows.Media.Brushes.Red;
-                        line.Fill = System.Windows.Media.Brushes.Red;
+                        RatingMeaning obj = list[j];
+                        StackPanel stack = new StackPanel();
+                        stack.Orientation = Orientation.Horizontal;
+                        stack.Margin = new System.Windows.Thickness(5, 0, 5, 0);
+                        stack.VerticalAlignment = VerticalAlignment.Center;
+                        TextBlock txtBlock = new TextBlock();
+
+                        txtBlock.Text = " " + obj.name;
+                        Rectangle rec = new Rectangle();
+                        Rectangle line = new Rectangle();
+
+                        if (obj.rating == 0)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Red;
+                            line.Fill = System.Windows.Media.Brushes.Red;
+                        }
+                        else if (obj.rating == 1)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Orange;
+                            line.Fill = System.Windows.Media.Brushes.Orange;
+                        }
+                        else if (obj.rating == 2)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Yellow;
+                            line.Fill = System.Windows.Media.Brushes.Yellow;
+                        }
+                        else if (obj.rating == 3)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Green;
+                            line.Fill = System.Windows.Media.Brushes.Green;
+                        }
+                        else if (obj.rating == 4)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Blue;
+                            line.Fill = System.Windows.Media.Brushes.Blue;
+                        }
+                        rec.Height = 10;
+                        rec.Width = 10;
+                        stack.Children.Add(rec);
+                        stack.Children.Add(txtBlock);
+                        stackpanel.Children.Add(stack);
+
+
+                        line.Height = 5;
+                        if (this.client.gender == "1" && (j + 1) != list.Count)
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normM.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                        }
+                        else if (this.client.gender == "1")
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(25, GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(25, GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normM.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                        }
+                        else if (this.client.gender == "0" && (j + 1) != list.Count)
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normF.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+
+                            i++;
+                        }
+                        else if (this.client.gender == "0")
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(25, GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(25, GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normF.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                        }
+
+
                     }
-                    else if(obj.rating == 1) {
-                        rec.Fill = System.Windows.Media.Brushes.Orange;
-                        line.Fill = System.Windows.Media.Brushes.Orange;
-                    }
-                    else if (obj.rating == 2)
-                    {
-                        rec.Fill = System.Windows.Media.Brushes.Yellow;
-                        line.Fill = System.Windows.Media.Brushes.Yellow;
-                    }
-                    else if (obj.rating == 3)
-                    {
-                        rec.Fill = System.Windows.Media.Brushes.Green;
-                        line.Fill = System.Windows.Media.Brushes.Green;
-                    }
-                    else if  (obj.rating == 4)
-                    {
-                        rec.Fill = System.Windows.Media.Brushes.Blue;
-                        line.Fill = System.Windows.Media.Brushes.Blue;
-                    }
-                    rec.Height = 10;
-                    rec.Width = 10;
-                    stack.Children.Add(rec);
-                    stack.Children.Add(txtBlock);               
-                    stackpanel.Children.Add(stack);
 
-                    
-                    line.Height = 5;
-                    if (this.client.gender == "1" && (j+1)!=list.Count)
-                    {
-                        ColumnDefinition c1 = new ColumnDefinition();
-                        c1.Width = new GridLength(Double.Parse((list[j+1].normM-obj.normM).ToString()), GridUnitType.Star);
 
-                        ColumnDefinition c2 = new ColumnDefinition();
-                        c2.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+                    //Rectangle line2 = new Rectangle();
+                    //line2.Fill = System.Windows.Media.Brushes.Black;
 
-                        TextBlock txtBlock2 = new TextBlock();
-                        txtBlock2.Text = obj.normM.ToString();
-                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+                    //line2.Height = 5;
+                    //line2.Width = 50;
 
-                        scala.ColumnDefinitions.Add(c1);                        
-                        scala.Children.Add(line);
-                        scalaNumbers.ColumnDefinitions.Add(c2);
-                        scalaNumbers.Children.Add(txtBlock2);
+                    //ColumnDefinition c3 = new ColumnDefinition();
+                    //c3.Width = new GridLength(Double.Parse(elem.score.ToString()), GridUnitType.Star);
 
-                        line.Width = 1000;
-                        Grid.SetColumn(line, i);
-                        Grid.SetColumn(txtBlock2, i);
-                        i++;
-                    }else if (this.client.gender == "1")
-                    {
-                        ColumnDefinition c1 = new ColumnDefinition();
-                        c1.Width = new GridLength(25, GridUnitType.Star);
 
-                        ColumnDefinition c2 = new ColumnDefinition();
-                        c2.Width = new GridLength(25, GridUnitType.Star);
+                    //clientResult.ColumnDefinitions.Add(c3);
+                    //clientResult.Children.Add(line2);
+                    //line2.Width = 1000;
+                    //Grid.SetColumn(line2, 0);
 
-                        TextBlock txtBlock2 = new TextBlock();
-                        txtBlock2.Text = obj.normM.ToString();
-                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
-
-                        scala.ColumnDefinitions.Add(c1);
-                        scala.Children.Add(line);
-                        scalaNumbers.ColumnDefinitions.Add(c2);
-                        scalaNumbers.Children.Add(txtBlock2);
-
-                        line.Width = 1000;
-                        Grid.SetColumn(line, i);
-                        Grid.SetColumn(txtBlock2, i);
-                        i++;
-                    }
-                    else if (this.client.gender == "0" && (j + 1) != list.Count)
-                    {
-                        ColumnDefinition c1 = new ColumnDefinition();
-                        c1.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
-
-                        ColumnDefinition c2 = new ColumnDefinition();
-                        c2.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
-
-                        TextBlock txtBlock2 = new TextBlock();
-                        txtBlock2.Text = obj.normF.ToString();
-                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
-
-                        scala.ColumnDefinitions.Add(c1);
-                        scala.Children.Add(line);
-                        scalaNumbers.ColumnDefinitions.Add(c2);
-                        scalaNumbers.Children.Add(txtBlock2);
-
-                        line.Width = 1000;
-                        Grid.SetColumn(line, i);
-                        Grid.SetColumn(txtBlock2, i);
-                       
-                        i++;
-                    }
-                    else if (this.client.gender == "0")
-                    {
-                        ColumnDefinition c1 = new ColumnDefinition();
-                        c1.Width = new GridLength(25, GridUnitType.Star);
-
-                        ColumnDefinition c2 = new ColumnDefinition();
-                        c2.Width = new GridLength(25, GridUnitType.Star);
-
-                        TextBlock txtBlock2 = new TextBlock();
-                        txtBlock2.Text = obj.normF.ToString();
-                        txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
-
-                        scala.ColumnDefinitions.Add(c1);
-                        scala.Children.Add(line);
-                        scalaNumbers.ColumnDefinitions.Add(c2);
-                        scalaNumbers.Children.Add(txtBlock2);
-
-                        line.Width = 1000;
-                        Grid.SetColumn(line, i);
-                        Grid.SetColumn(txtBlock2, i);
-                        i++;
-                    }
-
-                 
+                    //Rectangle line2 = new Rectangle();
+                    //line2.Fill = System.Windows.Media.Brushes.Yellow;
+                    //line2.Height = 5;
+                    //line2.Width = 50;
+                    //scala.Children.Add(line);
+                    //scala.Children.Add(line2);
                 }
-
-             
-                //Rectangle line2 = new Rectangle();
-                //line2.Fill = System.Windows.Media.Brushes.Black;
-
-                //line2.Height = 5;
-                //line2.Width = 50;
-
-                //ColumnDefinition c3 = new ColumnDefinition();
-                //c3.Width = new GridLength(Double.Parse(elem.score.ToString()), GridUnitType.Star);
-
-              
-                //clientResult.ColumnDefinitions.Add(c3);
-                //clientResult.Children.Add(line2);
-                //line2.Width = 1000;
-                //Grid.SetColumn(line2, 0);
-               
-                //Rectangle line2 = new Rectangle();
-                //line2.Fill = System.Windows.Media.Brushes.Yellow;
-                //line2.Height = 5;
-                //line2.Width = 50;
-                //scala.Children.Add(line);
-                //scala.Children.Add(line2);
             }
-        }
         }
 
         DataGridColumnHeader lastObject;
 
         private void getHeaderName(object sender, RoutedEventArgs e)
         {
-            
+
             if (lastObject != null)
             {
                 lastObject.Background = Brushes.White;
                 lastObject.BorderBrush = Brushes.LightGray;
             }
-           
+
             DataGridColumnHeader header = ((DataGridColumnHeader)sender);
             string headerText = header.Content.ToString();
 
-            if(headerText != "TestName" && headerText != "units") {
-            lastObject = header;
-            header.Background= Brushes.Gainsboro;
-            
-            this.columnIndex = dataGrid.Columns.Single(c => c.Header.ToString() == headerText).DisplayIndex-2;
-            dataGrid.SelectedIndex = rowIndex;
+            if (headerText != "TestName" && headerText != "units")
+            {
+                lastObject = header;
+                header.Background = Brushes.Gainsboro;
+
+                this.columnIndex = dataGrid.Columns.Single(c => c.Header.ToString() == headerText).DisplayIndex - 2;
+                dataGrid.SelectedIndex = rowIndex;
+            }
+        }
+
+        private class CatsItem
+        {
+            public TestCategory category { get; set; }
+            public Brush color { get; set; }
+            public string percentage { get; set; }
+        }
+
+        public class ByteArrayComparer : IEqualityComparer<byte[]>
+        {
+            public bool Equals(byte[] a, byte[] b)
+            {
+                return a.SequenceEqual(b);
+            }
+
+            public int GetHashCode(byte[] key)
+            {
+                if (key == null)
+                    throw new ArgumentNullException("key");
+                return key.Sum(b => b);
             }
         }
     }
