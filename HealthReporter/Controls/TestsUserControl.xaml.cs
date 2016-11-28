@@ -99,7 +99,7 @@ namespace HealthReporter.Controls
                 System.Windows.Controls.TabItem c = (System.Windows.Controls.TabItem)WomenAgesTab.ItemContainerGenerator.ContainerFromItem(WomenAgesTab.Items[i]);
                 if(c != null) c.Template = null;
             }
-            if (list.Count != 0)
+            if (list != null && list.Count != 0)
             {
                 list.Add(new TabItem() { interval = new AgeInterval() { interval = "+" }, rowitems = new List<RowItem>() });
                 list.Add(new TabItem() { interval = new AgeInterval() { interval = "-" }, rowitems = new List<RowItem>() });

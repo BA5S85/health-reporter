@@ -54,12 +54,7 @@ namespace HealthReporter.Controls
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
 
-            //map that keeps latest appraisal date for every test in appraisal history
-            var latestDatesMap = new Dictionary<byte[], DateTime>(new ByteArrayComparer());
-            //map that keeps latest test score for every test in appraisal history
-            var latestTestScore = new Dictionary<byte[], decimal>(new ByteArrayComparer());
-            //map that keeps categoryId for every test
-            var testCategoriesMap = new Dictionary<byte[], byte[]>(new ByteArrayComparer());
+            var latestAppraisalTests = new Dictionary<byte[], HistoryTableItem>(new ByteArrayComparer());
 
             //Finding all appraisal results of client
             var repo = new AppraisalsRepository();
@@ -77,22 +72,17 @@ namespace HealthReporter.Controls
                 {
                     DateTime date = DateTime.Parse(item.date);
 
-                    DateTime lastDate;
-                    if (latestDatesMap.TryGetValue(item.tId, out lastDate)) //map contains testId
+                    HistoryTableItem histItem;
+                    if (latestAppraisalTests.TryGetValue(item.tId, out histItem)) //map contains testId
                     {
-                        if (date > lastDate)
+                        if (date > DateTime.Parse(histItem.date))
                         {
-                            latestDatesMap[item.tId] = date;
-                            latestTestScore[item.tId] = item.Score;
+                            latestAppraisalTests[item.tId] = histItem;
                         }
                     }
                     else
                     {
-                        latestDatesMap.Add(item.tId, date);
-                        latestTestScore.Add(item.tId, item.Score);
-                    }
-                    if(!testCategoriesMap.ContainsKey(item.tId)){
-                        testCategoriesMap.Add(item.tId, item.tCategory);
+                        latestAppraisalTests.Add(item.tId, item);
                     }
                 }
 
@@ -183,51 +173,31 @@ namespace HealthReporter.Controls
             dataGrid.ItemsSource = result;
 
             //categories datagrid
-            catsDataGrid.ItemsSource = findCatsDataGridItems(latestTestScore, testCategoriesMap);
+            catsDataGrid.ItemsSource = findCatsDataGridItems(latestAppraisalTests);
 
         }
 
-        private IList<CatsItem> findCatsDataGridItems(Dictionary<byte[], decimal> scoreMap, Dictionary<byte[], byte[]> categoryMap)
+        private IList<CatsItem> findCatsDataGridItems(Dictionary<byte[], HistoryTableItem> latestMap)
         {
-            //default values just for testing
-            int weight = 1;
-            var converter = new BrushConverter();
-            var brush = (Brush)converter.ConvertFromString("green");
-
-
             Dictionary<byte[], decimal> categoryScores = new Dictionary<byte[], decimal>(new ByteArrayComparer());
             Dictionary<byte[], decimal> categoryMaxScores = new Dictionary<byte[], decimal>(new ByteArrayComparer());
 
             IList<CatsItem> items = new List<CatsItem>();
-            /*
-            foreach (byte[] id in scoreMap.Keys)
-            {
-                byte[] catId;
-                categoryMap.TryGetValue(id, out catId);
-
-                decimal score;
-                if (categoryScores.TryGetValue(catId, out score))
-                {
-                    categoryScores[catId] = score + scoreMap[id] * weight;
-                }
-                else categoryScores.Add(catId, scoreMap[id] * weight);
-
-                //items.Add(new CatsItem() { category = cat, color = brush, percentage = "17.7%" });
-            }
-            */
 
             var repo = new RatingRepository();
-            //Dictionary<byte[], IList<RatingMeaning>> allRatingMeanings = repo.findHistoryTestsRatings(int.Parse(this.client.age), scoreMap.Keys); //finds ratings for all tests in the history and returns dictionary(testId -> ratings) 
-            foreach (byte[] id in scoreMap.Keys)
+
+            foreach (byte[] id in latestMap.Keys)
             {
                 int age = findAge(int.Parse(this.client.age), id);
                 IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, id);
-                decimal score = scoreMap[id];
+                decimal score = latestMap[id].Score;
                 RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
                 int scoreRating = scoreMeaning.rating;
                 int maxScoreRating = findMaxScoreRating(allRatingMeanings);
 
-                byte[] catId = categoryMap[id];
+                byte[] catId = latestMap[id].tCategory;
+
+                decimal weight = (decimal)latestMap[id].weight;
 
                 decimal catScore;
                 if (categoryScores.TryGetValue(catId, out catScore))
@@ -258,8 +228,9 @@ namespace HealthReporter.Controls
                 }
                 else
                 {
-                    percentage = 100;
+                    throw new DivideByZeroException("can't find percentage because maximum is zero");
                 }
+                var brush = findColorCode(percentage);
 
                     foreach (TestCategory cat in cats)
                     {
@@ -271,6 +242,21 @@ namespace HealthReporter.Controls
             }
 
                 return items;
+        }
+
+        private Brush findColorCode(decimal percentage)
+        {
+            string color = "Red";
+
+            if (percentage <= 20) color = "Red";
+            else if (percentage <= 40) color = "Orange";
+            else if (percentage <= 60) color = "Yellow";
+            else if (percentage <= 80) color = "Green";
+            else color = "Blue";
+
+            var converter = new BrushConverter();
+            var brush = (Brush)converter.ConvertFromString(color);
+            return brush;
         }
 
         private int findAge(int clientAge, byte[] id)
