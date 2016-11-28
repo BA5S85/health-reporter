@@ -189,26 +189,29 @@ namespace HealthReporter.Controls
             foreach (byte[] id in latestMap.Keys)
             {
                 int age = findAge(int.Parse(this.client.age), id);
-                IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, id);
-                decimal score = latestMap[id].Score;
-                RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
-                int scoreRating = scoreMeaning.rating;
-                int maxScoreRating = findMaxScoreRating(allRatingMeanings);
-
-                byte[] catId = latestMap[id].tCategory;
-
-                decimal weight = (decimal)latestMap[id].weight;
-
-                decimal catScore;
-                if (categoryScores.TryGetValue(catId, out catScore))
+                if (age != -1) //if age is -1 then test has no ratings and it can't be used in calculations
                 {
-                    categoryScores[catId] = catScore + scoreRating * weight;
-                    categoryMaxScores[catId] = categoryMaxScores[catId] + maxScoreRating * weight;
-                }
-                else
-                {
-                    categoryScores.Add(catId, scoreRating * weight);
-                    categoryMaxScores.Add(catId, maxScoreRating * weight);
+                    IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, id);
+                    decimal score = latestMap[id].Score;
+                    RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
+                    int scoreRating = scoreMeaning.rating;
+                    int maxScoreRating = findMaxScoreRating(allRatingMeanings);
+
+                    byte[] catId = latestMap[id].tCategory;
+
+                    decimal weight = (decimal)latestMap[id].weight;
+
+                    decimal catScore;
+                    if (categoryScores.TryGetValue(catId, out catScore))
+                    {
+                        categoryScores[catId] = catScore + scoreRating * weight;
+                        categoryMaxScores[catId] = categoryMaxScores[catId] + maxScoreRating * weight;
+                    }
+                    else
+                    {
+                        categoryScores.Add(catId, scoreRating * weight);
+                        categoryMaxScores.Add(catId, maxScoreRating * weight);
+                    }
                 }
             }
 
@@ -228,7 +231,7 @@ namespace HealthReporter.Controls
                 }
                 else
                 {
-                    throw new DivideByZeroException("can't find percentage because maximum is zero");
+                    if (actual == 0) percentage = 100;
                 }
                 var brush = findColorCode(percentage);
 
@@ -263,6 +266,7 @@ namespace HealthReporter.Controls
         {
             var repo = new RatingRepository();
             IList<Rating> ratings = repo.getTestRatings(new Test() { id=id });
+            if (ratings.Count == 0) return -1;
             int age = ratings[0].age;
             foreach(Rating rat in ratings)
             {
