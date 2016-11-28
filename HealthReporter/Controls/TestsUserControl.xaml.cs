@@ -167,6 +167,7 @@ namespace HealthReporter.Controls
                     testRep.Update(test);
                 }
             }
+            validation2();
         }
 
         private int colorToInt(String color)
@@ -322,13 +323,13 @@ namespace HealthReporter.Controls
         private void menRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e) //trying to fix DeferRefresh error
         {
             var grid = (DataGrid)sender;
-            grid.CommitEdit(DataGridEditingUnit.Row, true);
+            grid.CommitEdit();
         }
 
         private void WomenRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e)
         {
             var grid = (DataGrid)sender;
-            grid.CommitEdit(DataGridEditingUnit.Row, true);
+            grid.CommitEdit();
         }
 
         private void updateTestsColumn(TestCategory cat) //cat is a main category
@@ -409,6 +410,7 @@ namespace HealthReporter.Controls
                 MenuItem mi = (MenuItem)addStuffButton.ContextMenu.Items[2];
                 mi.IsEnabled = true;
             }
+            validation2();
         }
 
         private Brush ratingToColor(int rating)
@@ -532,6 +534,7 @@ namespace HealthReporter.Controls
                GenderTabsItemssource(new System.Collections.ObjectModel.ObservableCollection<TabItem>(this._tabitems));
                MenAgesTab.SelectedIndex = _selectedGroup;
             }
+            validation2();
 
         }
 
@@ -690,8 +693,9 @@ namespace HealthReporter.Controls
 
         private bool validation2()
         {
-            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).name == "No Name"  || ((Test)testName.DataContext).units == "" || ((Test)testName.DataContext).units == null))
+            if (testName.DataContext != null && (((Test)testName.DataContext).name == "" || ((Test)testName.DataContext).name == "No Name"  || ((Test)testName.DataContext).units == "" || ((Test)testName.DataContext).units == null) || !ratingsCheck())
             {
+                ratingsCheck();
                 catsDataGrid.IsEnabled = false;
                 testsDataGrid.IsEnabled = false;
                 search.IsEnabled = false;
@@ -701,6 +705,33 @@ namespace HealthReporter.Controls
             testsDataGrid.IsEnabled = true;
             search.IsEnabled = true;
             return true;
+        }
+
+        private bool ratingsCheck()
+        {
+            if (MenAgesTab.Items.Count == 0)
+            {
+                tip.Visibility = Visibility.Visible;
+                tip.ToolTip = "Click on the + button the add ratings.";
+                ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#575C5C"));
+                return true;
+            }
+            else
+            {
+                foreach (TabItem tab in _tabitems)
+                {
+                    if (tab.rowitems.Count < 2)
+                    {
+                        tip.Visibility = Visibility.Visible;
+                        tip.ToolTip = "All age groups must have at least two ratings or no ratings at all.";
+                        ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("red"));
+                        return false;
+                    }
+                }
+                ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#575C5C"));
+                tip.Visibility = Visibility.Hidden;
+                return true;
+            }
         }
 
         private void textBox_LostFocus(object sender, RoutedEventArgs e)
