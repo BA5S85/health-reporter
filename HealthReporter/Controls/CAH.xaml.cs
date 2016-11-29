@@ -75,7 +75,6 @@ namespace HealthReporter.Controls
                     HistoryTableItem histItem;
                     if (latestAppraisalTests.TryGetValue(item.tId, out histItem)) //map contains testId
                     {
-                        System.Diagnostics.Trace.WriteLine(date > DateTime.Parse(histItem.date));
                         if (date > DateTime.Parse(histItem.date))
                         {
                             latestAppraisalTests[item.tId] = item;
