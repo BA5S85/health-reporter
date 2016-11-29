@@ -75,9 +75,10 @@ namespace HealthReporter.Controls
                     HistoryTableItem histItem;
                     if (latestAppraisalTests.TryGetValue(item.tId, out histItem)) //map contains testId
                     {
+                        System.Diagnostics.Trace.WriteLine(date > DateTime.Parse(histItem.date));
                         if (date > DateTime.Parse(histItem.date))
                         {
-                            latestAppraisalTests[item.tId] = histItem;
+                            latestAppraisalTests[item.tId] = item;
                         }
                     }
                     else
@@ -243,6 +244,17 @@ namespace HealthReporter.Controls
                         }
                     }
             }
+            foreach(TestCategory cat in cats)
+            {
+                var converter = new BrushConverter();
+                var brush = (Brush)converter.ConvertFromString("white");
+                bool hasScore = false;
+                foreach(byte[] id in categoryScores.Keys)
+                {
+                    if (cat.id.SequenceEqual(id)) hasScore = true;
+                }
+                if(!hasScore) items.Add(new CatsItem() { category = cat, color = brush, percentage = "-" });
+            }
 
                 return items;
         }
@@ -280,11 +292,18 @@ namespace HealthReporter.Controls
 
         private RatingMeaning findScoreMeaning(decimal score, IList<RatingMeaning> list)
         {
+            bool isMale = this.client.gender == "1";
             if (list.Count == 0) return new RatingMeaning() { rating = 0};
             RatingMeaning meaning = list[0];
             foreach(RatingMeaning mean in list)
             {
-                if(score > mean.normM)
+                var norm = mean.normF;
+                if (isMale)
+                {
+                    norm = mean.normM;
+                }
+
+                if(score > norm)
                 {
                     meaning = mean;
                 }
