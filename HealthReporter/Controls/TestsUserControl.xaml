@@ -302,7 +302,7 @@
                                     </Style>
                                 </TextBlock.Resources>
                             </TextBlock>
-                            <TabControl Name="GenderTab" Grid.Column="1" Grid.RowSpan="2" Margin="10,0,10,10" BorderThickness="0" >
+                            <TabControl Name="GenderTab" Grid.Column="1" Grid.RowSpan="2" Margin="10,0,10,10" PreviewMouseDown="GenderTab_PreviewMouseDown" BorderThickness="0" >
                                 <TabControl.Resources>
                                     <Style TargetType="TabPanel">
                                         <Setter Property="HorizontalAlignment" Value="Right"/>

@@ -852,5 +852,11 @@ namespace HealthReporter.Controls
             for (int childIndex = 0; childIndex < childrenCount; childIndex++)
                 CommitTables(VisualTreeHelper.GetChild(control, childIndex));
         }
+
+        private void GenderTab_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (IsUnderTabHeader(e.OriginalSource as DependencyObject))
+                CommitTables(sender as TabControl);
+        }
     }
 }
