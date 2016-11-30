@@ -521,7 +521,7 @@ namespace HealthReporter.Controls
             IList<Client> clients = repo.FindSearchResult(searchBy, this._group);
 
             clientDataGrid.ItemsSource = clients;
-            hideClientDetails();                    
+            hideClientDetails();       
         }
 
         private void filterSearchBoxAllClients(object sender, TextChangedEventArgs e)
@@ -556,7 +556,10 @@ namespace HealthReporter.Controls
                 return;
             }
             SaveClientInfo(this._client);
-           
+            clientDataGrid.SelectedIndex = -1;
+            hideClientDetails();
+            Keyboard.Focus(search);
+
         }
 
         private void btn_ShowAllClients(object sender, RoutedEventArgs e)
