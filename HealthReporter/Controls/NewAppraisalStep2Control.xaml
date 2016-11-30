@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
-             mc:Ignorable="d" Height="485" Width="800">
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Padding="30"
+             mc:Ignorable="d" Height="auto" Width="auto">
     <UserControl.Resources>
         <local:InvertBoolConverter x:Key="invertBoolConverter"/>
         <Image x:Key="Dustbin" Source="/Images/dustbin.png" Stretch="Uniform"/>

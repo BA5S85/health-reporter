@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
-             mc:Ignorable="d" Height="485" Width="800">
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Padding="30"
+             mc:Ignorable="d" Height="auto" Width="auto">
     <Grid>
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Border.Effect>
@@ -19,7 +22,29 @@
                 </Grid.RowDefinitions>
                 <Border BorderBrush="#FFF0F0F0" BorderThickness="2">
                     <Grid Grid.Row="0" Background="White" HorizontalAlignment="Stretch" >
-                        <Border BorderBrush="Gray" BorderThickness="1" Background="White"  CornerRadius="12" Margin="215,20,205,28">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Button  x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="43,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Back" BorderBrush="#FFA2B2BD" Background="White">
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="100"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <Button x:Name="button2_Copy1" Content="+" HorizontalAlignment="Left" Margin="111,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_AddTest" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="100"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="108,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Background="White"  CornerRadius="12" Margin="0,20,0,28">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                 <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
                                     <TextBlock.Text>
@@ -40,38 +65,26 @@
                                 </TextBlock>
                             </StackPanel>
                         </Border>
-
-                        <Button x:Name="button" Content="Back" HorizontalAlignment="Left" Margin="43,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Back" BorderBrush="#FFA2B2BD" Background="White">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="100"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <Button x:Name="button2" Content="+" HorizontalAlignment="Left" Margin="650,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_NewAppraisal" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="100"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="649,64,0,0" TextWrapping="Wrap" Text="Appraisal" VerticalAlignment="Top"/>
-                        <Button x:Name="button2_Copy" Content="+" HorizontalAlignment="Left" Margin="719,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Report" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="100"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="721,64,0,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
-                        <Button x:Name="button2_Copy1" Content="+" HorizontalAlignment="Left" Margin="111,19,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_AddTest" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="100"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="108,61,0,0" TextWrapping="Wrap" Text="Add Test" VerticalAlignment="Top"/>
+                        <Grid Grid.Column="2">
+                            <Button x:Name="button2" Content="+" HorizontalAlignment="Right" Margin="0,19,124,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_NewAppraisal" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="100"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <TextBlock x:Name="textBlock" HorizontalAlignment="Right" Margin="0,64,124,0" TextWrapping="Wrap" Text="Appraisal" VerticalAlignment="Top"/>
+                            <Button x:Name="button2_Copy" Content="+" HorizontalAlignment="Right" Margin="0,19,54,0" VerticalAlignment="Top" Width="40" Height="40" Click="btn_Report" BorderBrush="#FFA2B2BD"  Background="White" FontWeight="Bold" FontSize="14">
+                                <Button.Resources>
+                                    <Style TargetType="{x:Type Border}">
+                                        <Setter Property="CornerRadius" Value="100"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                            <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Right" Margin="0,64,54,0" TextWrapping="Wrap" Text="Report" VerticalAlignment="Top"/>
+                        </Grid>
+                        
+                       
 
                     </Grid>
                 </Border>
