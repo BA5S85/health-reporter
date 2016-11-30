@@ -43,8 +43,6 @@ namespace HealthReporter.Controls
             appraisal.clientId = client.id;
             appraisal.date = String.Format("{0:yyyy-MM-dd}", DateTime.Now);
             date.DataContext = appraisal;
-
-           
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
