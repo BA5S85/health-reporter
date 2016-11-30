@@ -131,7 +131,7 @@ namespace HealthReporter.Controls
                     dates.Add(item.date.ToString());
                 }
             }
-
+ 
             foreach (RowItem item in catsDataGrid.Items)
             {
                 IList<ListBoxItem> lbItems = item.categoryTests;
@@ -159,7 +159,7 @@ namespace HealthReporter.Controls
                         IList<ListBoxItem> lbItems = item.categoryTests;
                         foreach (ListBoxItem lbItem in lbItems)
                         {
-                            if (lbItem.isEnabled && !dates.Contains(appraisal.date) && lbItem.test.id.SequenceEqual(preTest.testId))
+                            if (!lbItem.isEnabled && lbItem.test.id.SequenceEqual(preTest.testId))
                             {
                                 isHist = true;
                             }
@@ -176,7 +176,7 @@ namespace HealthReporter.Controls
             IList<Test> historyTests = aprep.FindAppraisalTests(this.client);
             if (tests.Count < 1 && historyTests.Count < 1)
             {
-                MessageBox.Show("Please select test/tests.", "Message");
+                MessageBox.Show("Please select tests/presests.", "Message");
             }
             else
             {

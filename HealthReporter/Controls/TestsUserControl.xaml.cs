@@ -589,7 +589,7 @@ namespace HealthReporter.Controls
 
         private void btn_DeleteTest(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the selected test?", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete the selected test? All appraisal results related to the test will be deleted. The test will also be deleted from every preset that contains it.", "", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
             if(result == MessageBoxResult.Yes)
             {
@@ -609,6 +609,8 @@ namespace HealthReporter.Controls
 
                 ClearFields();
                 GenderTabsItemssource(null);
+
+
 
                 IList<Test> tests = testRepo.FindAll();
                 findTestTotal();

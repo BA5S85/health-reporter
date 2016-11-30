@@ -16,6 +16,8 @@ namespace HealthReporter.Models
         public void Delete(Test test)
         {
             var res = DatabaseUtility.getConnection().InsertSql("DELETE from tests where id=@id", test);
+            var res2 = DatabaseUtility.getConnection().InsertSql("DELETE from preset_tests where testId=@id", test);
+            var res3 = DatabaseUtility.getConnection().InsertSql("DELETE from appraisal_tests where testId=@id", test);
         }
         public IList<Test> Get(Test test)
         {
