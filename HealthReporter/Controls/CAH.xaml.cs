@@ -698,5 +698,16 @@ namespace HealthReporter.Controls
                 return key.Sum(b => b);
             }
         }
+
+        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                e.Handled = true;
+                DataGrid grid = sender as DataGrid;
+                var focusedElement = Keyboard.FocusedElement as UIElement;
+                focusedElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+            }
+        }
     }
 }
