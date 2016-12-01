@@ -48,7 +48,13 @@ namespace HealthReporter.Controls
 
             Client client1 = this.client;
 
-            ClientInfo.DataContext = client1;
+            if (client1.gender == "0")
+            {
+                ClientInfo.Text = client1.firstName + " " + client1.lastName + ", " + client1.age + ", Female";
+            } else if (client1.gender == "1")
+            {
+                ClientInfo.Text = client1.firstName + " " + client1.lastName + ", " + client1.age + ", Male";
+            }
             ClientGroup.DataContext = group;
 
             //Finding all appraisal dates of client
@@ -699,15 +705,6 @@ namespace HealthReporter.Controls
             }
         }
 
-        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Tab)
-            {
-                e.Handled = true;
-                DataGrid grid = sender as DataGrid;
-                var focusedElement = Keyboard.FocusedElement as UIElement;
-                focusedElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
-            }
-        }
+       
     }
 }

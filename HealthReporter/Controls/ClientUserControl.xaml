@@ -330,11 +330,11 @@
                         </StackPanel>
                         <TextBlock Foreground="LightSlateGray" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="4" x:Name="Text4" Text="Gender" Margin="0,0,10,0"/>
                         <StackPanel Grid.Column="1" Grid.Row="4">
-                            <ComboBox Margin="10,0,0,0" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" HorizontalAlignment="Left" Style="{StaticResource ComboBoxFlatStyle}"   Text="{Binding gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  x:Name="gender" 
+                            <ComboBox Margin="10,0,0,0" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" HorizontalAlignment="Left" Style="{StaticResource ComboBoxFlatStyle}"   SelectedIndex="{Binding gender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  x:Name="gender" 
                                          Width="140"
                                         Validation.ErrorTemplate="{x:Null}">
-                                <ComboBoxItem Content="1"></ComboBoxItem>
-                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Tag="0" Content="Female"></ComboBoxItem>
+                                <ComboBoxItem Tag="1" Content="Male" />
                             </ComboBox>
                             <Label x:Name="AdornerSite4" Foreground="Red" FontWeight="Bold" FontSize="8" Content="{Binding (Validation.Errors).CurrentItem.ErrorContent, ElementName=gender}" Margin="5,0,0,0"/>
                         </StackPanel>

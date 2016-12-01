@@ -122,15 +122,17 @@ namespace HealthReporter.Models
         public string gender
         {
             get
-            {
-                return _gender;
+            {       
+                    return _gender;
             }
             set
             {
                 _gender = value;
                 OnPropertyChanged("gender");
             }
+
         }
+       
         public string birthDate
         {
             get

@@ -46,16 +46,8 @@
                         </Grid>
                         <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Background="White"  CornerRadius="12" Margin="0,20,0,28">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{} {0} {1}, {2}, {3}">
-                                            <Binding Path="firstName" />
-                                            <Binding Path="lastName" />
-                                            <Binding Path="age" />
-                                            <Binding Path="gender" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+                                <TextBlock x:Name="ClientInfo" FontSize="14" VerticalAlignment="Center" TextAlignment="Center"/>
+
                                 <TextBlock x:Name="ClientGroup" FontSize="14" VerticalAlignment="Center" TextAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="{} {0}">
@@ -130,7 +122,7 @@
                             <RowDefinition Height="5"></RowDefinition>
                             <RowDefinition Height="120"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <DataGrid HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" RowHeaderWidth="0" Background="{x:Null}" BorderBrush="{x:Null}"  Grid.Row="0"  CanUserSortColumns="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" SelectionUnit="Cell" PreviewKeyDown="dataGrid_PreviewKeyDown">
+                        <DataGrid HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" RowHeaderWidth="0" Background="{x:Null}" BorderBrush="{x:Null}"  Grid.Row="0"  CanUserSortColumns="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" >
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
                                     <Setter Property="Background" Value="White"/>
