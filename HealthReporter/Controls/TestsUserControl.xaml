@@ -328,7 +328,7 @@
                                             </TabControl.ItemTemplate>
                                             <TabControl.ContentTemplate>
                                                 <DataTemplate>
-                                                    <DataGrid x:Name="menRatingsDatagrid" Style="{DynamicResource DataGridStyle}" GotFocus="menRatingsDatagrid_GotFocus" SelectionChanged="menRatingsDatagrid_SelectionChanged" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" Unloaded="menRatingsDatagrid_Unloaded" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" PreviewKeyDown="KeyDownHandler" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}" IsReadOnly="False" HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
+                                                    <DataGrid x:Name="menRatingsDatagrid" Style="{DynamicResource DataGridStyle}" GotFocus="menRatingsDatagrid_GotFocus" SelectionChanged="menRatingsDatagrid_SelectionChanged" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" PreviewKeyDown="KeyDownHandler" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}" IsReadOnly="False" HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
                                                             <DataGridTextColumn Header="Score" Binding="{Binding normM, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">
@@ -434,7 +434,7 @@
                                             </TabControl.ItemTemplate>
                                             <TabControl.ContentTemplate>
                                                 <DataTemplate>
-                                                    <DataGrid x:Name="WomenRatingsDatagrid" GotFocus="menRatingsDatagrid_GotFocus" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionMode="Single" Unloaded="WomenRatingsDatagrid_Unloaded" RowDetailsVisibilityMode="Collapsed" IsReadOnly="False" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}"  HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
+                                                    <DataGrid x:Name="WomenRatingsDatagrid" GotFocus="menRatingsDatagrid_GotFocus" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" IsReadOnly="False" RowEditEnding="RatingsDataGrid_RowEditEnding" ItemsSource = "{Binding Path=rowitems}"  HeadersVisibility="Column" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                                                         <DataGrid.Columns>
                                                             <DataGridTextColumn Header="Score" Binding="{Binding normF, UpdateSourceTrigger = LostFocus}"  Width="0.5*" CanUserSort="False"/>
                                                             <DataGridTemplateColumn Header="Rating">

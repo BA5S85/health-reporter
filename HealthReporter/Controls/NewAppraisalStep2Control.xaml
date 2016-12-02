@@ -7,6 +7,9 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              Padding="30"
+             Focusable="True"
+             Loaded="UserControl_Loaded"
+             PreviewKeyDown="UserControl_PreviewKeyDown"   
              mc:Ignorable="d" Height="auto" Width="auto">
     <UserControl.Resources>
         <local:InvertBoolConverter x:Key="invertBoolConverter"/>

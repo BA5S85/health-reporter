@@ -730,5 +730,18 @@ namespace HealthReporter.Controls
             IList<HistoryTableItem> history = repo.FindAll(client);
             dataGrid.ItemsSource = findFullHistory(history);
         }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Escape)
+            {
+                btn_Back(null, null);
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(this);
+        }
     }
 }

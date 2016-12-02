@@ -51,6 +51,7 @@ namespace HealthReporter.Controls
         {
             int childNumber = this._parent.stkTest.Children.Count;
             this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+            this._parent.stkTest.Children[childNumber - 2].Focus();
         }
 
         private void btn_Next(object sender, RoutedEventArgs e)
@@ -63,18 +64,30 @@ namespace HealthReporter.Controls
 
                 NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
                 this._parent.stkTest.Children.Add(obj);
-
             }
-            catch
-            {
-
-            }
-
+            catch {}
         }
 
         private void name_GotFocus(object sender, RoutedEventArgs e)
         {
             AdornerSite.Visibility = Visibility.Visible;
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btn_Back(null, null);
+            }
+            else if(e.Key == Key.Enter)
+            {
+                btn_Next(null, null);
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(this);
         }
     }
 }

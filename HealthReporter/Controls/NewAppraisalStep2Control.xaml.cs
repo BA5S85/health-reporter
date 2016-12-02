@@ -78,7 +78,7 @@ namespace HealthReporter.Controls
 
         private void btn_Back(object sender, RoutedEventArgs e)
         {
-            if (this._parent.stkTest.Children.Count > 4)
+            if (this._parent.stkTest.Children.Count > 4) //?
             {
                 this._parent.stkTest.Children.RemoveRange(3, this._parent.stkTest.Children.Count);
             }
@@ -86,6 +86,7 @@ namespace HealthReporter.Controls
             {
                 int childNumber = this._parent.stkTest.Children.Count;
                 this._parent.stkTest.Children.RemoveAt(childNumber - 1);
+                this._parent.stkTest.Children[childNumber - 2].Focus();
             }
                   
         }
@@ -280,6 +281,23 @@ namespace HealthReporter.Controls
                 str += test.name + " \n";
             }
             MessageBox.Show(str); 
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(this);
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btn_Back(null, null);
+            }
+            else if (e.Key == Key.Enter)
+            {
+                btn_OK(null, null);
+            }
         }
     }
 

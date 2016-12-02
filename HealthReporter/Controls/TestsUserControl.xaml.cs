@@ -320,18 +320,6 @@ namespace HealthReporter.Controls
             else testDetailDatagrid.Visibility = Visibility.Hidden;
         }
 
-        private void menRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e) //trying to fix DeferRefresh error
-        {
-            var grid = (DataGrid)sender;
-            grid.CommitEdit();
-        }
-
-        private void WomenRatingsDatagrid_Unloaded(object sender, RoutedEventArgs e)
-        {
-            var grid = (DataGrid)sender;
-            grid.CommitEdit();
-        }
-
         private void updateTestsColumn(TestCategory cat) //cat is a main category
         {
             var rep = new TestCategoryRepository();
