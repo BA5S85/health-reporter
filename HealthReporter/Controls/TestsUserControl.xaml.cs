@@ -402,13 +402,17 @@ namespace HealthReporter.Controls
             if (tabitems.Count > 0)
             {
                 MenAgesTab.SelectedIndex = 0;
-                MenuItem mi = (MenuItem)addStuffButton.ContextMenu.Items[2];
-                mi.IsEnabled = false;
+                addRatingsM.IsEnabled = false;
+                addRatingsF.IsEnabled = false;
+                addRatingsM.Visibility = Visibility.Hidden;
+                addRatingsF.Visibility = Visibility.Hidden;
             }
             else
             {
-                MenuItem mi = (MenuItem)addStuffButton.ContextMenu.Items[2];
-                mi.IsEnabled = true;
+                addRatingsM.IsEnabled = true;
+                addRatingsF.IsEnabled = true;
+                addRatingsM.Visibility = Visibility.Visible;
+                addRatingsF.Visibility = Visibility.Visible;
             }
             validation2();
         }
@@ -713,8 +717,8 @@ namespace HealthReporter.Controls
         {
             if (MenAgesTab.Items.Count == 0)
             {
-                tip.Visibility = Visibility.Visible;
-                tip.ToolTip = "Click on the + button the add ratings.";
+                tip.Visibility = Visibility.Hidden;
+                // tip.ToolTip = "Click on the '+ Add ratings' button the add ratings.";
                 ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#575C5C"));
                 return true;
             }
