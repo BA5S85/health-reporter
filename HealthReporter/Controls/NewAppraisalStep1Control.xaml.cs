@@ -34,7 +34,7 @@ namespace HealthReporter.Controls
             this.group = group;
             appraiser = new Appraiser();
             appraiser.id = System.Guid.NewGuid().ToByteArray();
-            appraiser.name = "Enter Name";
+            appraiser.name = "";
             name.DataContext = appraiser;
 
             appraisal = new Appraisal();
@@ -43,6 +43,8 @@ namespace HealthReporter.Controls
             appraisal.clientId = client.id;
             appraisal.date = String.Format("{0:yyyy-MM-dd}", DateTime.Now);
             date.DataContext = appraisal;
+
+            AdornerSite.Visibility = Visibility.Hidden;
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -53,19 +55,26 @@ namespace HealthReporter.Controls
 
         private void btn_Next(object sender, RoutedEventArgs e)
         {
-
-            try {                
+            try
+            {
+                if (appraiser.name == "") throw new Exception();
                 DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
                 appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
 
                 NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
                 this._parent.stkTest.Children.Add(obj);
 
-            } catch
-            {
-               
             }
-            
+            catch
+            {
+
+            }
+
+        }
+
+        private void name_GotFocus(object sender, RoutedEventArgs e)
+        {
+            AdornerSite.Visibility = Visibility.Visible;
         }
     }
 }

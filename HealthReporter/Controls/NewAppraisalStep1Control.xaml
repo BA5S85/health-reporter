@@ -27,7 +27,7 @@
                 <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
                 <Grid Name="grid" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock HorizontalAlignment="Center" Margin="204,32,364,0" TextWrapping="Wrap" Text="Appraiser's name" VerticalAlignment="Top"/>
-                    <TextBox Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="name" HorizontalAlignment="Center" Height="23" Margin="308,30,209,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142" Validation.ErrorTemplate="{x:Null}">
+                    <TextBox GotFocus="name_GotFocus" Template="{StaticResource TxtBoxDefault}" Text="{Binding name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" x:Name="name" HorizontalAlignment="Center" Height="23" Margin="308,30,209,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="142" Validation.ErrorTemplate="{x:Null}">
                         <TextBox.Style>
                             <Style TargetType="{x:Type TextBox}">
                                 <Style.Setters>

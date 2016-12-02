@@ -219,8 +219,31 @@
             <Setter Property="BorderBrush" Value="LightBlue" />
             <Setter Property="BorderThickness" Value="1" />
             <Style.Triggers>
-
             </Style.Triggers>
         </Style>
+
+        <ControlTemplate x:Key="TxtBoxDefault" TargetType="TextBox">
+            <Grid>
+                <TextBox Style="{StaticResource TextBoxStyle}" Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Enter Name"
+                Margin="5,0,5,0"
+                Foreground="#FF808080"
+                FontStyle="Italic"
+                IsHitTestVisible="False"
+                x:Name="UserMessage"
+                Visibility="Hidden"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="Text" Value=""/>
+                        <Condition Property="IsKeyboardFocusWithin" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Visibility" TargetName="UserMessage" Value="Visible"/>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Application.Resources>
 </Application>
