@@ -87,7 +87,12 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0" Background="AliceBlue">
-                        <DataGrid x:Name="catsDataGrid" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" ItemsSource = "{Binding}" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Button x:Name="allCatsButton" Margin="10,10,0,5" HorizontalContentAlignment="Left" VerticalAlignment="Center"  Grid.Row="0" Foreground="LightSlateGray"  Background="AliceBlue"  BorderThickness="0" Focusable="True" Content="All Tests" FontSize="14" Click="allCatsButton_Click"/>
+                        <DataGrid x:Name="catsDataGrid" Grid.Row="1" SelectionChanged="catsDataGrid_SelectionChanged" SelectedValuePath="category" Style="{DynamicResource DataGridStyle}" HorizontalGridLinesBrush="LightBlue" VerticalGridLinesBrush="LightBlue" SelectionUnit="FullRow" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" ItemsSource = "{Binding}" IsReadOnly="True" HeadersVisibility="None" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" RowHeight="25">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="12">
                                     <DataGridTemplateColumn.CellTemplate>

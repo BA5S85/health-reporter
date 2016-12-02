@@ -34,12 +34,21 @@ namespace HealthReporter.Models
 
         }
 
+        public IList<HistoryTableItem> FindByCategory(Client client, TestCategory cat)
+        {
+            var cmd = DatabaseUtility.getConnection().CreateCommand();
+            cmd.CommandText = "SELECT appraisals.date, tests.name as TestName, tests.categoryId as tCategory, tests.weight as weight, tests.units as Units,  appraisal_tests.score as Score, appraisers.name as AppraisersName,appraisals.id as applId, tests.id as tId  FROM appraisers inner JOIN appraisals ON appraisals.appraiserId = appraisers.id inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId = @id AND tests.categoryId = @categoryId ";
+            cmd.Parameters.AddWithValue("@id", client.id);
+            cmd.Parameters.AddWithValue("@categoryId", cat.id);
+            IList<HistoryTableItem> items = cmd.Query<HistoryTableItem>();
+            return items;
+        }
+
         public IList<Test> FindAppraisalTests(Client client)
         {
             return DatabaseUtility.getConnection().QuerySql<Test>("SELECT * FROM appraisals inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId=@id ", client);
 
         }
-
     }
 
     public class Appraisal : INotifyPropertyChanged, IDataErrorInfo

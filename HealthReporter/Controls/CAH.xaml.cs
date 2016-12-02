@@ -27,6 +27,7 @@ namespace HealthReporter.Controls
         private Client client;
         private Group group;
         private MainWindow _parent;
+        private IList<string> dates;
 
 
         public CAH(MainWindow _parent)
@@ -91,69 +92,14 @@ namespace HealthReporter.Controls
                         latestAppraisalTests.Add(item.tId, item);
                     }
                 }
-
-
             }
 
             dates.Sort((x, y) => DateTime.Parse(y).CompareTo(DateTime.Parse(x)));
+            this.dates = dates;
 
-            //Creating list with structure: (TestName, units, (date, score, appraiser))
 
             //Initializing datagrid objects
-            List<FullHistoryDatagrid> result = new List<FullHistoryDatagrid>();
-
-            foreach (HistoryTableItem item in history)
-            {
-                if (!result.Exists(x => x.TestName == item.TestName))
-                {
-                    FullHistoryDatagrid newOne = new FullHistoryDatagrid();
-                    newOne.TestName = item.TestName;
-                    newOne.units = item.Units;
-                    newOne.tId = item.tId;
-                    newOne.list = new List<Date_Score_Appraiser>();
-
-                    foreach (string date in dates)
-                    {
-                        if (item.date != date)
-                        {
-                            Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
-                            newOne2.date = date;
-                            newOne2.appraiser = item.AppraisersName;
-                            newOne2.score = 0;
-                            newOne2.applId = null;
-                            newOne2.tId = item.tId;
-                            newOne.list.Add(newOne2);
-                        }
-                        else
-                        {
-                            Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
-                            newOne2.date = item.date;
-                            newOne2.appraiser = item.AppraisersName;
-                            newOne2.score = item.Score;
-                            newOne2.applId = item.applId;
-                            newOne2.tId = item.tId;
-                            newOne.list.Add(newOne2);
-                        }
-                    }
-                    result.Add(newOne);
-                }
-
-                else
-                {
-                    FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
-                    foreach (Date_Score_Appraiser elem in getElem.list)
-                    {
-                        if (item.date == elem.date)
-                        {
-                            elem.appraiser = item.AppraisersName;
-                            elem.date = item.date;
-                            elem.score = item.Score;
-                            elem.applId = item.applId;
-                            elem.tId = item.tId;
-                        }
-                    }
-                }
-            }
+            List<FullHistoryDatagrid> result = findFullHistory(history);
 
             //Reading elements into table
             int i = 0;
@@ -176,6 +122,7 @@ namespace HealthReporter.Controls
                 dataGrid.Columns.Add(textColumn);
                 i++;
             }
+
             dataGrid.ItemsSource = result;
 
             //categories datagrid
@@ -629,8 +576,6 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(txtBlock2, i);
                             i++;
                         }
-
-
                     }
 
 
@@ -705,6 +650,85 @@ namespace HealthReporter.Controls
             }
         }
 
-       
+        private void catsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid.SelectedIndex != -1)
+            {
+                TestCategory cat = (TestCategory)grid.SelectedValue;
+
+                var repo = new AppraisalsRepository();
+                IList<HistoryTableItem> catHistory = repo.FindByCategory(client, cat);
+                dataGrid.ItemsSource = findFullHistory(catHistory);
+            }
+        }
+
+        //Creating list with structure: (TestName, units, (date, score, appraiser))
+        private List<FullHistoryDatagrid> findFullHistory(IList<HistoryTableItem> items)
+        {
+            List<FullHistoryDatagrid> result = new List<FullHistoryDatagrid>();
+
+            foreach (HistoryTableItem item in items)
+            {
+                if (!result.Exists(x => x.TestName == item.TestName))
+                {
+                    FullHistoryDatagrid newOne = new FullHistoryDatagrid();
+                    newOne.TestName = item.TestName;
+                    newOne.units = item.Units;
+                    newOne.tId = item.tId;
+                    newOne.list = new List<Date_Score_Appraiser>();
+
+                    foreach (string date in this.dates)
+                    {
+                        if (item.date != date)
+                        {
+                            Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
+                            newOne2.date = date;
+                            newOne2.appraiser = item.AppraisersName;
+                            newOne2.score = 0;
+                            newOne2.applId = null;
+                            newOne2.tId = item.tId;
+                            newOne.list.Add(newOne2);
+                        }
+                        else
+                        {
+                            Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
+                            newOne2.date = item.date;
+                            newOne2.appraiser = item.AppraisersName;
+                            newOne2.score = item.Score;
+                            newOne2.applId = item.applId;
+                            newOne2.tId = item.tId;
+                            newOne.list.Add(newOne2);
+                        }
+                    }
+                    result.Add(newOne);
+                }
+
+                else
+                {
+                    FullHistoryDatagrid getElem = result.Find(x => x.TestName == item.TestName);
+                    foreach (Date_Score_Appraiser elem in getElem.list)
+                    {
+                        if (item.date == elem.date)
+                        {
+                            elem.appraiser = item.AppraisersName;
+                            elem.date = item.date;
+                            elem.score = item.Score;
+                            elem.applId = item.applId;
+                            elem.tId = item.tId;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void allCatsButton_Click(object sender, RoutedEventArgs e)
+        {
+            catsDataGrid.SelectedIndex = -1;
+            var repo = new AppraisalsRepository();
+            IList<HistoryTableItem> history = repo.FindAll(client);
+            dataGrid.ItemsSource = findFullHistory(history);
+        }
     }
 }

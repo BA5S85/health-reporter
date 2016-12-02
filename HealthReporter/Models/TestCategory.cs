@@ -51,7 +51,7 @@ namespace HealthReporter.Models
         }
     }
 
-    class TestCategory : IHasPrimaryKey, INotifyPropertyChanged, IDataErrorInfo
+    public class TestCategory : IHasPrimaryKey, INotifyPropertyChanged, IDataErrorInfo
     {
         public byte[] GetPrimaryKey()
         {
