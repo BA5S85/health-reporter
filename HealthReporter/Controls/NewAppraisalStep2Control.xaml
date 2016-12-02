@@ -135,7 +135,7 @@
                                 </Style>
                             </Button.Resources>
                         </Button>
-                        <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Right" Margin="0,0,37,41" VerticalAlignment="Bottom" Width="75" Click="btn_OK" Background="White">
+                        <Button x:Name="btnOK" Content="OK"  HorizontalAlignment="Right" Margin="0,0,37,41" VerticalAlignment="Bottom" BorderThickness="1.5" BorderBrush="Black" Width="75" Click="btn_OK" Background="White">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="4"/>

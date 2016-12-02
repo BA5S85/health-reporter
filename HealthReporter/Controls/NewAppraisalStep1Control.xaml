@@ -68,7 +68,7 @@
                 <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
 
                 <Grid Grid.Row="4" Background="AliceBlue">
-                    <Button Content="Next" HorizontalAlignment="Center" Margin="354,0,250,0" VerticalAlignment="Center" Width="75" BorderBrush="#FFA2B2BD" Background="White" Click="btn_Next">
+                    <Button Content="Next" HorizontalAlignment="Center" Margin="354,0,250,0" BorderThickness="1.5" VerticalAlignment="Center" Width="75" BorderBrush="Black" Background="White" Click="btn_Next">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>

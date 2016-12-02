@@ -58,7 +58,11 @@ namespace HealthReporter.Controls
         {
             try
             {
-                if (appraiser.name == "") throw new Exception();
+                if (appraiser.name == "")
+                {
+                    AdornerSite.Visibility = Visibility.Visible;
+                    throw new Exception();
+                }
                 DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
                 appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
 
