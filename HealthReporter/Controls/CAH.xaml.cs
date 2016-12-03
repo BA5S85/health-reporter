@@ -729,6 +729,11 @@ namespace HealthReporter.Controls
                 var repo = new AppraisalsRepository();
                 IList<HistoryTableItem> catHistory = repo.FindByCategory(client, cat);
                 dataGrid.ItemsSource = findFullHistory(catHistory);
+                diagrams.Visibility = Visibility.Hidden;
+                begin.Visibility = Visibility.Visible;
+                noDiagram.Visibility = Visibility.Hidden;
+                noteMessage.Visibility = Visibility.Visible;
+                notesGrid.Visibility = Visibility.Hidden;
             }
         }
 
@@ -804,6 +809,8 @@ namespace HealthReporter.Controls
             diagrams.Visibility = Visibility.Hidden;
             noDiagram.Visibility = Visibility.Hidden;
             begin.Visibility = Visibility.Visible;
+            noteMessage.Visibility = Visibility.Visible;
+            notesGrid.Visibility = Visibility.Hidden;
         }
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -906,6 +913,8 @@ namespace HealthReporter.Controls
                     diagrams.Visibility = Visibility.Hidden;
                     begin.Visibility = Visibility.Hidden;
                     noDiagram.Visibility = Visibility.Visible;
+                    noteMessage.Visibility = Visibility.Hidden;
+                    notesGrid.Visibility = Visibility.Visible;
 
                 }
                 else
@@ -913,6 +922,9 @@ namespace HealthReporter.Controls
                     noDiagram.Visibility = Visibility.Hidden;
                     begin.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
+                    noteMessage.Visibility = Visibility.Hidden;
+                    notesGrid.Visibility = Visibility.Visible;
+
                     int i = 0;
                     double findClientScoreLineWidth = 0;
 
@@ -926,7 +938,7 @@ namespace HealthReporter.Controls
                         TextBlock txtBlock = new TextBlock();
 
                         txtBlock.Text = " " + obj.name;
-                        Rectangle rec = new Rectangle();
+                        Ellipse rec = new Ellipse();
                         Rectangle line = new Rectangle();
 
                         if (obj.rating == 0)
