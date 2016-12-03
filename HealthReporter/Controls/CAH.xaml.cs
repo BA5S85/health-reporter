@@ -115,9 +115,6 @@ namespace HealthReporter.Controls
             dates.Sort((x, y) => DateTime.Parse(y).CompareTo(DateTime.Parse(x)));
             this.dates = dates;
 
-
-
-
             //Initializing datagrid objects
             List<FullHistoryDatagrid> result = findFullHistory(history);
 
@@ -299,7 +296,34 @@ namespace HealthReporter.Controls
                 }
             }
             return max;
+        }
 
+        private Dictionary<byte[], HistoryTableItem> findLatestAppraisals(IList<HistoryTableItem> history)
+        {
+            var latestAppraisalTests = new Dictionary<byte[], HistoryTableItem>(new ByteArrayComparer());
+
+            foreach (HistoryTableItem item in history)
+            {
+                //finding latest appraisal date for each test in appraisal history
+                if (item.date != null && item.Score != 0)
+                {
+                    DateTime date = DateTime.Parse(item.date);
+
+                    HistoryTableItem histItem;
+                    if (latestAppraisalTests.TryGetValue(item.tId, out histItem)) //map contains testId
+                    {
+                        if (date > DateTime.Parse(histItem.date))
+                        {
+                            latestAppraisalTests[item.tId] = item;
+                        }
+                    }
+                    else
+                    {
+                        latestAppraisalTests.Add(item.tId, item);
+                    }
+                }
+            }
+            return latestAppraisalTests;
         }
 
         private void btn_Back(object sender, RoutedEventArgs e)
@@ -409,10 +433,10 @@ namespace HealthReporter.Controls
                 }
                
             }
-            
-            
-
-
+            var rep = new AppraisalsRepository();
+            IList<HistoryTableItem> hist = rep.FindAll(client);
+            var latestAppraisalTests = findLatestAppraisals(hist);
+            catsDataGrid.ItemsSource = findCatsDataGridItems(latestAppraisalTests);
         }
 
         private int rowIndex = 0;
