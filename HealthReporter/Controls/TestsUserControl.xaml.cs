@@ -867,5 +867,21 @@ namespace HealthReporter.Controls
             if (IsUnderTabHeader(e.OriginalSource as DependencyObject))
                 CommitTables(sender as TabControl);
         }
+
+        /*
+         * Prevents the next row getting selected in catsDataGrid after a user presses ENTER when finished renaming a category.
+         */
+        private void catsDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var datagrid = (DataGrid)sender;
+                if (datagrid != null)
+                {
+                    catsDataGrid.CommitEdit();
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }

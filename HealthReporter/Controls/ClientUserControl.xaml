@@ -79,7 +79,7 @@
                     <Button x:Name="allClientsButton" Margin="10,10,0,5" HorizontalContentAlignment="Left" VerticalAlignment="Center"  Grid.Row="0" Foreground="LightSlateGray"  Background="AliceBlue"  BorderThickness="0" Focusable="True" Content="All Clients" FontSize="14" Click="btn_ShowAllClients"/>
 
                     <TextBlock Grid.Row="1" Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Groups</TextBlock>
-                    <DataGrid Focusable="True" Grid.Row="2" Grid.Column="0" x:Name="groupDataGrid" HeadersVisibility="None" SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" CellEditEnding="groupDataGrid_CellEditEnding"  SelectionChanged="groupsDataGrid_SelectionChanged" GridLinesVisibility="None" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3">
+                    <DataGrid Focusable="True" Grid.Row="2" Grid.Column="0" x:Name="groupDataGrid" HeadersVisibility="None" SelectionMode="Single" CanUserSortColumns="False" IsReadOnly="True" CellEditEnding="groupDataGrid_CellEditEnding"  SelectionChanged="groupsDataGrid_SelectionChanged" GridLinesVisibility="None" AutoGenerateColumns="False" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="13" Grid.RowSpan="3" PreviewKeyDown="groupDataGrid_PreviewKeyDown">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" Width="*"/>
                         </DataGrid.Columns>

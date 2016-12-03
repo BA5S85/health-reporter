@@ -603,5 +603,21 @@ namespace HealthReporter.Controls
             System.Windows.Controls.Calendar cal = (System.Windows.Controls.Calendar)popup.Child;
             cal.DisplayMode = System.Windows.Controls.CalendarMode.Decade;
         }
+
+        /*
+         * Prevents the next row getting selected in catsDataGrid after a user presses ENTER when finished renaming a group.
+         */
+        private void groupDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var datagrid = (DataGrid)sender;
+                if (datagrid != null)
+                {
+                    groupDataGrid.CommitEdit();
+                    e.Handled = true;
+                }
+            }
+        }
     }
     }
