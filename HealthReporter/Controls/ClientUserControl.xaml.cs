@@ -493,7 +493,8 @@ namespace HealthReporter.Controls
            
             // Adding focus on the rename obj row
             groupDataGrid.Focus();        
-            groupDataGrid.SelectedItem = renameobj;          
+            groupDataGrid.SelectedItem = renameobj;
+            groupDataGrid.CurrentCell = item2.SelectedCells[0];
             groupDataGrid.IsReadOnly = false;
             groupDataGrid.BeginEdit();          
         }
@@ -605,7 +606,7 @@ namespace HealthReporter.Controls
         }
 
         /*
-         * Prevents the next row getting selected in catsDataGrid after a user presses ENTER when finished renaming a group.
+         * Prevents the next row getting selected in groupDataGrid after a user presses ENTER when finished renaming a group.
          */
         private void groupDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {

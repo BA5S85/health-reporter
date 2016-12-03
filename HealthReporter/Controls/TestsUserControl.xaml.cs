@@ -784,6 +784,7 @@ namespace HealthReporter.Controls
             // adding focus on the rename obj row
             catsDataGrid.Focus();
             catsDataGrid.SelectedItem = renameobj;
+            catsDataGrid.CurrentCell = item2.SelectedCells[0];
             catsDataGrid.IsReadOnly = false;
             catsDataGrid.BeginEdit();
         }
