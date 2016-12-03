@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HealthReporter.Controls"
-             mc:Ignorable="d" Height="300" Width="400"
-             d:DesignHeight="300" d:DesignWidth="400">
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Padding="30"
+             mc:Ignorable="d" Height="auto" Width="auto">
+
     <Grid>
+        
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="7" Direction="300" ShadowDepth="4" />
@@ -15,12 +19,17 @@
         <Border Background="White" BorderBrush="Black" BorderThickness="0.5" CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="0.75*" />
+                    <RowDefinition Height="5" />
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="0.75*" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" x:Name="textBlock4" HorizontalAlignment="Center" Margin="174,38,149,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Height="23" Width="76" FontSize="14"><Run Text="New "/><Run Text="Preset"/></TextBlock>
-                <Grid Name="grid" Grid.Row="1">
+                <TextBlock Foreground="SlateGray" Grid.Row="0" x:Name="textBlock4" HorizontalAlignment="Center" Margin="174,38,149,0" TextWrapping="Wrap" VerticalAlignment="Center"  Height="23" Width="76" FontSize="14"><Run Text="New "/><Run Text="Preset"/></TextBlock>
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+
+                <Grid Name="grid" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock x:Name="nameLabel" HorizontalAlignment="Center" Margin="103,10,264,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" RenderTransformOrigin="0.45,1.909"/>
                     <TextBox x:Name="name" HorizontalAlignment="Center" Height="23" Margin="150,5,99,0" TextWrapping="Wrap" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{x:Null}" VerticalAlignment="Top" Width="150">
                         <TextBox.Style>
@@ -38,15 +47,15 @@
                     </TextBox>
                     <Label x:Name="AdornerSite" Foreground="Red" FontWeight="Bold" FontSize="8" Content="{Binding (Validation.Errors).CurrentItem.ErrorContent, ElementName=name}" Margin="148,33,99,10" />
                 </Grid>
-                <Grid Grid.Row="2" Margin="0,25,0,0">
-                    <Button x:Name="createPreset" Content="Create"  HorizontalAlignment="Center" Margin="220,0,104,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.329,-0.053" Click="btn_CreateNewPreset" Background="White">
+                <Grid Grid.Row="4" Background="AliceBlue" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Button x:Name="createPreset" Content="Create"  HorizontalAlignment="Center" Margin="220,0,104,0" VerticalAlignment="Center" Width="75" RenderTransformOrigin="0.329,-0.053" Click="btn_CreateNewPreset" Background="White">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button x:Name="back" Content="Back" HorizontalAlignment="Center" Margin="120,0,204,0" VerticalAlignment="Top" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
+                    <Button x:Name="back" Content="Back" HorizontalAlignment="Center" Margin="120,0,204,0" VerticalAlignment="Center" Width="75" Click="btn_Back" BorderBrush="#FFA2B2BD"  Background="White">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>

@@ -198,8 +198,6 @@ namespace HealthReporter.Controls
             }
             else
             {
-               
-
                 IList<Appraisal> allAppraisals = repo.FindAllAppraisals(client);
 
                 foreach(Appraisal elem in allAppraisals)
@@ -216,9 +214,7 @@ namespace HealthReporter.Controls
                     }
                     repo.Insert(at);
                 }
-
-               
-              
+         
                 // Going to the Main appraisal history view
                 int childNumber = this._parent.stkTest.Children.Count;
                 this._parent.stkTest.Children.RemoveRange(childNumber - 2, childNumber);
