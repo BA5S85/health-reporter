@@ -828,20 +828,25 @@ namespace HealthReporter.Controls
 
         private void notesFullText_LostFocus(object sender, RoutedEventArgs e)
         {
-            Appraisal_tests_repository repo = new Appraisal_tests_repository();
-            Appraisal_tests elem = new Appraisal_tests();
-
-            FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
-
             int index = dataGrid.SelectedCells[0].Column.DisplayIndex;
-            Date_Score_Appraiser elem2 = selectedItem.list[index - 2];
+            if (index > -1) {
+                Appraisal_tests_repository repo = new Appraisal_tests_repository();
+                Appraisal_tests elem = new Appraisal_tests();
+
+                FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
+
+                
+                Date_Score_Appraiser elem2 = selectedItem.list[index - 2];
 
 
-            elem.testId = elem2.tId;
-            elem.appraisalId = elem2.applId;
-            elem.note = notesFullText.Text;
+                elem.testId = elem2.tId;
+                elem.appraisalId = elem2.applId;
+                elem.note = notesFullText.Text;
 
-            repo.UpdateNote(elem);
+                repo.UpdateNote(elem);
+            }
+
+          
 
         }
 
