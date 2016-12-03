@@ -150,6 +150,8 @@ namespace HealthReporter.Controls
             //categories datagrid
             catsDataGrid.ItemsSource = findCatsDataGridItems(latestAppraisalTests);
 
+            begin.Visibility = Visibility.Visible;
+
         }
 
         private IList<CatsItem> findCatsDataGridItems(Dictionary<byte[], HistoryTableItem> latestMap)
@@ -477,12 +479,14 @@ namespace HealthReporter.Controls
                 if (list.Count == 0)
                 {
                     diagrams.Visibility = Visibility.Hidden;
+                    begin.Visibility = Visibility.Hidden;
                     noDiagram.Visibility = Visibility.Visible;
 
                 }
                 else
                 {
                     noDiagram.Visibility = Visibility.Hidden;
+                    begin.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
                     int i = 0;
                     double findClientScoreLineWidth = 0;
@@ -768,6 +772,9 @@ namespace HealthReporter.Controls
             var repo = new AppraisalsRepository();
             IList<HistoryTableItem> history = repo.FindAll(client);
             dataGrid.ItemsSource = findFullHistory(history);
+            diagrams.Visibility = Visibility.Hidden;
+            noDiagram.Visibility = Visibility.Hidden;
+            begin.Visibility = Visibility.Visible;
         }
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -845,12 +852,14 @@ namespace HealthReporter.Controls
                 if (list.Count == 0)
                 {
                     diagrams.Visibility = Visibility.Hidden;
+                    begin.Visibility = Visibility.Hidden;
                     noDiagram.Visibility = Visibility.Visible;
 
                 }
                 else
                 {
                     noDiagram.Visibility = Visibility.Hidden;
+                    begin.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
                     int i = 0;
                     double findClientScoreLineWidth = 0;

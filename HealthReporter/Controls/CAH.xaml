@@ -181,7 +181,9 @@
                             <Grid x:Name="scala" Grid.Row="2" Margin="10,0"/>
                             <Grid x:Name="scalaNumbers" Grid.Row="3"  Margin="10,0" />
                         </Grid>
-                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="noDiagram" Visibility="Hidden" Text="To see diagram, please insert ratings with scores for the selected test in Test's tab" Foreground="LightSlateGray"/>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="noDiagram" Visibility="Hidden" Text="Please insert ratings with scores for the selected test in Test's tab to see the diagram." Foreground="LightSlateGray"/>
+                        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="begin" Visibility="Hidden" Text="Please click on test result to see the diagram." Foreground="LightSlateGray"/>
+
                     </Grid>
                 </Grid>
               
