@@ -390,8 +390,9 @@ namespace HealthReporter.Controls
             Appraisal_tests appTest = new Appraisal_tests();
             appTest.testId = elem2.tId;
             appTest.appraisalId = elem2.applId;
-            appTest.score = elem2.score;
-
+            appTest.score = elem2.score;           
+            
+           
             var repo = new Appraisal_tests_repository();
 
             if (editedTextbox.Text.ToString() != "")
@@ -407,6 +408,7 @@ namespace HealthReporter.Controls
 
                         decimal test1 = decimal.Parse(editedTextbox.Text);
                         appTest.score = test1;
+                        
                         repoAT.Update(appTest);
                         
                     }
@@ -424,7 +426,7 @@ namespace HealthReporter.Controls
                             {
                                 appTest.appraisalId = item2.applId;
                                 appTest.score = Decimal.Parse(editedTextbox.Text);
-
+                                
                                 repoAT.Insert(appTest);
                                 return;
                             }
@@ -751,6 +753,7 @@ namespace HealthReporter.Controls
                         {
                             Date_Score_Appraiser newOne2 = new Date_Score_Appraiser();
                             newOne2.date = date;
+                            newOne2.note = "";
                             newOne2.appraiser = item.AppraisersName;
                             newOne2.score = 0;
                             newOne2.applId = null;
@@ -764,6 +767,7 @@ namespace HealthReporter.Controls
                             newOne2.appraiser = item.AppraisersName;
                             newOne2.score = item.Score;
                             newOne2.applId = item.applId;
+                            newOne2.note = item.note;
                             newOne2.tId = item.tId;
                             newOne.list.Add(newOne2);
                         }
@@ -782,6 +786,7 @@ namespace HealthReporter.Controls
                             elem.date = item.date;
                             elem.score = item.Score;
                             elem.applId = item.applId;
+                            elem.note = item.note;
                             elem.tId = item.tId;
                         }
                     }
@@ -814,7 +819,24 @@ namespace HealthReporter.Controls
             Keyboard.Focus(this);
         }
 
+        private void notesFullText_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Appraisal_tests_repository repo = new Appraisal_tests_repository();
+            Appraisal_tests elem = new Appraisal_tests();
 
+            FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
+
+            int index = dataGrid.SelectedCells[0].Column.DisplayIndex;
+            Date_Score_Appraiser elem2 = selectedItem.list[index - 2];
+
+
+            elem.testId = elem2.tId;
+            elem.appraisalId = elem2.applId;
+            elem.note = notesFullText.Text;
+
+            repo.UpdateNote(elem);
+
+        }
 
         private void dataGrid_GotFocus(object sender, RoutedEventArgs e)
         {                       
@@ -827,7 +849,13 @@ namespace HealthReporter.Controls
 
                 int index = dataGrid.SelectedCells[0].Column.DisplayIndex;
                 Date_Score_Appraiser elem = selectedItem.list[index - 2];
-               
+
+                // Showing Notes Grid
+                notesGrid.Visibility = Visibility.Visible;
+                noteMessage.Visibility = Visibility.Hidden;
+
+                notesFullText.DataContext = elem;
+
                 // Finding client age range
                 RatingRepository repo = new RatingRepository();
                 List<Rating> ratingsByTestId = repo.getRatingsByTestId(selectedItem).ToList();

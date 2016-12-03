@@ -37,7 +37,7 @@ namespace HealthReporter.Models
 
         public IList<HistoryTableItem> FindAll(Client client)
         {
-           return DatabaseUtility.getConnection().QuerySql<HistoryTableItem>("SELECT appraisals.date, tests.name as TestName, tests.categoryId as tCategory, tests.weight as weight, tests.units as Units,  appraisal_tests.score as Score, appraisers.name as AppraisersName,appraisals.id as applId, tests.id as tId  FROM appraisers inner JOIN appraisals ON appraisals.appraiserId = appraisers.id inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId=@id ", client);
+           return DatabaseUtility.getConnection().QuerySql<HistoryTableItem>("SELECT appraisals.date, tests.name as TestName, tests.categoryId as tCategory, tests.weight as weight, tests.units as Units,  appraisal_tests.score as Score, appraisers.name as AppraisersName,appraisals.id as applId, tests.id as tId, appraisal_tests.note  FROM appraisers inner JOIN appraisals ON appraisals.appraiserId = appraisers.id inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId=@id ", client);
 
         }
         public IList<DateTime> FindAllDates(Client client)
@@ -193,6 +193,7 @@ namespace HealthReporter.Models
         public byte[] tId { get; set; }
         public byte[] tCategory { get; set; }
         public double weight { get; set; }
+        public string note { get; set; }
     }
 
 
@@ -230,6 +231,7 @@ namespace HealthReporter.Models
         public string appraiser { get; set; }
         public byte[] applId { get; set; }
         public byte[] tId { get; set; }
+        public string note { get; set; }
 
         public decimal score
         {

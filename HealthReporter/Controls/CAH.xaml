@@ -94,6 +94,8 @@
                             <RowDefinition Height="40" />
                             <RowDefinition Height="35" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Button x:Name="allCatsButton" Margin="10,10,0,5" HorizontalContentAlignment="Left" VerticalAlignment="Center"  Grid.Row="0" Foreground="LightSlateGray"  Background="AliceBlue"  BorderThickness="0" Focusable="True" Content="All Appraisals" FontSize="14" Click="allCatsButton_Click"/>
                         <TextBlock Grid.Row="1" Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Appraisals by Category</TextBlock>
@@ -124,6 +126,22 @@
                                 </Style>
                             </DataGrid.Resources>
                         </DataGrid>
+                        <GridSplitter Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows"/>
+                        <Grid x:Name="notesGrid" Grid.Row="4" Background="WhiteSmoke" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Visibility="Hidden">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Margin="10,10,10,5" Foreground="LightSlateGray" FontSize="14">Notes</TextBlock>
+                            <TextBox x:Name="notesFullText" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" LostFocus="notesFullText_LostFocus" Text="{Binding note, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                        </Grid>
+                        <Grid Grid.Row="4" x:Name="noteMessage" Background="WhiteSmoke">
+                            <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Text="Please click on test result to see or add notes." Foreground="LightSlateGray"/>
+                        </Grid>
+
+
+
                     </Grid>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Columns"/>
                     <Grid Grid.Column="2">
