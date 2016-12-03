@@ -128,7 +128,9 @@ namespace HealthReporter.Controls
                 DataGridTextColumn textColumn = new DataGridTextColumn();
                 textColumn.Header = String.Format("{0:dd/MM/yyyy}", DateTime.Parse(elem));
                 Binding binding = new Binding("list[" + i + "]");
+               
                 binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
+                  
                 textColumn.Binding = binding;
 
                 Style style = new Style(typeof(DataGridCell))
@@ -349,7 +351,7 @@ namespace HealthReporter.Controls
         {
 
             var editedTextbox = e.EditingElement as TextBox;
-            FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedItem;
+            FullHistoryDatagrid elem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
 
             DataGridColumn col1 = e.Column;
             int index = col1.DisplayIndex;
@@ -368,6 +370,7 @@ namespace HealthReporter.Controls
 
             if (editedTextbox.Text.ToString() != "")
             {
+               
                 if (elem2.applId != null)
                 {
                     try
@@ -379,6 +382,7 @@ namespace HealthReporter.Controls
                         decimal test1 = decimal.Parse(editedTextbox.Text);
                         appTest.score = test1;
                         repoAT.Update(appTest);
+                        
                     }
                     catch
                     {
@@ -401,7 +405,12 @@ namespace HealthReporter.Controls
                         }
                     }
                 }
+               
             }
+            
+            
+
+
         }
 
         private int rowIndex = 0;
@@ -476,6 +485,7 @@ namespace HealthReporter.Controls
                     noDiagram.Visibility = Visibility.Hidden;
                     diagrams.Visibility = Visibility.Visible;
                     int i = 0;
+                    double findClientScoreLineWidth = 0;
 
                     for (int j = 0; j < list.Count; j++)
                     {
@@ -544,6 +554,7 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(line, i);
                             Grid.SetColumn(txtBlock2, i);
                             i++;
+                            findClientScoreLineWidth += Double.Parse((list[j + 1].normM - obj.normM).ToString());
                         }
                         else if (this.client.gender == "1")
                         {
@@ -566,6 +577,7 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(line, i);
                             Grid.SetColumn(txtBlock2, i);
                             i++;
+                            findClientScoreLineWidth += 25;
                         }
                         else if (this.client.gender == "0" && (j + 1) != list.Count)
                         {
@@ -589,6 +601,7 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(txtBlock2, i);
 
                             i++;
+                            findClientScoreLineWidth += Double.Parse((list[j + 1].normF - obj.normF).ToString());
                         }
                         else if (this.client.gender == "0")
                         {
@@ -611,24 +624,36 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(line, i);
                             Grid.SetColumn(txtBlock2, i);
                             i++;
+                            findClientScoreLineWidth += 25;
                         }
                     }
 
 
-                    //Rectangle line2 = new Rectangle();
-                    //line2.Fill = System.Windows.Media.Brushes.Black;
+                    Rectangle line2 = new Rectangle();
+                    line2.Fill = System.Windows.Media.Brushes.Black;
 
-                    //line2.Height = 5;
-                    //line2.Width = 50;
+                    Rectangle line3 = new Rectangle();
+                    line3.Fill = System.Windows.Media.Brushes.White;
 
-                    //ColumnDefinition c3 = new ColumnDefinition();
-                    //c3.Width = new GridLength(Double.Parse(elem.score.ToString()), GridUnitType.Star);
+                    line2.Height = 5;
+                    
+
+                    line3.Height = 5;
+                   
+
+                    ColumnDefinition c3 = new ColumnDefinition();
+                    c3.Width = new GridLength(Double.Parse(elem.score.ToString()), GridUnitType.Star);
+                    ColumnDefinition c4 = new ColumnDefinition();
+                    c4.Width = new GridLength(findClientScoreLineWidth- Double.Parse(elem.score.ToString()), GridUnitType.Star);
 
 
-                    //clientResult.ColumnDefinitions.Add(c3);
-                    //clientResult.Children.Add(line2);
-                    //line2.Width = 1000;
-                    //Grid.SetColumn(line2, 0);
+                    clientResult.ColumnDefinitions.Add(c3);
+                    clientResult.ColumnDefinitions.Add(c4);
+                    clientResult.Children.Add(line2);
+                    clientResult.Children.Add(line3);
+                    
+                    Grid.SetColumn(line2, 0);
+                    Grid.SetColumn(line3, 1);
 
                     //Rectangle line2 = new Rectangle();
                     //line2.Fill = System.Windows.Media.Brushes.Yellow;
@@ -640,29 +665,7 @@ namespace HealthReporter.Controls
             }
         }
 
-        DataGridColumnHeader lastObject;
-
-        private void getHeaderName(object sender, RoutedEventArgs e)
-        {
-
-            if (lastObject != null)
-            {
-                lastObject.Background = Brushes.White;
-                lastObject.BorderBrush = Brushes.LightGray;
-            }
-
-            DataGridColumnHeader header = ((DataGridColumnHeader)sender);
-            string headerText = header.Content.ToString();
-
-            if (headerText != "TestName" && headerText != "units")
-            {
-                lastObject = header;
-                header.Background = Brushes.Gainsboro;
-
-                this.columnIndex = dataGrid.Columns.Single(c => c.Header.ToString() == headerText).DisplayIndex - 2;
-                dataGrid.SelectedIndex = rowIndex;
-            }
-        }
+       
 
         private class CatsItem
         {
@@ -779,5 +782,257 @@ namespace HealthReporter.Controls
         {
             Keyboard.Focus(this);
         }
+
+
+
+        private void dataGrid_GotFocus(object sender, RoutedEventArgs e)
+        {                       
+                try
+                {
+                (e.OriginalSource as DataGridCell).IsSelected = true;
+
+                // Finding the selected cell object
+                FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
+
+                int index = dataGrid.SelectedCells[0].Column.DisplayIndex;
+                Date_Score_Appraiser elem = selectedItem.list[index - 2];
+               
+                // Finding client age range
+                RatingRepository repo = new RatingRepository();
+                List<Rating> ratingsByTestId = repo.getRatingsByTestId(selectedItem).ToList();
+
+                var ageslist = new SortedSet<int>();
+
+                int min = 0;
+                int max = 0;
+
+                foreach (Rating rating in ratingsByTestId)
+                {
+                    ageslist.Add(rating.age);
+                }
+
+                foreach (int setElem in ageslist)
+                {
+                    if (setElem < int.Parse(client.age))
+                    {
+                        min = setElem;
+                    }
+                    else
+                    {
+                        max = setElem;
+                        break;
+                    }
+                }
+                if (max <= 0)
+                {
+                    ageslabel.Text = "ages " + min.ToString() + "+";
+                }
+                else
+                {
+                    ageslabel.Text = "ages " + min.ToString() + "-" + (max - 1).ToString();
+                }
+
+                // Finding rating labels with meanings
+                stackpanel.Children.Clear();
+                scala.Children.Clear();
+                scala.ColumnDefinitions.Clear();
+                scalaNumbers.Children.Clear();
+                scalaNumbers.ColumnDefinitions.Clear();
+                clientResult.Children.Clear();
+                clientResult.ColumnDefinitions.Clear();
+
+                IList<RatingMeaning> list = repo.findLabelsWithMeanings(min, selectedItem);
+                if (list.Count == 0)
+                {
+                    diagrams.Visibility = Visibility.Hidden;
+                    noDiagram.Visibility = Visibility.Visible;
+
+                }
+                else
+                {
+                    noDiagram.Visibility = Visibility.Hidden;
+                    diagrams.Visibility = Visibility.Visible;
+                    int i = 0;
+                    double findClientScoreLineWidth = 0;
+
+                    for (int j = 0; j < list.Count; j++)
+                    {
+                        RatingMeaning obj = list[j];
+                        StackPanel stack = new StackPanel();
+                        stack.Orientation = Orientation.Horizontal;
+                        stack.Margin = new System.Windows.Thickness(5, 0, 5, 0);
+                        stack.VerticalAlignment = VerticalAlignment.Center;
+                        TextBlock txtBlock = new TextBlock();
+
+                        txtBlock.Text = " " + obj.name;
+                        Rectangle rec = new Rectangle();
+                        Rectangle line = new Rectangle();
+
+                        if (obj.rating == 0)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Red;
+                            line.Fill = System.Windows.Media.Brushes.Red;
+                        }
+                        else if (obj.rating == 1)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Orange;
+                            line.Fill = System.Windows.Media.Brushes.Orange;
+                        }
+                        else if (obj.rating == 2)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Yellow;
+                            line.Fill = System.Windows.Media.Brushes.Yellow;
+                        }
+                        else if (obj.rating == 3)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Green;
+                            line.Fill = System.Windows.Media.Brushes.Green;
+                        }
+                        else if (obj.rating == 4)
+                        {
+                            rec.Fill = System.Windows.Media.Brushes.Blue;
+                            line.Fill = System.Windows.Media.Brushes.Blue;
+                        }
+                        rec.Height = 10;
+                        rec.Width = 10;
+                        stack.Children.Add(rec);
+                        stack.Children.Add(txtBlock);
+                        stackpanel.Children.Add(stack);
+
+                        line.Height = 5;
+                        if (this.client.gender == "1" && (j + 1) != list.Count)
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(Double.Parse((list[j + 1].normM - obj.normM).ToString()), GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normM.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                            findClientScoreLineWidth += Double.Parse((list[j + 1].normM - obj.normM).ToString());
+                        }
+                        else if (this.client.gender == "1")
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(25, GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(25, GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normM.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                            findClientScoreLineWidth += 25;
+                        }
+                        else if (this.client.gender == "0" && (j + 1) != list.Count)
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(Double.Parse((list[j + 1].normF - obj.normF).ToString()), GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normF.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+
+                            i++;
+                            findClientScoreLineWidth += Double.Parse((list[j + 1].normF - obj.normF).ToString());
+                        }
+                        else if (this.client.gender == "0")
+                        {
+                            ColumnDefinition c1 = new ColumnDefinition();
+                            c1.Width = new GridLength(25, GridUnitType.Star);
+
+                            ColumnDefinition c2 = new ColumnDefinition();
+                            c2.Width = new GridLength(25, GridUnitType.Star);
+
+                            TextBlock txtBlock2 = new TextBlock();
+                            txtBlock2.Text = obj.normF.ToString();
+                            txtBlock2.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#778899"));
+
+                            scala.ColumnDefinitions.Add(c1);
+                            scala.Children.Add(line);
+                            scalaNumbers.ColumnDefinitions.Add(c2);
+                            scalaNumbers.Children.Add(txtBlock2);
+
+                            line.Width = 1000;
+                            Grid.SetColumn(line, i);
+                            Grid.SetColumn(txtBlock2, i);
+                            i++;
+                            findClientScoreLineWidth += 25;
+                        }
+                    }
+
+
+                    Rectangle line2 = new Rectangle();
+                    line2.Fill = System.Windows.Media.Brushes.Black;
+
+                    Rectangle line3 = new Rectangle();
+                    line3.Fill = System.Windows.Media.Brushes.White;
+
+                    line2.Height = 5;
+                    line3.Height = 5;
+
+                    DataGridCell cell = (DataGridCell)e.OriginalSource;
+                    TextBlock x = (TextBlock)cell.Content;                    
+
+                    ColumnDefinition c3 = new ColumnDefinition();
+                    c3.Width = new GridLength(Double.Parse(x.Text.ToString()), GridUnitType.Star);
+                    ColumnDefinition c4 = new ColumnDefinition();
+                    c4.Width = new GridLength(findClientScoreLineWidth - Double.Parse(x.Text.ToString()), GridUnitType.Star);
+
+
+                    clientResult.ColumnDefinitions.Add(c3);
+                    clientResult.ColumnDefinitions.Add(c4);
+                    clientResult.Children.Add(line2);
+                    clientResult.Children.Add(line3);
+
+                    Grid.SetColumn(line2, 0);
+                    Grid.SetColumn(line3, 1);
+
+                    //Rectangle line2 = new Rectangle();
+                    //line2.Fill = System.Windows.Media.Brushes.Yellow;
+                    //line2.Height = 5;
+                    //line2.Width = 50;
+                    //scala.Children.Add(line);
+                    //scala.Children.Add(line2);
+                }
+            }
+            catch { }
+        }
+
+        
     }
 }

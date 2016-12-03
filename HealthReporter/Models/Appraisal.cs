@@ -197,7 +197,7 @@ namespace HealthReporter.Models
 
 
     //Classes for holding all HistoryDatagrid Items
-    public class FullHistoryDatagrid
+    public class FullHistoryDatagrid:  INotifyPropertyChanged
     {
         public string TestName { get; set; }
         public string units { get; set; }
@@ -205,9 +205,25 @@ namespace HealthReporter.Models
         public List<Date_Score_Appraiser> list { get; set; }
 
 
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
     }
 
-    public class Date_Score_Appraiser
+    public class Date_Score_Appraiser : INotifyPropertyChanged
     {
         public string date { get; set; }
         private decimal _score;
@@ -224,6 +240,7 @@ namespace HealthReporter.Models
             set
             {
                 _score = value;
+                OnPropertyChanged("score");
             }
         }
         public override string ToString()
@@ -237,6 +254,22 @@ namespace HealthReporter.Models
                 return score.ToString();
             }
         }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
     }
 
 
