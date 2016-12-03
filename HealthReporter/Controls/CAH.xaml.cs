@@ -58,6 +58,8 @@ namespace HealthReporter.Controls
             }
             ClientGroup.DataContext = group;
 
+            
+
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
 
@@ -67,6 +69,22 @@ namespace HealthReporter.Controls
             var repo = new AppraisalsRepository();
 
             IList<HistoryTableItem> history = repo.FindAll(client);
+
+            if (history.Count == 0)
+            {
+                //Getting dates into the CAH main view, if no tests haven't been added
+                List<DateTime> dateList = repo.FindAllDates(client).ToList();
+                dateList.Sort((x, y) =>y.CompareTo(x));
+
+                foreach (DateTime elem in dateList)
+                {
+                    DataGridTextColumn textColumn = new DataGridTextColumn();
+                    textColumn.Header = String.Format("{0:dd/MM/yyyy}",elem);                                                   
+                    dataGrid.Columns.Add(textColumn);
+                  
+                }
+            } 
+
             foreach (HistoryTableItem item in history)
             {
                 if (item.date != null && !dates.Contains(item.date.ToString()))
@@ -96,6 +114,8 @@ namespace HealthReporter.Controls
 
             dates.Sort((x, y) => DateTime.Parse(y).CompareTo(DateTime.Parse(x)));
             this.dates = dates;
+
+
 
 
             //Initializing datagrid objects
@@ -294,6 +314,22 @@ namespace HealthReporter.Controls
 
         private void btn_AddTest(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (dataGrid.Columns[2].Header != null)
+                {
+                    NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group);
+                    this._parent.stkTest.Children.Add(obj);
+                }
+
+            }
+            catch
+            {
+                MessageBox.Show("Please add appraisal first.");
+            }
+            
+           
+           
         }
 
         private void btn_Report(object sender, RoutedEventArgs e)

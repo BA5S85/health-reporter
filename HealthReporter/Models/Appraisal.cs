@@ -12,12 +12,12 @@ namespace HealthReporter.Models
 
     public class AppraisalsRepository
     {
-        public void Insert(Appraisal appraisal, Appraiser appraiser, List<Appraisal_tests> tests)
+        public void Insert( List<Appraisal_tests> tests)
         {
             var connection = DatabaseUtility.getConnection();
 
-            var res = connection.InsertSql("INSERT INTO appraisals (id, appraiserId, clientId, date ) values(@id, @appraiserId, @clientId, @date)", appraisal);
-            var res2 = connection.InsertSql("INSERT INTO appraisers (id, name) values(@id, @name)", appraiser);
+            //var res = connection.InsertSql("INSERT INTO appraisals (id, appraiserId, clientId, date ) values(@id, @appraiserId, @clientId, @date)", appraisal);
+            //var res2 = connection.InsertSql("INSERT INTO appraisers (id, name) values(@id, @name)", appraiser);
 
             
             foreach (Appraisal_tests test in tests)
@@ -27,10 +27,27 @@ namespace HealthReporter.Models
 
 
         }
+        public void InsertAppraisalAndAppraiser(Appraisal appraisal, Appraiser appraiser)
+        {
+            var connection = DatabaseUtility.getConnection();
+
+            var res = connection.InsertSql("INSERT INTO appraisals (id, appraiserId, clientId, date ) values(@id, @appraiserId, @clientId, @date)", appraisal);
+            var res2 = connection.InsertSql("INSERT INTO appraisers (id, name) values(@id, @name)", appraiser);
+        }
 
         public IList<HistoryTableItem> FindAll(Client client)
         {
            return DatabaseUtility.getConnection().QuerySql<HistoryTableItem>("SELECT appraisals.date, tests.name as TestName, tests.categoryId as tCategory, tests.weight as weight, tests.units as Units,  appraisal_tests.score as Score, appraisers.name as AppraisersName,appraisals.id as applId, tests.id as tId  FROM appraisers inner JOIN appraisals ON appraisals.appraiserId = appraisers.id inner JOIN appraisal_tests ON appraisal_tests.appraisalId = appraisals.id inner JOIN tests ON tests.id = appraisal_tests.testId WHERE appraisals.clientId=@id ", client);
+
+        }
+        public IList<DateTime> FindAllDates(Client client)
+        {
+            return DatabaseUtility.getConnection().QuerySql<DateTime>("SELECT date FROM appraisals WHERE appraisals.clientId=@id ", client);
+
+        }
+        public IList<Appraisal> FindAllAppraisals(Client client)
+        {
+            return DatabaseUtility.getConnection().QuerySql<Appraisal>("SELECT * FROM appraisals WHERE appraisals.clientId=@id ", client);
 
         }
 

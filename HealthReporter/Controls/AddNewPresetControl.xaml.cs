@@ -26,17 +26,14 @@ namespace HealthReporter.Controls
 
         private Client client;
         private Group group;
-        private Appraiser appraiser;
-        private Appraisal appraisal;
 
-        public AddNewPresetControl(MainWindow parentWindow, IList<Test> tests, Client client, Group group, Appraiser appraiser, Appraisal appraisal)
+        public AddNewPresetControl(MainWindow parentWindow, IList<Test> tests, Client client, Group group)
         {
             InitializeComponent();
             this._parent = parentWindow;
             this.client = client;
             this.group = group;
-            this.appraiser = appraiser;
-            this.appraisal = appraisal;
+          
 
             this.tests = tests;
         }
@@ -77,7 +74,7 @@ namespace HealthReporter.Controls
             int childNumber = this._parent.stkTest.Children.Count;
             this._parent.stkTest.Children.RemoveAt(childNumber - 2);
             
-            NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
+            NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group);
             this._parent.stkTest.Children.Add(obj);
 
         }

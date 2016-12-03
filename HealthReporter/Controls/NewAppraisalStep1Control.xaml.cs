@@ -66,7 +66,49 @@ namespace HealthReporter.Controls
                 DateTime enteredDate = Convert.ToDateTime(date.SelectedDate.ToString());
                 appraisal.date = String.Format("{0:yyyy-MM-dd}", enteredDate);
 
-                NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group, appraiser, appraisal);
+                var repo = new AppraisalsRepository();
+
+                //All appraisal dates
+                List<DateTime> dateList = repo.FindAllDates(client).ToList();
+                dateList.Sort((x, y) => y.CompareTo(x));                
+
+                //Get tests that are in CAH already and add the ones that are missing
+                List<byte[]> tests = new List<byte[]>();
+                IList<HistoryTableItem> history = repo.FindAll(client);
+
+                foreach(HistoryTableItem elem in history)
+                {    
+                    tests.Add(elem.tId);
+                }
+
+                if (tests.Count != 0)
+                {
+                    
+                        List<Appraisal_tests> at = new List<Appraisal_tests>();
+                        foreach (byte[] test in tests)
+                        {
+                            if(!dateList.Contains(DateTime.Parse(appraisal.date)))
+                            {
+                                Appraisal_tests one = new Appraisal_tests();
+                                one.appraisalId = appraisal.id;
+                                one.testId = test;
+                                one.score = Decimal.Parse("0");
+                                at.Add(one);
+                            }
+                            
+                        }
+                        repo.Insert(at);
+                 }
+
+               
+                repo.InsertAppraisalAndAppraiser(appraisal, appraiser);
+
+                // Going to the Main appraisal history view
+                int childNumber = this._parent.stkTest.Children.Count;
+                this._parent.stkTest.Children.RemoveRange(childNumber - 2, childNumber);
+
+                CAH obj = new CAH(this._parent, client, group);
+
                 this._parent.stkTest.Children.Add(obj);
             }
             catch {}

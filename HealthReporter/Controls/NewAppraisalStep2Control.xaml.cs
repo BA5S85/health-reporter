@@ -25,21 +25,17 @@ namespace HealthReporter.Controls
         private Client client;
         private MainWindow _parent;
         private Group group;
-        private Appraiser appraiser;
-        private Appraisal appraisal;
+        
         private List<Test> tests = new List<Test>();
      
 
-        public NewAppraisalStep2Control(MainWindow _parent, Client client, Group group, Appraiser appraiser, Appraisal appraisal)
+        public NewAppraisalStep2Control(MainWindow _parent, Client client, Group group)
         {           
             InitializeComponent();
             this._parent = _parent;
             this.client = client;
             this.group = group;
-            this.appraiser = appraiser;
-            this.appraisal = appraisal;
-
-  
+           
             var rep = new PresetRepository();
             IList<Preset> presets = new List<Preset>();
             presets = rep.FindAll();       
@@ -111,7 +107,7 @@ namespace HealthReporter.Controls
                 return;
             }
 
-            AddNewPresetControl obj = new AddNewPresetControl(this._parent, tests, client, group, appraiser, appraisal);
+            AddNewPresetControl obj = new AddNewPresetControl(this._parent, tests, client, group);
             this.Opacity = 0.3;
             this.IsEnabled = false;
             this._parent.stkTest.Children.Add(obj);
@@ -119,10 +115,15 @@ namespace HealthReporter.Controls
 
         private void btn_OK(object sender, RoutedEventArgs e)
         {
+            var repo = new AppraisalsRepository();
+
+            //Getting dates if no tests haven't been added
+            List<DateTime> dateList = repo.FindAllDates(client).ToList();
+            dateList.Sort((x, y) => y.CompareTo(x));
+
 
             //Finding all appraisal dates of client
             List<string> dates = new List<string>();
-            var repo = new AppraisalsRepository();
             IList<HistoryTableItem> history = repo.FindAll(client);
 
             foreach (HistoryTableItem item in history)
@@ -138,10 +139,26 @@ namespace HealthReporter.Controls
                 IList<ListBoxItem> lbItems = item.categoryTests;
                 foreach(ListBoxItem lbItem in lbItems)
                 {
-                    if (lbItem.isSelected && lbItem.isEnabled && !dates.Contains(appraisal.date))
+                    foreach (DateTime elem in dateList)
                     {
-                        tests.Add(lbItem.test); //adds only tests that are not in history view already
+                        if (dates.Count == 0)
+                        {
+                            if (lbItem.isSelected && lbItem.isEnabled && !dates.Contains(elem.ToString()))
+                            {
+                               // MessageBox.Show("here");
+                                tests.Add(lbItem.test); //adds only tests that are not in history view already
+                            }
+                        }else
+                        {
+                            if (lbItem.isSelected && lbItem.isEnabled && dates.Contains(elem.ToString()))
+                            {
+                              //  MessageBox.Show("here");
+                                tests.Add(lbItem.test); //adds only tests that are not in history view already
+                            }
+                        }
+                       
                     }
+                    
                 }
             }
 
@@ -182,21 +199,29 @@ namespace HealthReporter.Controls
             else
             {
                
-                List<Appraisal_tests> at = new List<Appraisal_tests>();
-                foreach (Test test in tests)
-                {
-                    Appraisal_tests one = new Appraisal_tests();
-                    one.appraisalId = appraisal.id;
-                    one.testId = test.id;
-                    one.score = Decimal.Parse("0");                   
-                    at.Add(one);
 
+                IList<Appraisal> allAppraisals = repo.FindAllAppraisals(client);
+
+                foreach(Appraisal elem in allAppraisals)
+                {
+                    List<Appraisal_tests> at = new List<Appraisal_tests>();
+                    foreach (Test test in tests)
+                    {
+                        Appraisal_tests one = new Appraisal_tests();
+                        one.appraisalId = elem.id;
+                        one.testId = test.id;
+                        one.score = Decimal.Parse("0");
+                        at.Add(one);
+
+                    }
+                    repo.Insert(at);
                 }
-                repo.Insert(appraisal, appraiser, at);
+
+               
               
                 // Going to the Main appraisal history view
                 int childNumber = this._parent.stkTest.Children.Count;
-                this._parent.stkTest.Children.RemoveRange(childNumber - 3, childNumber);
+                this._parent.stkTest.Children.RemoveRange(childNumber - 2, childNumber);
 
                 CAH obj = new CAH(this._parent, client, group);                
 
