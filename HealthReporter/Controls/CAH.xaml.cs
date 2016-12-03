@@ -851,11 +851,23 @@ namespace HealthReporter.Controls
         }
 
         private void dataGrid_GotFocus(object sender, RoutedEventArgs e)
-        {                       
-                try
+        {
+           
+           
+
+
+            try
                 {
                 (e.OriginalSource as DataGridCell).IsSelected = true;
+                string columnHeader = (string)dataGrid.SelectedCells[0].Column.Header;
 
+                if(columnHeader == "Test name"|| columnHeader == "Units") {
+                    notesGrid.Visibility = Visibility.Hidden;
+                    noteMessage.Visibility = Visibility.Visible;
+                    diagrams.Visibility = Visibility.Hidden;
+                    begin.Visibility = Visibility.Visible;
+                    noDiagram.Visibility = Visibility.Hidden;
+                }
                 // Finding the selected cell object
                 FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
 
