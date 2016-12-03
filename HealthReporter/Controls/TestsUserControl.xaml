@@ -106,13 +106,14 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}" Width="*"/>
                         </DataGrid.Columns>
-                        <DataGrid.Resources>
-                            <ContextMenu x:Key="GridContextMenu">
-                                <ContextMenu.Items>
-                                    <MenuItem Header="Delete" Click="MenuItem_DeleteCategory"/>
-                                </ContextMenu.Items>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="MenuItem_DeleteCategory"/>
+                                <MenuItem Header="Rename" Click="MenuItem_RenameCategory"/>
                             </ContextMenu>
-                            <Style TargetType="{x:Type DataGridCell}">
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
                                     <Trigger Property="DataGridCell.IsSelected" Value="True">
                                         <Setter Property="Background" Value="LightBlue" />
@@ -135,7 +136,6 @@
                                 <Setter Property="Height" Value="23"/>
                                 <Setter Property="Background" Value="AliceBlue"/>
                                 <Setter Property="Margin" Value="15,0,0,0" />
-                                <Setter Property="ContextMenu" Value="{StaticResource GridContextMenu}" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" Value="LightBlue"/>

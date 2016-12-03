@@ -773,6 +773,21 @@ namespace HealthReporter.Controls
             }
         }
 
+        private void MenuItem_RenameCategory(object sender, RoutedEventArgs e)
+        {
+            // finding the item to rename
+            var item = (MenuItem)sender;
+            var contextMenu = (ContextMenu)item.Parent;
+            var item2 = (DataGrid)contextMenu.PlacementTarget;
+            var renameobj = (Models.TestCategory)item2.SelectedCells[0].Item;
+
+            // adding focus on the rename obj row
+            catsDataGrid.Focus();
+            catsDataGrid.SelectedItem = renameobj;
+            catsDataGrid.IsReadOnly = false;
+            catsDataGrid.BeginEdit();
+        }
+
         private void testName_GotFocus(object sender, RoutedEventArgs e)
         {
             if(testName.Text == "No Name")
