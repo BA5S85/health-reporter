@@ -54,13 +54,8 @@
         </x:Array>
         <Style x:Key="Tip" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FF2E92F7" />
-            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="ToolTipService.InitialShowDelay" Value="5" />
-            <Style.Triggers>
-                <Trigger Property="TextBlock.IsMouseOver" Value="True">
-                    <Setter Property="FontWeight" Value="Bold" />
-                </Trigger>
-            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <Border>
@@ -283,7 +278,7 @@
                                 </Style>
                             </TextBlock.Resources>
                         </TextBlock>
-                        <TextBlock Margin="0,10,6,3" Height="15" Text="?" HorizontalAlignment="Right" Style="{StaticResource Tip}" Grid.Row="2" VerticalAlignment="Bottom">
+                        <TextBlock Margin="0,10,6,3" Height="15" Text="?" FontWeight="Bold" HorizontalAlignment="Right" Style="{StaticResource Tip}" Grid.Row="2" VerticalAlignment="Bottom">
                             <TextBlock.ToolTip>
                                 <TextBlock>
                                     Units of measurement, like kg, cm, mm, reps, etc.
@@ -291,7 +286,7 @@
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <TextBlock x:Name="Text3" Margin="65,18,0,0" TextWrapping="Wrap" Text="Decimals" RenderTransformOrigin="0.146,1.25" Grid.Row="2" Grid.Column="1" Height="16" HorizontalAlignment="Left" Width="48" VerticalAlignment="Bottom"/>
-                        <TextBlock Margin="118,18,0,3" Height="15" Text="?" HorizontalAlignment="Left" Style="{StaticResource Tip}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
+                        <TextBlock Margin="118,18,0,3" Height="15" Text="?" FontWeight="Bold" HorizontalAlignment="Left" Style="{StaticResource Tip}" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
                             <TextBlock.ToolTip>
                                 <TextBlock>
                                     * 0, 1, 2 denotes a number of digits after the decimal point that a test result needs (e.g., in 25.99 there are two digits after the point, and in 5.3 there is only one).
@@ -308,7 +303,7 @@
                         <TextBox x:Name="units" Height="23" Margin="10,15,0,0" TextWrapping="Wrap" Style="{StaticResource TextBoxStyle}" Text="{Binding units, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" LostFocus="textBox_LostFocus" RenderTransformOrigin="0.179,0.522" HorizontalAlignment="Left" Width="40" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom"/>
                         <ComboBox x:Name="decimalsSelector" SelectedIndex="2" Margin="140,0,0,0"  SelectedValue="{Binding decimals, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" RenderTransformOrigin="1.076,0.676" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderBrush="Black" Style="{StaticResource ComboBoxFlatStyle}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Width="40" Height="22" VerticalAlignment="Bottom"/>
                         <TextBlock Margin="10,10,15,0" Foreground="#575C5C" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" HorizontalAlignment="Right" Width="40" Text="Weight" Grid.Row="1" Height="16"/>
-                        <TextBlock Margin="10,10,6,3" Height="15" Text="?" HorizontalAlignment="Right" Style="{StaticResource Tip}" Grid.Row="1">
+                        <TextBlock Margin="10,10,6,3" Height="15" Text="?" FontWeight="Bold" HorizontalAlignment="Right" Style="{StaticResource Tip}" Grid.Row="1">
                             <TextBlock.ToolTip>
                                 <TextBlock>
                                     You may want to give this test more "weight" than other tests.
@@ -331,7 +326,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Foreground="#575C5C" HorizontalAlignment="Right" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" Width="48" Height="16" Margin="0,0,10,25" Grid.Row="1" VerticalAlignment="Bottom"><Run Text="Formula"/><LineBreak/><Run/></TextBlock>
                             <TextBlock Margin="44,30,0,0" x:Name="ratingLabel" Foreground="#575C5C" TextWrapping="Wrap" RenderTransformOrigin="0.469,-1.188" Text="Ratings" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="42"/>
-                            <TextBlock x:Name="tip" Height="15" Text="?" Margin="88,30,4,12" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Tip}">
+                            <TextBlock x:Name="tip" Height="15" Text="?" FontWeight="Bold" Margin="88,30,4,12" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Tip}">
                                 <TextBlock.ToolTip>
                                     <TextBlock>
                                         A test can have many different ratings.
@@ -572,7 +567,7 @@
                         <TextBox x:Name="TestDescriptionText" Margin="10" TextWrapping="Wrap" Text="{Binding description, Mode=TwoWay, UpdateSourceTrigger=LostFocus, NotifyOnSourceUpdated=True}" SourceUpdated="TextBox_SourceUpdated" Grid.Row="7" Grid.Column="1"/>
 
                     </Grid>
-                    <Button Grid.Row="2" HorizontalAlignment="Left" x:Name="addStuffButton" ContextMenuService.IsEnabled="False"  Content="+" Margin="20,20,20,20" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="30" BorderBrush="#FFA2B2BD"  Background="White"  FontSize="16"  Width="30" RenderTransformOrigin="0.867,-0.133">
+                    <Button Grid.Row="2" HorizontalAlignment="Left" x:Name="addStuffButton" ContextMenuService.IsEnabled="False"  Content="+" Margin="20,20,20,20" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="40" BorderBrush="#FF2E92F7" Foreground="#FF2E92F7" FontWeight="Bold" Background="White" BorderThickness="2" FontSize="20"  Width="40" RenderTransformOrigin="0.867,-0.133">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>
