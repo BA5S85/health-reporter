@@ -58,17 +58,21 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Models\AppraisalTests.cs" />
+    <Compile Include="Models\AppraiserTests.cs" />
+    <Compile Include="Models\ClientTests.cs" />
+    <Compile Include="Models\TestCategoryTests.cs" />
     <Compile Include="ViewModels\MainWindowViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\HealthReporter\HealthReporter.csproj">
       <Project>{b4bab029-550b-4027-81a4-605a6816a320}</Project>
