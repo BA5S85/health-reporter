@@ -43,7 +43,7 @@ namespace HealthReporter.Controls
 
             // forces all tooltips to stay on the screen while a cursor is held over the "?" sign
             // without this a tooltip is shown for 5 seconds only
-            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
+            //ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
         }
 
         private void findTestTotal()
