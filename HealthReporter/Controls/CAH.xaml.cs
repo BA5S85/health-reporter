@@ -1138,13 +1138,10 @@ namespace HealthReporter.Controls
                     line3.Height = 5;
 
                     DataGridCell cell = (DataGridCell)e.OriginalSource;
-                    TextBlock x = (TextBlock)cell.Content;
-
-                    MessageBox.Show(" Must" + (Double.Parse(x.Text.ToString()).ToString()));
-                    MessageBox.Show(" Valge" + (findClientScoreLineWidth - Double.Parse(x.Text.ToString())).ToString());
+                    TextBlock x = (TextBlock)cell.Content;            
                                     
                    if ((findClientScoreLineWidth - Double.Parse(x.Text.ToString())) < 0){
-                        MessageBox.Show("gere");
+                      
                         ColumnDefinition c5 = new ColumnDefinition();
                         c5.Width = new GridLength(1000, GridUnitType.Star);
                         clientResult.ColumnDefinitions.Add(c5);                       
