@@ -1164,6 +1164,19 @@ namespace HealthReporter.Controls
             catch { }
         }
 
-        
+        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var senderDatagrid = (DataGrid)sender;
+            if (e.Key == Key.Tab)
+            {
+                if (senderDatagrid != null)
+                {
+                    dataGrid.CommitEdit();
+                    var focusedElement = Keyboard.FocusedElement as UIElement;
+                    focusedElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }

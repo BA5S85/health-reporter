@@ -150,7 +150,7 @@
                             <RowDefinition Height="5"></RowDefinition>
                             <RowDefinition Height="120"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <DataGrid SelectionUnit="Cell"  GotFocus="dataGrid_GotFocus" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" RowHeaderWidth="0" Background="{x:Null}" BorderBrush="{x:Null}"  Grid.Row="0"  CanUserSortColumns="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" >
+                        <DataGrid SelectionUnit="Cell"  GotFocus="dataGrid_GotFocus" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" RowHeaderWidth="0" Background="{x:Null}" BorderBrush="{x:Null}"  Grid.Row="0"  CanUserSortColumns="False" SelectionMode="Single" SelectionChanged="dataGrid_SelectionChanged" IsReadOnly="False" CanUserAddRows="False" CellEditEnding="dataGrid_CellEditEnding"  x:Name="dataGrid" CurrentCellChanged="dataGrid_CurrentCellChanged" RowEditEnding="dataGrid_RowEditEnding"  AutoGenerateColumns="False" PreviewKeyDown="dataGrid_PreviewKeyDown" >
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
                                     <Setter Property="Background" Value="White"/>
