@@ -40,6 +40,10 @@ namespace HealthReporter.Controls
             btnShowTests.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E0EEEE"));
 
             findTestTotal();
+
+            // forces all tooltips to stay on the screen while a cursor is held over the "?" sign
+            // without this a tooltip is shown for 5 seconds only
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
         }
 
         private void findTestTotal()
@@ -493,7 +497,9 @@ namespace HealthReporter.Controls
                 lastAge = item.interval.rating.age;
             }
             Test test = (Test)testName.DataContext;
-            InputDialog inputDialog = new InputDialog("Please enter age group for which you would like to add ratings:", lastAge + "-");
+            InputDialog inputDialog = new InputDialog("Please enter an age range for which you would like to add ratings\n" +
+                "(e.g. " + lastAge + "-" + (lastAge + 9) + ", meaning age range for people between " + lastAge + " and " + (lastAge + 9) + " years):\n", lastAge + "-");
+
             if (inputDialog.ShowDialog() == true)
             {
                 int frst = parse_age(inputDialog.Answer, true, 0);
@@ -705,8 +711,6 @@ namespace HealthReporter.Controls
         {
             if (MenAgesTab.Items.Count == 0)
             {
-                tip.Visibility = Visibility.Hidden;
-                // tip.ToolTip = "Click on the '+ Add ratings' button the add ratings.";
                 ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#575C5C"));
                 return true;
             }
@@ -723,7 +727,6 @@ namespace HealthReporter.Controls
                     }
                 }
                 ratingLabel.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#575C5C"));
-                tip.Visibility = Visibility.Hidden;
                 return true;
             }
         }
