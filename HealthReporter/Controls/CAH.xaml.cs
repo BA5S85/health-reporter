@@ -410,7 +410,6 @@ namespace HealthReporter.Controls
                         appTest.score = test1;
                         
                         repoAT.Update(appTest);
-                        
                     }
                     catch
                     {
@@ -439,6 +438,15 @@ namespace HealthReporter.Controls
             IList<HistoryTableItem> hist = rep.FindAll(client);
             var latestAppraisalTests = findLatestAppraisals(hist);
             catsDataGrid.ItemsSource = findCatsDataGridItems(latestAppraisalTests);
+
+            foreach(var latestApprTest in latestAppraisalTests)
+            {
+                if (latestApprTest.Value.date == elem2.date) //appraisal test with latest date was updated, color indicator needs to be updated too
+                {   //not the best solution but since the itemssource is not updated while new results are inserted I couldn't find any better
+                    dataGrid.ItemsSource = findFullHistory(hist);
+                    break;
+                }
+            }
         }
 
         private int rowIndex = 0;
