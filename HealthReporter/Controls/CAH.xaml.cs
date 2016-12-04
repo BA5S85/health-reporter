@@ -344,7 +344,7 @@ namespace HealthReporter.Controls
         {
             try
             {
-                if (dataGrid.Columns[2].Header != null)
+                if (dataGrid.Columns[3].Header != null)
                 {
                     NewAppraisalStep2Control obj = new NewAppraisalStep2Control(this._parent, client, group);
                     this._parent.stkTest.Children.Add(obj);
@@ -589,10 +589,10 @@ namespace HealthReporter.Controls
                         else if (this.client.gender == "1")
                         {
                             ColumnDefinition c1 = new ColumnDefinition();
-                            c1.Width = new GridLength(25, GridUnitType.Star);
+                            c1.Width = new GridLength(100, GridUnitType.Star);
 
                             ColumnDefinition c2 = new ColumnDefinition();
-                            c2.Width = new GridLength(25, GridUnitType.Star);
+                            c2.Width = new GridLength(100, GridUnitType.Star);
 
                             TextBlock txtBlock2 = new TextBlock();
                             txtBlock2.Text = obj.normM.ToString();
@@ -607,7 +607,7 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(line, i);
                             Grid.SetColumn(txtBlock2, i);
                             i++;
-                            findClientScoreLineWidth += 25;
+                            findClientScoreLineWidth += 100;
                         }
                         else if (this.client.gender == "0" && (j + 1) != list.Count)
                         {
@@ -636,10 +636,10 @@ namespace HealthReporter.Controls
                         else if (this.client.gender == "0")
                         {
                             ColumnDefinition c1 = new ColumnDefinition();
-                            c1.Width = new GridLength(25, GridUnitType.Star);
+                            c1.Width = new GridLength(100, GridUnitType.Star);
 
                             ColumnDefinition c2 = new ColumnDefinition();
-                            c2.Width = new GridLength(25, GridUnitType.Star);
+                            c2.Width = new GridLength(100, GridUnitType.Star);
 
                             TextBlock txtBlock2 = new TextBlock();
                             txtBlock2.Text = obj.normF.ToString();
@@ -654,7 +654,7 @@ namespace HealthReporter.Controls
                             Grid.SetColumn(line, i);
                             Grid.SetColumn(txtBlock2, i);
                             i++;
-                            findClientScoreLineWidth += 25;
+                            findClientScoreLineWidth += 100;
                         }
                     }
 
@@ -685,12 +685,6 @@ namespace HealthReporter.Controls
                     Grid.SetColumn(line2, 0);
                     Grid.SetColumn(line3, 1);
 
-                    //Rectangle line2 = new Rectangle();
-                    //line2.Fill = System.Windows.Media.Brushes.Yellow;
-                    //line2.Height = 5;
-                    //line2.Width = 50;
-                    //scala.Children.Add(line);
-                    //scala.Children.Add(line2);
                 }
             }
         }
@@ -880,7 +874,7 @@ namespace HealthReporter.Controls
                 FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
 
                 
-                Date_Score_Appraiser elem2 = selectedItem.list[index - 2];
+                Date_Score_Appraiser elem2 = selectedItem.list[index - 3];
 
 
                 elem.testId = elem2.tId;
@@ -1156,12 +1150,7 @@ namespace HealthReporter.Controls
                     Grid.SetColumn(line2, 0);
                     Grid.SetColumn(line3, 1);
 
-                    //Rectangle line2 = new Rectangle();
-                    //line2.Fill = System.Windows.Media.Brushes.Yellow;
-                    //line2.Height = 5;
-                    //line2.Width = 50;
-                    //scala.Children.Add(line);
-                    //scala.Children.Add(line2);
+                  
                 }
             }
             catch { }
