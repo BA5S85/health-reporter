@@ -232,14 +232,19 @@
                     </DataGrid>
                 </Grid>
                 <GridSplitter Grid.Column="3" Width="3" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" ResizeDirection="Columns" />
-                <Button Visibility="Hidden" Grid.Column="4" Margin="20" x:Name="openAppraisalHistoryBtn" ContextMenuService.IsEnabled="False" Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Foreground="#FF2E92F7" FontWeight="Bold" BorderBrush="#FF2E92F7" BorderThickness="2" Background="White" FontSize="20" Width="40" Click="btn_OpenAppraisalHistory">
+                <Button ToolTipService.InitialShowDelay="5" Visibility="Hidden" Grid.Column="4" Margin="20" x:Name="openAppraisalHistoryBtn" ContextMenuService.IsEnabled="False" Content="A" HorizontalAlignment="Right" VerticalAlignment="Top" Height="40" Foreground="#FF2E92F7" FontWeight="Bold" BorderBrush="#FF2E92F7" BorderThickness="2" Background="White" FontSize="20" Width="40" Click="btn_OpenAppraisalHistory">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="4"/>
                         </Style>
                     </Button.Resources>
+                    <Button.ToolTip>
+                        <TextBlock>
+                            Click to add new appraisals and measurements.
+                        </TextBlock>
+                    </Button.ToolTip>
                 </Button>
-                <Label Visibility="Hidden" Grid.Column="4" x:Name="openAppraisalHistoryLabel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,27,64,0" Width="129" Foreground="#FF2E92F7">Show appraisal history</Label>
+                <Label Visibility="Hidden" Grid.Column="4" x:Name="openAppraisalHistoryLabel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,27,66,0" Foreground="#FF2E92F7">Add or show appraisals</Label>
                 <Grid x:Name="clientDetailMain" Grid.Column="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60" />
@@ -354,7 +359,7 @@
                     <TextBlock HorizontalAlignment="Center"  VerticalAlignment="Top" x:Name="NoCards" Visibility="Hidden" Grid.Row="1" Grid.Column="0" Grid.RowSpan="5" Grid.ColumnSpan="2"  Foreground="LightSlateGray" FontSize="14">
                         No information to show
                     </TextBlock>
-                    <Button Grid.Row="2" Margin="20,20,20,20" x:Name="addStuff" ContextMenuService.IsEnabled="False" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="40" BorderBrush="#FF2E92F7" FontWeight="Bold" Background="White" FontSize="20" BorderThickness="2" Width="40" Foreground="#FF2E92F7">
+                    <Button ToolTipService.InitialShowDelay="5" Grid.Row="2" Margin="20,20,20,20" x:Name="addStuff" ContextMenuService.IsEnabled="False" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btn_AddStuff" Height="40" BorderBrush="#FF2E92F7" FontWeight="Bold" Background="White" FontSize="20" BorderThickness="2" Width="40" Foreground="#FF2E92F7">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="4"/>
@@ -366,6 +371,11 @@
                                 <MenuItem Header="New client" Click="btn_AddNewClient"/>
                             </ContextMenu>
                         </Button.ContextMenu>
+                        <Button.ToolTip>
+                            <TextBlock>
+                                Click to add new groups and clients.
+                            </TextBlock>
+                        </Button.ToolTip>
                     </Button>
                     <Button Visibility="Hidden" Content="{StaticResource Dustbin}" Padding="6" Grid.Row="2" Margin="20,20,20,20" x:Name="delete" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="btn_Delete" Height="30" BorderBrush="#FFA2B2BD"  Background="White" FontSize="12"  Width="30">
                         <Button.Resources>
