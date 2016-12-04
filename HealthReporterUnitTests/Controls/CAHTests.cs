@@ -4,6 +4,7 @@ using HealthReporter;
 using HealthReporter.Utilities;
 using HealthReporter.Models;
 using HealthReporter.Controls;
+using System.Collections.Generic;
 
 namespace HealthReporterUnitTests.Controls
 {
@@ -15,6 +16,22 @@ namespace HealthReporterUnitTests.Controls
         {
             DatabaseUtility.resetDb();
             DatabaseUtility.checkDb();
+        }
+
+        [TestMethod]
+        public void findScoreMeaning()
+        {
+            decimal score = 15;
+            RatingMeaning targetMeaning = new RatingMeaning() { rating = 1, name = "test 2", normF = 5, normM = 10 };
+            IList<RatingMeaning> list = new List<RatingMeaning>();
+            list.Add(new RatingMeaning() { rating = 0, name = "test 0", normF = 0, normM = 0 });
+            list.Add(targetMeaning);
+            list.Add(new RatingMeaning() { rating = 2, name = "test 1", normF = 15, normM = 20 });
+            list.Add(new RatingMeaning() { rating = 3, name = "test 2", normF = 25, normM = 30 });
+
+            RatingMeaning result = CAH.findScoreMeaning(score, list, true);
+
+            Assert.AreEqual(result, targetMeaning, "findScoreMeaning returned wrong meaning");
         }
 
         [TestMethod]

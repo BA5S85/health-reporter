@@ -167,7 +167,7 @@ namespace HealthReporter.Controls
                 {
                     IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, id);
                     decimal score = latestMap[id].Score;
-                    RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
+                    RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings, this.client.gender == "1");
                     int scoreRating = scoreMeaning.rating;
                     int maxScoreRating = findMaxScoreRating(allRatingMeanings);
 
@@ -263,9 +263,8 @@ namespace HealthReporter.Controls
             return age;
         }
 
-        private RatingMeaning findScoreMeaning(decimal score, IList<RatingMeaning> list)
+        static public RatingMeaning findScoreMeaning(decimal score, IList<RatingMeaning> list, bool isMale)
         {
-            bool isMale = this.client.gender == "1";
             if (list.Count == 0) return new RatingMeaning() { rating = 0};
             RatingMeaning meaning = list[0];
             foreach(RatingMeaning mean in list)
@@ -792,7 +791,7 @@ namespace HealthReporter.Controls
                         if(latestAppraisals.TryGetValue(item.tId, out histItem)){ //test has at least one appraisal
                             IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, item.tId);
                             decimal score = histItem.Score;
-                            RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
+                            RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings, this.client.gender == "1");
                             int scoreRating = scoreMeaning.rating;
                             newOne.color = ratingToColor(scoreRating);                          
                         }
