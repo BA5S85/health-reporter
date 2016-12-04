@@ -169,6 +169,15 @@
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="12">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="8" Height="8" Fill="{Binding color}" HorizontalAlignment="Center" Margin="2,2,2,2" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                                 <DataGridTextColumn IsReadOnly="True" Header="Test name" Binding="{Binding TestName}"  Width="223"/>
                                 <DataGridTextColumn IsReadOnly="True" Header="Units" Binding="{Binding units}" >
                                     <DataGridTextColumn.ElementStyle>

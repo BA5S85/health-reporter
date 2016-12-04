@@ -382,7 +382,7 @@ namespace HealthReporter.Controls
             DataGridColumn col1 = e.Column;
             int index = col1.DisplayIndex;
 
-            Date_Score_Appraiser elem2 = elem.list[index - 2];
+            Date_Score_Appraiser elem2 = elem.list[index - 3];
             var repoAT = new Appraisal_tests_repository();
 
             IList<Appraisal_tests> history = repoAT.FindAll();
@@ -737,9 +737,39 @@ namespace HealthReporter.Controls
             }
         }
 
+        private Brush ratingToColor(int rating)
+        {
+            string color = "Red";
+
+            switch (rating)
+            {
+                case 0:
+                    color = "Red";
+                    break;
+                case 1:
+                    color = "Orange";
+                    break;
+                case 2:
+                    color = "Yellow";
+                    break;
+                case 3:
+                    color = "Green";
+                    break;
+                case 4:
+                    color = "Blue";
+                    break;
+                default: { break; }
+            }
+            var converter = new BrushConverter();
+            var brush = (Brush)converter.ConvertFromString(color);
+            return brush;
+        }
+
         //Creating list with structure: (TestName, units, (date, score, appraiser))
         private List<FullHistoryDatagrid> findFullHistory(IList<HistoryTableItem> items)
         {
+            var latestAppraisals = findLatestAppraisals(items);
+            var repo = new RatingRepository();
             List<FullHistoryDatagrid> result = new List<FullHistoryDatagrid>();
 
             foreach (HistoryTableItem item in items)
@@ -751,6 +781,20 @@ namespace HealthReporter.Controls
                     newOne.units = item.Units;
                     newOne.tId = item.tId;
                     newOne.list = new List<Date_Score_Appraiser>();
+
+                    //finding color 
+                    int age = findAge(int.Parse(this.client.age), item.tId);
+                    if (age != -1) //if age is -1 then test has no ratings, nothing to indicate with the color
+                    {
+                        HistoryTableItem histItem;
+                        if(latestAppraisals.TryGetValue(item.tId, out histItem)){ //test has at least one appraisal
+                            IList<RatingMeaning> allRatingMeanings = repo.findHistoryTestRatings(age, item.tId);
+                            decimal score = histItem.Score;
+                            RatingMeaning scoreMeaning = findScoreMeaning(score, allRatingMeanings);
+                            int scoreRating = scoreMeaning.rating;
+                            newOne.color = ratingToColor(scoreRating);                          
+                        }
+                    }
 
                     foreach (string date in this.dates)
                     {

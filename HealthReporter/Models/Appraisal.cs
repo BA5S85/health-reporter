@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace HealthReporter.Models
 {
@@ -204,6 +205,7 @@ namespace HealthReporter.Models
         public string units { get; set; }
         public byte[] tId { get; set; }
         public List<Date_Score_Appraiser> list { get; set; }
+        public Brush color { get; set; }
 
 
         #region INotifyPropertyChanged Members
