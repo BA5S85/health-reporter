@@ -899,7 +899,7 @@ namespace HealthReporter.Controls
                 (e.OriginalSource as DataGridCell).IsSelected = true;
                 string columnHeader = (string)dataGrid.SelectedCells[0].Column.Header;
 
-                if(columnHeader == "Test name"|| columnHeader == "Units") {
+                if(columnHeader == "Test name"|| columnHeader == "Units" || columnHeader=="") {
                     notesGrid.Visibility = Visibility.Hidden;
                     noteMessage.Visibility = Visibility.Visible;
                     diagrams.Visibility = Visibility.Hidden;
@@ -910,7 +910,7 @@ namespace HealthReporter.Controls
                 FullHistoryDatagrid selectedItem = (FullHistoryDatagrid)dataGrid.SelectedCells[0].Item;
 
                 int index = dataGrid.SelectedCells[0].Column.DisplayIndex;
-                Date_Score_Appraiser elem = selectedItem.list[index - 2];
+                Date_Score_Appraiser elem = selectedItem.list[index - 3];
 
                 // Showing Notes Grid
                 notesGrid.Visibility = Visibility.Visible;

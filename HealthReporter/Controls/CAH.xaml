@@ -169,7 +169,7 @@
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Width="12">
+                                <DataGridTemplateColumn Header="" IsReadOnly="True" Width="12">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
