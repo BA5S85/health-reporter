@@ -12,6 +12,7 @@ using TestStack.White.UIItems.WPFUIItems;
 using TestStack.White.UIItems.ListBoxItems;
 using System.Collections.Generic;
 using TestStack.White.UIItems.TabItems;
+using TestStack.White.WindowsAPI;
 
 // https://msdn.microsoft.com/en-us/library/ms182532.aspx
 
@@ -64,7 +65,7 @@ namespace HealthReporterUnitTests
 
 
             groups.SelectedRows[0].Enter(groupName);
-            window.Click();
+            window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
 
             rows = groups.Rows;
             int newCount = rows.Count;
@@ -94,7 +95,7 @@ namespace HealthReporterUnitTests
 
 
                 groups.SelectedRows[0].Enter("Test grupp 2");
-                window.Click();
+                window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
             }
 
             groups.Rows[0].Click();
@@ -139,8 +140,8 @@ namespace HealthReporterUnitTests
             PopUpMenu menu = window.Popup;
             menu.Item("New category").Click();
 
-            window.Get<TextBox>("name").Enter("Testkategooria");
-            window.Get<Button>("createCategory").Click();
+            categories.SelectedRows[0].Enter("Testcategory");
+            window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
 
             int newCatsCount = window.Get<ListView>("catsDataGrid").Rows.Count;
             application.Close();
@@ -166,8 +167,8 @@ namespace HealthReporterUnitTests
                 menu = window.Popup;
                 menu.Item("New category").Click();
 
-                window.Get<TextBox>("name").Enter("Testkategooria");
-                window.Get<Button>("createCategory").Click();
+                categories.SelectedRows[0].Enter("Testcategory");
+                window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
             }
             categories = window.Get<ListView>("catsDataGrid");
             categories.Rows[0].Click();
@@ -182,9 +183,8 @@ namespace HealthReporterUnitTests
             window.Get<TextBox>("testName").Enter("Test test");
             window.Get<TextBox>("units").Enter("1");
 
-            addButton.Click();
-            menu = window.Popup;
-            menu.Item("New age group").Click();
+            Button ratingButton = window.Get<Button>("addRatingsM");
+            ratingButton.Click();
 
             Window modal = window.ModalWindow("Input");
             modal.Get<TextBox>().Enter("0-10");
