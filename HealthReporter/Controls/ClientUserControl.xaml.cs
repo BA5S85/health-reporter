@@ -163,8 +163,8 @@ namespace HealthReporter.Controls
                         DateTime enteredDate = Convert.ToDateTime(DateTime.Now);
                         var client = new Client()
                         {
-                            firstName = "No Name",
-                            lastName = "No Name",
+                            firstName = "Enter first name",
+                            lastName = "Enter last name",
                             groupId = this._group.id,
                             email = "",
                             gender = "1",
@@ -186,12 +186,15 @@ namespace HealthReporter.Controls
                     clientDataGrid.ItemsSource = clients;
                     int row = clients.Count - 1;
                     clientDetailDatagrid.DataContext = this._client;
+                    
                     clientDataGrid.SelectedIndex = row;
 
                     // Setting focus on firstName textbox
                     firstName.Focusable = true;
                     Keyboard.Focus(firstName);
                     firstName.SelectAll();
+                    lastName.Foreground= (SolidColorBrush)(new BrushConverter().ConvertFrom("#708090"));
+                   
 
                     findClientTotal();
                 }
@@ -618,6 +621,25 @@ namespace HealthReporter.Controls
                     groupDataGrid.CommitEdit();
                     e.Handled = true;
                 }
+            }
+        }
+
+        private void firstName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)e.OriginalSource;
+            if (tb.Text == "Enter first name")
+            {
+                firstName.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#000000"));
+                tb.Text = "";
+            }
+        }
+        private void lastName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)e.OriginalSource;
+            if (tb.Text == "Enter last name")
+            {
+                lastName.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#000000"));
+                tb.Text = "";
             }
         }
     }

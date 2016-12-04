@@ -262,7 +262,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock  Foreground="LightSlateGray" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="1" x:Name="Text1" Text="First Name" Margin="0,0,10,0"/>
                         <StackPanel Grid.Column="1" Grid.Row="1">
-                            <TextBox Margin="10,0,0,0" HorizontalAlignment="Left"  x:Name="firstName"  TextWrapping="Wrap" 
+                            <TextBox GotFocus="firstName_GotFocus" Margin="10,0,0,0" HorizontalAlignment="Left"  x:Name="firstName"  TextWrapping="Wrap" 
                                  Text="{Binding firstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="140"  
                                  Validation.ErrorTemplate="{x:Null}">
                                 <TextBox.Style>
@@ -280,9 +280,9 @@
                             </TextBox>
                             <Label x:Name="AdornerSite" Foreground="Red"  FontWeight="Bold" FontSize="8" Content="{Binding (Validation.Errors).CurrentItem.ErrorContent, ElementName=firstName}" Margin="5,0,0,0" />
                         </StackPanel>
-                        <TextBlock Foreground="LightSlateGray" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="2" x:Name="Text2" Text="Last Name" Margin="0,0,10,0"/>
+                        <TextBlock  Foreground="LightSlateGray" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="2" x:Name="Text2" Text="Last Name" Margin="0,0,10,0"/>
                         <StackPanel Grid.Column="1" Grid.Row="2">
-                            <TextBox Margin="10,0,0,0" HorizontalAlignment="Left" x:Name="lastName"  TextWrapping="Wrap" 
+                            <TextBox Margin="10,0,0,0" GotFocus="lastName_GotFocus" HorizontalAlignment="Left" x:Name="lastName"  TextWrapping="Wrap" 
                                  Text="{Binding lastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="140"  
                                  Validation.ErrorTemplate="{x:Null}">
                                 <TextBox.Style>
