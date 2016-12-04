@@ -30,10 +30,9 @@ namespace HealthReporter.Models
         public void Delete(Client client)
         {
             var connection = DatabaseUtility.getConnection();
-            const string sqlString = "PRAGMA foreign_keys = ON;";
-            SQLiteCommand command = new SQLiteCommand(sqlString, connection);
-            command.ExecuteNonQuery();
+            
             var res = connection.InsertSql("DELETE from clients where id=@id", client);
+            var res2 = connection.InsertSql("DELETE from appraisals where clientId=@id", client);
 
         }
 
