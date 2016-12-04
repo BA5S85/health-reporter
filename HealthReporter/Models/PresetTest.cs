@@ -22,7 +22,8 @@ namespace HealthReporter.Models
             return DatabaseUtility.getConnection().QuerySql <PresetTest>("SELECT * FROM preset_tests WHERE presetId=@id", preset);
         }
     }
-        class PresetTest
+
+    public class PresetTest
     {
         public byte[] testId { get; set; }
         public byte[] presetId { get; set; }

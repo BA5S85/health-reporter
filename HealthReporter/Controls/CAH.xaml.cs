@@ -247,7 +247,7 @@ namespace HealthReporter.Controls
             return brush;
         }
 
-        private int findAge(int clientAge, byte[] id)
+        public static int findAge(int clientAge, byte[] id)
         {
             var repo = new RatingRepository();
             IList<Rating> ratings = repo.getTestRatings(new Test() { id=id });

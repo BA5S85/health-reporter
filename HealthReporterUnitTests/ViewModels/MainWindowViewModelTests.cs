@@ -13,6 +13,7 @@ using TestStack.White.UIItems.ListBoxItems;
 using System.Collections.Generic;
 using TestStack.White.UIItems.TabItems;
 using TestStack.White.WindowsAPI;
+using HealthReporter.Utilities;
 
 // https://msdn.microsoft.com/en-us/library/ms182532.aspx
 
@@ -29,20 +30,12 @@ namespace HealthReporterUnitTests
             set { _testContext = value; }
         }
 
-        //[TestMethod]
-        //public void TestMethod1()
-        //{
-        //    // arrange
-        //    double a = 11.99;
-        //    double b = 12;
-        //    double expectedSum = a+b;
-
-        //    // act
-        //    double actualSum = a + b;
-
-        //    // assert
-        //    Assert.AreEqual(expectedSum, actualSum, 0.001, "Wrong sum");
-        //}
+        [TestInitialize]
+        [TestCleanup]
+        public void DropDatabase()
+        {
+            DatabaseUtility.dropDatabase();
+        }
 
         [TestMethod]
         public void TestAddClientGroup()
