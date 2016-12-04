@@ -57,6 +57,12 @@ namespace HealthReporter.Controls
 
         private void btn_AddNewCategory(object sender, RoutedEventArgs e)
         {
+            if (!validation2())
+            {
+                MessageBox.Show("Please fill in all the required fields first. The required fields are written in red.");
+                return;
+            }
+
             try
             {
                 var category = new Models.TestCategory()
