@@ -898,10 +898,6 @@ namespace HealthReporter.Controls
 
         private void dataGrid_GotFocus(object sender, RoutedEventArgs e)
         {
-           
-           
-
-
             try
                 {
                 (e.OriginalSource as DataGridCell).IsSelected = true;
@@ -1142,24 +1138,35 @@ namespace HealthReporter.Controls
                     line3.Height = 5;
 
                     DataGridCell cell = (DataGridCell)e.OriginalSource;
-                    TextBlock x = (TextBlock)cell.Content;                    
+                    TextBlock x = (TextBlock)cell.Content;
 
-                    ColumnDefinition c3 = new ColumnDefinition();
-                    c3.Width = new GridLength(Double.Parse(x.Text.ToString()), GridUnitType.Star);
-                    ColumnDefinition c4 = new ColumnDefinition();
-                    c4.Width = new GridLength(findClientScoreLineWidth - Double.Parse(x.Text.ToString()), GridUnitType.Star);
+                    MessageBox.Show(" Must" + (Double.Parse(x.Text.ToString()).ToString()));
+                    MessageBox.Show(" Valge" + (findClientScoreLineWidth - Double.Parse(x.Text.ToString())).ToString());
+                                    
+                   if ((findClientScoreLineWidth - Double.Parse(x.Text.ToString())) < 0){
+                        MessageBox.Show("gere");
+                        ColumnDefinition c5 = new ColumnDefinition();
+                        c5.Width = new GridLength(1000, GridUnitType.Star);
+                        clientResult.ColumnDefinitions.Add(c5);                       
+                        clientResult.Children.Add(line2);
 
+                        Grid.SetColumn(line2, 0);                       
+                    }
+                    else {
+                        ColumnDefinition c3 = new ColumnDefinition();
+                        c3.Width = new GridLength(Double.Parse(x.Text.ToString()), GridUnitType.Star);
+                        ColumnDefinition c4 = new ColumnDefinition();
+                        c4.Width = new GridLength(findClientScoreLineWidth - Double.Parse(x.Text.ToString()), GridUnitType.Star);
+                        clientResult.ColumnDefinitions.Add(c3);
+                        clientResult.ColumnDefinitions.Add(c4);
+                        clientResult.Children.Add(line2);
+                        clientResult.Children.Add(line3);
 
-                    clientResult.ColumnDefinitions.Add(c3);
-                    clientResult.ColumnDefinitions.Add(c4);
-                    clientResult.Children.Add(line2);
-                    clientResult.Children.Add(line3);
-
-                    Grid.SetColumn(line2, 0);
-                    Grid.SetColumn(line3, 1);
-
-                  
+                        Grid.SetColumn(line2, 0);
+                        Grid.SetColumn(line3, 1);
                 }
+
+            }
             }
             catch { }
         }
