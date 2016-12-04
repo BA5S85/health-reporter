@@ -104,6 +104,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controls\CAHTests.cs" />
+    <Compile Include="Controls\ClientUserControlTests.cs" />
+    <Compile Include="Controls\TestsUserControlTests.cs" />
     <Compile Include="Models\AppraisalTests.cs" />
     <Compile Include="Models\AppraiserTests.cs" />
     <Compile Include="Models\ClientTests.cs" />

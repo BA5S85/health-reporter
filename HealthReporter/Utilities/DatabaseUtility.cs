@@ -52,15 +52,16 @@ namespace HealthReporter.Utilities
 
         static public void resetDb()
         {
-            SQLiteConnection dbConnection;
-            SQLiteConnectionStringBuilder builder;
-            SQLiteConnection.CreateFile(dbName);
-            builder = getConnectionStringBuilder();
-            dbConnection = new SQLiteConnection(builder.ConnectionString);
-
-            dbConnection.ExecuteSql("select 'drop table ' || name || ';' from sqlite_master where type = 'table'; ");
-            dbConnection.ExecuteSql(getDbCommand());
-            dbConnection.Close();
+            if (File.Exists(dbName))
+            {
+                SQLiteConnection dbConnection = getConnection();
+                dbConnection.ExecuteSql(dropDbCommand());
+                dbConnection.ExecuteSql(getDbCommand());
+                dbConnection.Close();
+            } else
+            {
+                createDatabase();
+            }
         }
 
         static public SQLiteConnection getConnection()
@@ -68,6 +69,24 @@ namespace HealthReporter.Utilities
             var connection = new SQLiteConnection(getConnectionStringBuilder().ConnectionString).OpenConnection();
 
             return connection;
+        }
+
+        static public string dropDbCommand()
+        {
+            return @"
+PRAGMA foreign_keys = OFF; 
+DROP TABLE 'presets';
+DROP TABLE 'test_categories';
+DROP TABLE 'rating_labels';
+DROP TABLE 'groups';
+DROP TABLE 'appraisers';
+DROP TABLE 'tests';
+DROP TABLE 'clients';
+DROP TABLE 'preset_tests';
+DROP TABLE 'ratings';
+DROP TABLE 'appraisals';
+DROP TABLE 'appraisal_tests';
+            ";
         }
 
         static public string getDbCommand()

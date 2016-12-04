@@ -15,7 +15,6 @@ namespace HealthReporterUnitTests.Controls
         public void InitializeDatabase()
         {
             DatabaseUtility.resetDb();
-            DatabaseUtility.checkDb();
         }
 
         [TestMethod]
