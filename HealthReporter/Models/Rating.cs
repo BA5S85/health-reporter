@@ -7,12 +7,13 @@ using HealthReporter.Utilities;
 
 namespace HealthReporter.Models
 {
-    class RatingRepository
+    public class RatingRepository
     {
         public void Insert(Rating rating)
         {
             var connection = DatabaseUtility.getConnection();
             var res = connection.InsertSql("INSERT INTO ratings (testId, labelId, age, normF, normM, updated, uploaded) values(@testId, @labelId, @age, @normF, @normM, @updated, @uploaded)", rating);
+            connection.Close();
         }
 
         public void Delete(Test test)
@@ -86,7 +87,7 @@ namespace HealthReporter.Models
         }
     }
 
-    class Rating
+    public class Rating
     {
         public byte[] testId { get; set; }
         public byte[] labelId { get; set; }
@@ -97,7 +98,7 @@ namespace HealthReporter.Models
         public string uploaded { get; set; }
     }
 
-    class RatingMeaning
+    public class RatingMeaning
     {
         public string name { get; set; }
         public int rating { get; set; }

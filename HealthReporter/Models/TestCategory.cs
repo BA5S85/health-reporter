@@ -6,13 +6,14 @@ using System.ComponentModel;
 
 namespace HealthReporter.Models
 {
-    class TestCategoryRepository
+    public class TestCategoryRepository
     {
         public void Insert(TestCategory testCategory)
         {
             var connection = DatabaseUtility.getConnection();
             testCategory.id = System.Guid.NewGuid().ToByteArray();
             var res = connection.InsertSql("INSERT INTO test_categories (id, parentId, name, position, uploaded) values(@id, @parentId, @name, @position, @uploaded)", testCategory);
+            connection.Close();
         }
 
         public IList<TestCategory> FindAll()

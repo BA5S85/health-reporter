@@ -11,7 +11,7 @@ using System.IO;
 
 namespace HealthReporter.Utilities
 {
-    class DatabaseUtility
+    public class DatabaseUtility
     {
         static String dbName = "HealthReporter.sqlite";
 
@@ -28,7 +28,7 @@ namespace HealthReporter.Utilities
             }
         }
 
-        private static void createDatabase()
+        static public void createDatabase()
         {
             SQLiteConnection dbConnection;
             SQLiteConnectionStringBuilder builder;
@@ -37,6 +37,30 @@ namespace HealthReporter.Utilities
             dbConnection = new SQLiteConnection(builder.ConnectionString);
 
             dbConnection.ExecuteSql(getDbCommand());
+            dbConnection.Close();
+        }
+
+        static public void dropDatabase()
+        {
+            if (File.Exists(dbName))
+            {
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+                File.Delete(dbName);
+            }
+        }
+
+        static public void resetDb()
+        {
+            SQLiteConnection dbConnection;
+            SQLiteConnectionStringBuilder builder;
+            SQLiteConnection.CreateFile(dbName);
+            builder = getConnectionStringBuilder();
+            dbConnection = new SQLiteConnection(builder.ConnectionString);
+
+            dbConnection.ExecuteSql("select 'drop table ' || name || ';' from sqlite_master where type = 'table'; ");
+            dbConnection.ExecuteSql(getDbCommand());
+            dbConnection.Close();
         }
 
         static public SQLiteConnection getConnection()
