@@ -8,6 +8,12 @@ using TestStack.White.Factory;
 using TestStack.White.UIItems.Finders;
 using TestStack.White.WindowsAPI;
 using HealthReporter.Utilities;
+using TestStack.White.UIItems.TabItems;
+using TestStack.White.UIItems.WPFUIItems;
+using HealthReporterUnitTests.Utilities;
+using System;
+using TestStack.White.UIItems.ListBoxItems;
+using TestStack.White.UIA;
 
 namespace HealthReporterUnitTests.Controls
 {
@@ -69,44 +75,85 @@ namespace HealthReporterUnitTests.Controls
                 string applicationPath = Path.Combine(solutionDir, "HealthReporter/bin/Debug/HealthReporter.exe");
                 Application application = Application.Launch(applicationPath);
                 Window window = application.GetWindow("Health Reporter", InitializeOption.NoCache);
+                
+                Helpers.addClientGroupIfNoneExist(window, "Test client category");
 
                 ListView groups = window.Get<ListView>("groupDataGrid");
-                Button addButton = window.Get<Button>("addStuff");
-                PopUpMenu menu;
-                if (groups.Rows.Count <= 0)
-                {
-                    addButton.Click();
-
-                    menu = window.Popup;
-                    menu.Item("New group").Click();
-
-
-                    groups.SelectedRows[0].Enter("Test grupp 2");
-                    window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
-                }
-
                 groups.Rows[0].Click();
 
                 ListView clients = window.Get<ListView>("clientDataGrid");
                 int clientCount = clients.Rows.Count;
 
-                addButton.Click();
-                menu = window.Popup;
+                Helpers.addClient(window, "Test client");
 
-                menu.Item("New client").Click();
-
-                TextBox firstName = window.Get<TextBox>("firstName");
-                firstName.Enter("Test eesnimi");
-                TextBox lastName = window.Get<TextBox>("lastName");
-                lastName.Enter("Test perenimi");
-                TextBox email = window.Get<TextBox>("email");
-                email.Enter("test@test.ee");
-                window.Get<Button>("allClientsButton").Click();
-                groups.Rows[0].Click();
-
+                clients = window.Get<ListView>("clientDataGrid");
                 int newClientCount = clients.Rows.Count;
                 application.Close();
                 Assert.AreEqual(clientCount + 1, newClientCount, 0, "Wrong number of clients after adding one.");
+            }
+
+            [TestMethod]
+            public void TestAddAppraisal()
+            {
+                string solutionDir = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.TestRunDirectory));
+                string applicationPath = Path.Combine(solutionDir, "HealthReporter/bin/Debug/HealthReporter.exe");
+                Application application = Application.Launch(applicationPath);
+                Window window = application.GetWindow("Health Reporter", InitializeOption.NoCache);
+
+                Helpers.addTestGroupIfNoneExist(window, "Testcategory");
+
+                Helpers.addTest(window, "test 1");
+                Helpers.addTest(window, "test 2");
+                Helpers.addTest(window, "test 3");
+
+                Helpers.addClientGroupIfNoneExist(window, "Test client category");
+
+                Helpers.addClient(window, "Test client");
+
+                ListView clients = window.Get<ListView>("clientDataGrid");
+                clients.Rows[0].Click();
+
+                window.Get<Button>("openAppraisalHistoryBtn").Click();
+                window.Get<Button>("button2").Click();
+
+                window.Get<TextBox>("name").Enter("Test Appraiser");
+                window.Get<Button>("newAppraisalNext").Click();
+
+                window.Get<Button>("button2_Copy1").Click();
+
+                ListView testCats = window.Get<ListView>("catsDataGrid");
+                System.Windows.Point point;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    point = new System.Windows.Point(testCats.Rows[0].Bounds.TopLeft.X + 40, testCats.Rows[0].Bounds.TopLeft.Y - 70 + i * 30);
+                    window.Mouse.Location = point;
+                    window.Mouse.Click();
+                }
+
+                window.Get<Button>("btnOK").Click();
+
+                ListView results = window.Get<ListView>("dataGrid");
+                ListViewCell cell;
+                cell = results.Rows[0].Cells[2];
+                cell.Click();
+                cell.Enter("90");
+                window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+
+                results = window.Get<ListView>("dataGrid");
+                cell = results.Rows[1].Cells[2];
+                cell.Click();
+                cell.Enter("90");
+                window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+
+                results = window.Get<ListView>("dataGrid");
+                cell = results.Rows[2].Cells[2];
+                cell.Click();
+                cell.Enter("90");
+                window.Keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
+
+                application.Close();
+
             }
         }
     }
