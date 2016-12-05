@@ -1094,10 +1094,10 @@ namespace HealthReporter.Controls
                             else if (this.client.gender == "1")
                             {
                                 ColumnDefinition c1 = new ColumnDefinition();
-                                c1.Width = new GridLength(100, GridUnitType.Star);
+                                c1.Width = new GridLength(5, GridUnitType.Star);
 
                                 ColumnDefinition c2 = new ColumnDefinition();
-                                c2.Width = new GridLength(100, GridUnitType.Star);
+                                c2.Width = new GridLength(5, GridUnitType.Star);
 
                                 TextBlock txtBlock2 = new TextBlock();
                                 txtBlock2.Text = obj.normM.ToString();
@@ -1112,7 +1112,7 @@ namespace HealthReporter.Controls
                                 Grid.SetColumn(line, i);
                                 Grid.SetColumn(txtBlock2, i);
                                 i++;
-                                findClientScoreLineWidth += 100;
+                                findClientScoreLineWidth += 5;
                             }
                             else if (this.client.gender == "0" && (j + 1) != list.Count)
                             {
@@ -1141,10 +1141,10 @@ namespace HealthReporter.Controls
                             else if (this.client.gender == "0")
                             {
                                 ColumnDefinition c1 = new ColumnDefinition();
-                                c1.Width = new GridLength(100, GridUnitType.Star);
+                                c1.Width = new GridLength(5, GridUnitType.Star);
 
                                 ColumnDefinition c2 = new ColumnDefinition();
-                                c2.Width = new GridLength(100, GridUnitType.Star);
+                                c2.Width = new GridLength(5, GridUnitType.Star);
 
                                 TextBlock txtBlock2 = new TextBlock();
                                 txtBlock2.Text = obj.normF.ToString();
@@ -1159,7 +1159,7 @@ namespace HealthReporter.Controls
                                 Grid.SetColumn(line, i);
                                 Grid.SetColumn(txtBlock2, i);
                                 i++;
-                                findClientScoreLineWidth += 100;
+                                findClientScoreLineWidth += 5;
                             }
                         }
 
